@@ -2,7 +2,7 @@
 
 A beautiful WinUI 3 desktop application that displays Jewish calendar information, Halachic times, Torah readings, and more.
 
-<img width="1620" height="1885" alt="image" src="https://github.com/user-attachments/assets/8579ab75-510f-4909-8ef4-49e84d734176" />
+<img width="1833" height="1983" alt="image" src="https://github.com/user-attachments/assets/e067c7bb-2d89-4bc9-90ec-62e018ac9bdf" />
 
 ## Features
 
