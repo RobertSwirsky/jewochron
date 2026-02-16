@@ -13,6 +13,7 @@ namespace Jewochron.Views
         private readonly MoonPhaseService moonPhaseService;
         private readonly LocationService locationService;
         private readonly JewishHolidaysService jewishHolidaysService;
+        private readonly MoladService moladService;
         private DispatcherQueueTimer? clockTimer;
         private readonly TimeZoneInfo jerusalemTimeZone;
 
@@ -28,6 +29,7 @@ namespace Jewochron.Views
             moonPhaseService = new MoonPhaseService();
             locationService = new LocationService();
             jewishHolidaysService = new JewishHolidaysService(hebrewCalendarService);
+            moladService = new MoladService(hebrewCalendarService);
 
             // Get Jerusalem time zone
             jerusalemTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
@@ -149,6 +151,14 @@ namespace Jewochron.Views
                 var (moonEmoji, moonPhaseName) = moonPhaseService.GetMoonPhase(now);
                 txtMoonPhase.Text = moonEmoji;
                 txtMoonPhaseName.Text = moonPhaseName;
+
+                // Molad (New Moon) calculation
+                var (moladDateTime, moladDayOfWeek, moladHour, moladChalakim, moladDayName) = moladService.GetNextMolad(now);
+                string hebrewDayName = moladService.GetHebrewDayName(moladDayOfWeek);
+
+                // Format molad display
+                txtMoladDate.Text = $"{moladDayName} ({hebrewDayName}), {moladDateTime:MMM d}";
+                txtMoladTime.Text = $"{moladHour}h {moladChalakim}p (Jerusalem)";
             }
             catch (Exception ex)
             {
