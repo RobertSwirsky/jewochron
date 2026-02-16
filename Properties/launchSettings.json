@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Jewochron (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Jewochron (Unpackaged)": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\rober\\repo\\Jewochron"
+    }
+  }
+}
