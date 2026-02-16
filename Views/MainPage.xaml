@@ -109,18 +109,18 @@
                             <Ellipse Canvas.Left="968" Canvas.Top="35" Width="4" Height="4" Fill="#E8E8D0" Opacity="0.5" />
                         </Canvas>
                         
-                        <!-- Stars (visible at night) -->
+                        <!-- Stars (visible at night) - 6-pointed Stars of David -->
                         <Canvas x:Name="StarsCanvas" Visibility="Visible">
-                            <Ellipse Canvas.Left="100" Canvas.Top="15" Width="2" Height="2" Fill="#FFFACD" Opacity="0.8" />
-                            <Ellipse Canvas.Left="180" Canvas.Top="25" Width="3" Height="3" Fill="#FFFACD" />
-                            <Ellipse Canvas.Left="250" Canvas.Top="18" Width="2" Height="2" Fill="#FFFACD" Opacity="0.7" />
-                            <Ellipse Canvas.Left="320" Canvas.Top="22" Width="2" Height="2" Fill="#FFFACD" Opacity="0.9" />
-                            <Ellipse Canvas.Left="420" Canvas.Top="12" Width="3" Height="3" Fill="#FFFACD" />
-                            <Ellipse Canvas.Left="680" Canvas.Top="20" Width="2" Height="2" Fill="#FFFACD" Opacity="0.8" />
-                            <Ellipse Canvas.Left="750" Canvas.Top="28" Width="2" Height="2" Fill="#FFFACD" Opacity="0.7" />
-                            <Ellipse Canvas.Left="840" Canvas.Top="16" Width="3" Height="3" Fill="#FFFACD" />
-                            <Ellipse Canvas.Left="1070" Canvas.Top="24" Width="2" Height="2" Fill="#FFFACD" Opacity="0.9" />
-                            <Ellipse Canvas.Left="1120" Canvas.Top="30" Width="2" Height="2" Fill="#FFFACD" Opacity="0.8" />
+                            <Path Canvas.Left="100" Canvas.Top="15" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.8" Width="6" Height="6" Stretch="Uniform" />
+                            <Path Canvas.Left="180" Canvas.Top="25" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Width="8" Height="8" Stretch="Uniform" />
+                            <Path Canvas.Left="250" Canvas.Top="18" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.7" Width="6" Height="6" Stretch="Uniform" />
+                            <Path Canvas.Left="320" Canvas.Top="22" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.9" Width="6" Height="6" Stretch="Uniform" />
+                            <Path Canvas.Left="420" Canvas.Top="12" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Width="8" Height="8" Stretch="Uniform" />
+                            <Path Canvas.Left="680" Canvas.Top="20" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.8" Width="6" Height="6" Stretch="Uniform" />
+                            <Path Canvas.Left="750" Canvas.Top="28" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.7" Width="6" Height="6" Stretch="Uniform" />
+                            <Path Canvas.Left="840" Canvas.Top="16" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Width="8" Height="8" Stretch="Uniform" />
+                            <Path Canvas.Left="1070" Canvas.Top="24" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.9" Width="6" Height="6" Stretch="Uniform" />
+                            <Path Canvas.Left="1120" Canvas.Top="30" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#FFFACD" Opacity="0.8" Width="6" Height="6" Stretch="Uniform" />
                         </Canvas>
                         
                         <!-- Distant Mount of Olives (layered hills with depth) -->
@@ -168,7 +168,7 @@
                         <Rectangle Canvas.Left="162" Canvas.Top="115" Width="8" Height="12" Fill="#2C2C2C" />
                         <!-- Star of David on building -->
                         <Path Canvas.Left="153" Canvas.Top="123"
-                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z"
                               Fill="#6BA4D8"
                               Stroke="#4A90E2"
                               StrokeThickness="0.5" />
@@ -186,7 +186,7 @@
                         <Rectangle Canvas.Left="243" Canvas.Top="77" Width="42" Height="5" Fill="#BBB09E" />
                         <!-- Star of David on building -->
                         <Path Canvas.Left="254" Canvas.Top="92"
-                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z"
                               Fill="#5A8FC8"
                               Stroke="#3A7BC8"
                               StrokeThickness="0.5" />
@@ -224,7 +224,7 @@
                         <Rectangle Canvas.Left="420" Canvas.Top="88" Width="40" Height="3" Fill="#D5C2A8" />
                         <!-- Star of David on building -->
                         <Path Canvas.Left="432" Canvas.Top="98"
-                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z"
                               Fill="#4A90E2"
                               Stroke="#3A7BC8"
                               StrokeThickness="0.5" />
@@ -368,7 +368,7 @@
                         <Rectangle Canvas.Left="680" Canvas.Top="90" Width="38" Height="3" Fill="#AB9B8E" />
                         <!-- Star of David on building -->
                         <Path Canvas.Left="690" Canvas.Top="100"
-                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z"
                               Fill="#7AA8E0"
                               Stroke="#5A8FC8"
                               StrokeThickness="0.5" />
@@ -403,7 +403,7 @@
                         <Rectangle Canvas.Left="815" Canvas.Top="88" Width="42" Height="3" Fill="#D5C2A8" />
                         <!-- Star of David on building -->
                         <Path Canvas.Left="827" Canvas.Top="98"
-                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z"
                               Fill="#5A8FC8"
                               Stroke="#3A7BC8"
                               StrokeThickness="0.5" />
@@ -413,7 +413,7 @@
                         <Rectangle Canvas.Left="867" Canvas.Top="85" Width="40" Height="3" Fill="#AB9B8E" />
                         <!-- Star of David on building -->
                         <Path Canvas.Left="878" Canvas.Top="95"
-                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z"
                               Fill="#6BA4D8"
                               Stroke="#4A90E2"
                               StrokeThickness="0.5" />
@@ -477,6 +477,7 @@
                                         Foreground="#666666" />
                                     <TextBlock
                                         x:Name="txtLocalTime"
+                                        FontFamily="Consolas"
                                         FontSize="48"
                                         FontWeight="Bold"
                                         HorizontalAlignment="Center"
@@ -491,6 +492,7 @@
                                         Foreground="#666666" />
                                     <TextBlock
                                         x:Name="txtJerusalemTime"
+                                        FontFamily="Consolas"
                                         FontSize="48"
                                         FontWeight="Bold"
                                         HorizontalAlignment="Center"
@@ -908,38 +910,174 @@
                             Padding="20,18"
                             Margin="0,0,0,10"
                             MinHeight="160">
-                            <StackPanel Spacing="12" VerticalAlignment="Center">
-                                <TextBlock
-                                    Text="✡️ Prayer Times • תפילות"
-                                    FontSize="16"
-                                    HorizontalAlignment="Center"
-                                    TextWrapping="Wrap"
-                                    Foreground="#888888" />
-                                <Grid Margin="0,6,0,0" MaxWidth="500">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="36" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                                    <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
-                                    <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="2" Foreground="#87CEEB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
+                                <!-- Praying Man Illustration - Enhanced Realistic Version -->
+                                <Canvas Grid.Column="0" Width="90" Height="130" Margin="0,0,16,0" VerticalAlignment="Center">
+                                    <!-- Shadow beneath figure -->
+                                    <Ellipse Canvas.Left="25" Canvas.Top="120" Width="40" Height="8" Fill="#000000" Opacity="0.15" />
 
-                                    <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
-                                    <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="2" Foreground="#FFA07A" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
+                                    <!-- Legs and shoes -->
+                                    <Rectangle Canvas.Left="37" Canvas.Top="75" Width="7" Height="32" Fill="#2A2A2A" RadiusX="3" RadiusY="3" />
+                                    <Rectangle Canvas.Left="46" Canvas.Top="75" Width="7" Height="32" Fill="#2A2A2A" RadiusX="3" RadiusY="3" />
+                                    <Ellipse Canvas.Left="35" Canvas.Top="105" Width="11" Height="7" Fill="#1A1A1A" />
+                                    <Ellipse Canvas.Left="36" Canvas.Top="105" Width="3" Height="3" Fill="#3A3A3A" Opacity="0.5" />
+                                    <Ellipse Canvas.Left="44" Canvas.Top="105" Width="11" Height="7" Fill="#1A1A1A" />
+                                    <Ellipse Canvas.Left="45" Canvas.Top="105" Width="3" Height="3" Fill="#3A3A3A" Opacity="0.5" />
 
-                                    <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
-                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
-                                    <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="2" Foreground="#9370DB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
-                                </Grid>
-                            </StackPanel>
+                                    <!-- Body (suit/jacket) with shading -->
+                                    <Rectangle Canvas.Left="35" Canvas.Top="40" Width="20" Height="38" Fill="#1A1A1A" RadiusX="3" RadiusY="2" />
+                                    <Rectangle Canvas.Left="36" Canvas.Top="41" Width="2" Height="36" Fill="#2A2A2A" Opacity="0.7" />
+                                    <Rectangle Canvas.Left="39" Canvas.Top="40" Width="12" Height="8" Fill="#FFFFFF" RadiusX="1" RadiusY="1" />
+                                    <Rectangle Canvas.Left="43" Canvas.Top="46" Width="4" Height="12" Fill="#1A4D7A" RadiusX="1" RadiusY="1" />
+
+                                    <!-- Arms holding book position -->
+                                    <Rectangle Canvas.Left="26" Canvas.Top="48" Width="6" Height="16" Fill="#1A1A1A" RadiusX="3" RadiusY="3">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform Angle="25" CenterX="3" CenterY="0" />
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle Canvas.Left="24" Canvas.Top="62" Width="5" Height="14" Fill="#1A1A1A" RadiusX="2" RadiusY="2">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform Angle="-35" CenterX="2" CenterY="0" />
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle Canvas.Left="58" Canvas.Top="48" Width="6" Height="16" Fill="#1A1A1A" RadiusX="3" RadiusY="3">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform Angle="-25" CenterX="3" CenterY="0" />
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle Canvas.Left="61" Canvas.Top="62" Width="5" Height="14" Fill="#1A1A1A" RadiusX="2" RadiusY="2">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform Angle="35" CenterX="3" CenterY="0" />
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+
+                                    <!-- Prayer book (Siddur) - prominently held -->
+                                    <Rectangle Canvas.Left="32" Canvas.Top="66" Width="27" Height="20" Fill="#000000" Opacity="0.2" RadiusX="1" RadiusY="1" />
+                                    <Rectangle Canvas.Left="30" Canvas.Top="64" Width="27" Height="20" Fill="#6B2C2C" Stroke="#4A1F1F" StrokeThickness="1.5" RadiusX="1" RadiusY="1" />
+                                    <Rectangle Canvas.Left="30" Canvas.Top="64" Width="3" Height="20" Fill="#8B3C3C" Opacity="0.6" RadiusX="1" RadiusY="1" />
+                                    <Rectangle Canvas.Left="31" Canvas.Top="66" Width="24" Height="16" Fill="#FFFAEB" RadiusX="0.5" RadiusY="0.5" />
+                                    <!-- Hebrew text lines -->
+                                    <Rectangle Canvas.Left="34" Canvas.Top="68" Width="9" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="34" Canvas.Top="70" Width="8" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="34" Canvas.Top="72" Width="9" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="34" Canvas.Top="74" Width="7" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="34" Canvas.Top="76" Width="9" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="34" Canvas.Top="78" Width="8" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="45" Canvas.Top="68" Width="8" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="45" Canvas.Top="70" Width="9" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="45" Canvas.Top="72" Width="7" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="45" Canvas.Top="74" Width="9" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="45" Canvas.Top="76" Width="8" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Rectangle Canvas.Left="45" Canvas.Top="78" Width="9" Height="1" Fill="#2C2C2C" Opacity="0.6" />
+                                    <Line X1="43.5" Y1="66" X2="43.5" Y2="82" Stroke="#5A2424" StrokeThickness="1" Opacity="0.4" />
+                                    <Path Canvas.Left="36" Canvas.Top="58" Data="M 8,3 L 14,11 L 2,11 Z M 8,13 L 14,5 L 2,5 Z" Fill="#D4AF37" Stroke="#B8941E" StrokeThickness="0.5" Width="10" Height="10" Stretch="Uniform" />
+
+                                    <!-- Hands -->
+                                    <Ellipse Canvas.Left="24" Canvas.Top="70" Width="9" Height="10" Fill="#F5D5C0" />
+                                    <Ellipse Canvas.Left="25" Canvas.Top="71" Width="4" Height="5" Fill="#FFECD5" Opacity="0.6" />
+                                    <Ellipse Canvas.Left="29" Canvas.Top="73" Width="4" Height="6" Fill="#F5D5C0" />
+                                    <Ellipse Canvas.Left="57" Canvas.Top="70" Width="9" Height="10" Fill="#F5D5C0" />
+                                    <Ellipse Canvas.Left="60" Canvas.Top="71" Width="4" Height="5" Fill="#FFECD5" Opacity="0.6" />
+                                    <Ellipse Canvas.Left="57" Canvas.Top="73" Width="4" Height="6" Fill="#F5D5C0" />
+
+                                    <!-- Head with better proportions -->
+                                    <Ellipse Canvas.Left="36" Canvas.Top="15" Width="18" Height="22" Fill="#F5D5C0" />
+                                    <Rectangle Canvas.Left="41" Canvas.Top="35" Width="8" Height="6" Fill="#F5D5C0" RadiusX="2" RadiusY="2" />
+                                    <Ellipse Canvas.Left="35" Canvas.Top="22" Width="4" Height="6" Fill="#ECC5B0" />
+                                    <Ellipse Canvas.Left="38" Canvas.Top="17" Width="12" Height="16" Fill="#FFECD5" Opacity="0.3" />
+
+                                    <!-- Facial features -->
+                                    <Path Canvas.Left="39" Canvas.Top="23" Data="M 0,2 Q 2,0 4,2" Stroke="#3D3D3D" StrokeThickness="1.2" />
+                                    <Path Canvas.Left="47" Canvas.Top="23" Data="M 0,2 Q 2,0 4,2" Stroke="#3D3D3D" StrokeThickness="1.2" />
+                                    <Path Canvas.Left="44" Canvas.Top="26" Data="M 1,0 L 2,4 L 0,4" Stroke="#D5B5A0" StrokeThickness="1" />
+                                    <Path Canvas.Left="42" Canvas.Top="30" Data="M 0,0 Q 3,1 6,0" Stroke="#C5A590" StrokeThickness="1.2" />
+
+                                    <!-- Beard -->
+                                    <Path Canvas.Left="37" Canvas.Top="30" Data="M 0,0 Q -2,6 0,11 Q 2,8 4,11 Q 6,8 8,11 Q 10,8 12,11 Q 14,8 16,11 Q 18,6 16,0" Fill="#3D3D3D" Opacity="0.9" />
+                                    <Path Canvas.Left="39" Canvas.Top="32" Data="M 0,0 Q 2,4 4,0" Stroke="#5D5D5D" StrokeThickness="0.5" Opacity="0.4" />
+                                    <Path Canvas.Left="45" Canvas.Top="32" Data="M 0,0 Q 2,4 4,0" Stroke="#5D5D5D" StrokeThickness="0.5" Opacity="0.4" />
+
+                                    <!-- Yarmulke -->
+                                    <Ellipse Canvas.Left="39" Canvas.Top="12" Width="12" Height="7" Fill="#1A1A1A" />
+                                    <Ellipse Canvas.Left="40" Canvas.Top="13" Width="10" Height="5" Fill="#2A2A2A" Opacity="0.5" />
+                                    <Ellipse Canvas.Left="43" Canvas.Top="14" Width="4" Height="3" Fill="#3A3A3A" Opacity="0.4" />
+
+                                    <!-- Tallit (prayer shawl) - shown during Shacharit -->
+                                    <Canvas x:Name="TallitCanvas" Visibility="Collapsed">
+                                        <Path Canvas.Left="24" Canvas.Top="38" Data="M 0,0 Q 8,2 10,6 L 10,42 Q 8,38 0,36 Z" Fill="#F8F8FF" Stroke="#E0E0E0" StrokeThickness="1" Opacity="0.95" />
+                                        <Rectangle Canvas.Left="26" Canvas.Top="44" Width="8" Height="2" Fill="#4169E1" Opacity="0.8" />
+                                        <Rectangle Canvas.Left="26" Canvas.Top="54" Width="8" Height="2" Fill="#4169E1" Opacity="0.8" />
+                                        <Rectangle Canvas.Left="26" Canvas.Top="49" Width="8" Height="1" Fill="#C0C0C0" Opacity="0.5" />
+                                        <Path Canvas.Left="56" Canvas.Top="38" Data="M 10,0 Q 2,2 0,6 L 0,42 Q 2,38 10,36 Z" Fill="#F8F8FF" Stroke="#E0E0E0" StrokeThickness="1" Opacity="0.95" />
+                                        <Rectangle Canvas.Left="56" Canvas.Top="44" Width="8" Height="2" Fill="#4169E1" Opacity="0.8" />
+                                        <Rectangle Canvas.Left="56" Canvas.Top="54" Width="8" Height="2" Fill="#4169E1" Opacity="0.8" />
+                                        <Rectangle Canvas.Left="56" Canvas.Top="49" Width="8" Height="1" Fill="#C0C0C0" Opacity="0.5" />
+                                        <Line X1="28" Y1="80" X2="28" Y2="95" Stroke="#F8F8FF" StrokeThickness="2" />
+                                        <Line X1="30" Y1="80" X2="30" Y2="92" Stroke="#F8F8FF" StrokeThickness="1.5" />
+                                        <Line X1="32" Y1="80" X2="32" Y2="94" Stroke="#F8F8FF" StrokeThickness="1.5" />
+                                        <Line X1="30" Y1="82" X2="30" Y2="88" Stroke="#4169E1" StrokeThickness="1" />
+                                        <Line X1="58" Y1="80" X2="58" Y2="95" Stroke="#F8F8FF" StrokeThickness="2" />
+                                        <Line X1="60" Y1="80" X2="60" Y2="92" Stroke="#F8F8FF" StrokeThickness="1.5" />
+                                        <Line X1="62" Y1="80" X2="62" Y2="94" Stroke="#F8F8FF" StrokeThickness="1.5" />
+                                        <Line X1="60" Y1="82" X2="60" Y2="88" Stroke="#4169E1" StrokeThickness="1" />
+                                    </Canvas>
+
+                                    <!-- Tefillin (phylacteries) - shown during weekday Shacharit -->
+                                    <Canvas x:Name="TefillinCanvas" Visibility="Collapsed">
+                                        <Rectangle Canvas.Left="40" Canvas.Top="16" Width="10" Height="9" Fill="#1A1A1A" RadiusX="1" RadiusY="1" />
+                                        <Path Canvas.Left="43" Canvas.Top="18" Data="M 0,0 L 0,4 M 2,0 L 2,4 M 4,0 L 4,4" Stroke="#2A2A2A" StrokeThickness="1" />
+                                        <Rectangle Canvas.Left="41" Canvas.Top="17" Width="8" Height="7" Fill="#2A2A2A" Opacity="0.3" RadiusX="0.5" RadiusY="0.5" />
+                                        <Path Canvas.Left="38" Canvas.Top="20" Data="M 0,0 Q -2,4 0,8" Stroke="#1A1A1A" StrokeThickness="2" />
+                                        <Path Canvas.Left="52" Canvas.Top="20" Data="M 0,0 Q 2,4 0,8" Stroke="#1A1A1A" StrokeThickness="2" />
+                                        <Ellipse Canvas.Left="43" Canvas.Top="28" Width="4" Height="4" Fill="#1A1A1A" />
+                                        <Rectangle Canvas.Left="26" Canvas.Top="52" Width="9" Height="7" Fill="#1A1A1A" RadiusX="1" RadiusY="1" />
+                                        <Rectangle Canvas.Left="27" Canvas.Top="53" Width="7" Height="5" Fill="#2A2A2A" Opacity="0.4" RadiusX="0.5" RadiusY="0.5" />
+                                        <Line X1="28" Y1="59" X2="28" Y2="63" Stroke="#1A1A1A" StrokeThickness="2" />
+                                        <Line X1="28" Y1="63" X2="30" Y2="63" Stroke="#1A1A1A" StrokeThickness="1.5" />
+                                        <Line X1="30" Y1="63" X2="30" Y2="67" Stroke="#1A1A1A" StrokeThickness="1.5" />
+                                        <Path Canvas.Left="26" Canvas.Top="70" Data="M 0,0 Q 2,2 0,4" Stroke="#1A1A1A" StrokeThickness="1" />
+                                    </Canvas>
+                                </Canvas>
+
+                                <StackPanel Grid.Column="1" Spacing="12" VerticalAlignment="Center">
+                                    <TextBlock
+                                        Text="✡️ Prayer Times • תפילות"
+                                        FontSize="16"
+                                        HorizontalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        Foreground="#888888" />
+                                    <Grid Margin="0,6,0,0" MaxWidth="500">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="36" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                        <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="2" Foreground="#87CEEB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
+
+                                        <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                        <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="2" Foreground="#FFA07A" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
+
+                                        <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                        <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="2" Foreground="#9370DB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
                         </Border>
 
                     </Grid>

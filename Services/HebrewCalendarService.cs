@@ -101,5 +101,10 @@ namespace Jewochron.Services
 
             return hebrewNumber;
         }
+
+        public bool IsShabbat(DateTime date)
+        {
+            return date.DayOfWeek == DayOfWeek.Saturday;
+        }
     }
 }

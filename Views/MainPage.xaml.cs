@@ -262,18 +262,18 @@ namespace Jewochron.Views
         {
             // Halachic day starts at sunrise (hour 1) and has 12 hours until sunset
             // Halachic night starts at sunset (hour 1) and has 12 hours until sunrise
-            
+
             if (time >= sunrise && time < sunset)
             {
                 // Daytime halachic hours
                 TimeSpan dayLength = sunset - sunrise;
                 TimeSpan timeSinceSunrise = time - sunrise;
                 double halachicHour = 1 + (timeSinceSunrise.TotalMinutes / dayLength.TotalMinutes * 12);
-                
+
                 int hours = (int)halachicHour;
                 double minutesFraction = (halachicHour - hours) * 60;
                 int minutes = (int)minutesFraction;
-                
+
                 return $"Hour {hours}:{minutes:D2} (Day)";
             }
             else
@@ -281,16 +281,39 @@ namespace Jewochron.Views
                 // Nighttime halachic hours
                 DateTime prevSunset = time < sunrise ? sunset.AddDays(-1) : sunset;
                 DateTime nextSunrise = time < sunrise ? sunrise : sunrise.AddDays(1);
-                
+
                 TimeSpan nightLength = nextSunrise - prevSunset;
                 TimeSpan timeSinceSunset = time - prevSunset;
                 double halachicHour = 1 + (timeSinceSunset.TotalMinutes / nightLength.TotalMinutes * 12);
-                
+
                 int hours = (int)halachicHour;
                 double minutesFraction = (halachicHour - hours) * 60;
                 int minutes = (int)minutesFraction;
-                
+
                 return $"Hour {hours}:{minutes:D2} (Night)";
+            }
+        }
+
+        private void UpdatePrayerManAttire(DateTime now, DateTime alotHaShachar, DateTime chatzot, 
+            DateTime minGedolah, DateTime sunset, DateTime tzait, bool isShabbat)
+        {
+            try
+            {
+                // Determine current prayer time
+                bool isShacharit = now >= alotHaShachar && now < chatzot;
+                bool isMincha = now >= minGedolah && now < sunset;
+                bool isMaariv = now >= tzait || now < alotHaShachar;
+
+                // Show tallit only during Shacharit
+                TallitCanvas.Visibility = isShacharit ? Visibility.Visible : Visibility.Collapsed;
+
+                // Show tefillin only during Shacharit on weekdays (not Shabbat)
+                TefillinCanvas.Visibility = (isShacharit && !isShabbat) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (Exception)
+            {
+                // Silently ignore errors in updating prayer man attire
+                // This is a visual element and shouldn't crash the app
             }
         }
 
@@ -353,6 +376,10 @@ namespace Jewochron.Views
                 txtMinchaIndicator.Text = "";
                 txtMaarivIndicator.Text = "";
 
+                // Update prayer man attire based on prayer time and Shabbat
+                bool isShabbat = hebrewCalendarService.IsShabbat(now);
+                UpdatePrayerManAttire(now, alotHaShachar, chatzot, minGedolah, sunset, tzait, isShabbat);
+
                 if (now >= alotHaShachar && now < chatzot)
                 {
                     txtShacharitIndicator.Text = "👉";
@@ -393,9 +420,13 @@ namespace Jewochron.Views
                 int gregorianDay = moladJerusalemTime.Day;
                 int gregorianYear = moladJerusalemTime.Year;
 
-                // Include Rosh Chodesh info in the date display
-                string roshChodeshIndicator = isTwoDayRoshChodesh ? " 🌙🌙" : " 🌙";
-                txtMoladDate.Text = $"{roshChodeshInfo}{roshChodeshIndicator}\n{moladDayOfWeek}, {gregorianMonthName} {gregorianDay}, {gregorianYear}";
+                // Split English and Hebrew on separate lines, no moon emojis
+                // roshChodeshInfo format: "Rosh Chodesh Month • ראש חודש חודש"
+                string[] parts = roshChodeshInfo.Split('•');
+                string englishPart = parts[0].Trim();
+                string hebrewPart = parts.Length > 1 ? parts[1].Trim() : "";
+
+                txtMoladDate.Text = $"{englishPart}\n{hebrewPart}\n{moladDayOfWeek}, {gregorianMonthName} {gregorianDay}, {gregorianYear}";
 
                 // Display the Molad time with chalakim (formatted by service)
                 txtMoladJerusalemTime.Text = moladFormattedTime;
