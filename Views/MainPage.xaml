@@ -85,55 +85,57 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="MainStack" HorizontalAlignment="Stretch" MaxWidth="1200" Spacing="15">
 
-                    <!-- Location Header -->
-                    <TextBlock
-                        x:Name="txtLocation"
-                        FontSize="14"
-                        HorizontalAlignment="Center"
-                        Foreground="#888888"
-                        Margin="0,5,0,0"
-                        Text="Loading location..." />
-
-                    <!-- Live Time Display -->
+                    <!-- Live Time Display with Location -->
                     <Border 
                         Background="#2D2D30" 
                         CornerRadius="12" 
                         Padding="15,12"
                         HorizontalAlignment="Stretch">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock
-                                    Text="Local Time"
-                                    FontSize="12"
-                                    HorizontalAlignment="Center"
-                                    Foreground="#888888" />
-                                <TextBlock
-                                    x:Name="txtLocalTime"
-                                    FontSize="20"
-                                    FontWeight="SemiBold"
-                                    HorizontalAlignment="Center"
-                                    Foreground="#4EC9B0"
-                                    Text="00:00:00" />
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock
-                                    Text="Jerusalem Time"
-                                    FontSize="12"
-                                    HorizontalAlignment="Center"
-                                    Foreground="#888888" />
-                                <TextBlock
-                                    x:Name="txtJerusalemTime"
-                                    FontSize="20"
-                                    FontWeight="SemiBold"
-                                    HorizontalAlignment="Center"
-                                    Foreground="#FFD700"
-                                    Text="00:00:00" />
-                            </StackPanel>
-                        </Grid>
+                        <StackPanel Spacing="6">
+                            <!-- Location Header -->
+                            <TextBlock
+                                x:Name="txtLocation"
+                                FontSize="13"
+                                HorizontalAlignment="Center"
+                                Foreground="#888888"
+                                Text="Loading location..." />
+
+                            <!-- Times Grid -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Spacing="4">
+                                    <TextBlock
+                                        Text="Local Time"
+                                        FontSize="11"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#666666" />
+                                    <TextBlock
+                                        x:Name="txtLocalTime"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#4EC9B0"
+                                        Text="00:00:00 AM" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="4">
+                                    <TextBlock
+                                        Text="Jerusalem Time"
+                                        FontSize="11"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#666666" />
+                                    <TextBlock
+                                        x:Name="txtJerusalemTime"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#FFD700"
+                                        Text="00:00:00" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
                     </Border>
 
                     <!-- Date Card -->
@@ -407,29 +409,21 @@
                             Padding="15,12"
                             Margin="0,0,0,10"
                             MinHeight="130">
-                            <StackPanel Spacing="6" HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-                                    <TextBlock
-                                        Text="✡️ Prayer Times"
-                                        FontSize="13"
-                                        Foreground="#888888"
-                                        VerticalAlignment="Center" />
-                                    <TextBlock
-                                        x:Name="txtCurrentTime"
-                                        FontSize="16"
-                                        FontWeight="SemiBold"
-                                        Foreground="#FFFFFF"
-                                        VerticalAlignment="Center"
-                                        Text="" />
-                                </StackPanel>
+                            <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                <TextBlock
+                                    Text="✡️ Prayer Times"
+                                    FontSize="13"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtCurrentPrayer"
-                                    FontSize="13"
+                                    FontSize="15"
                                     FontWeight="SemiBold"
                                     HorizontalAlignment="Center"
                                     Foreground="#90EE90"
+                                    TextWrapping="Wrap"
                                     Text="" />
-                                <Grid Margin="0,2,0,0" MaxWidth="350">
+                                <Grid Margin="0,4,0,0" MaxWidth="350">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />

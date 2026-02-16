@@ -57,7 +57,7 @@ namespace Jewochron.Views
             DateTime now = DateTime.Now;
             DateTime jerusalemTime = TimeZoneInfo.ConvertTime(now, jerusalemTimeZone);
 
-            txtLocalTime.Text = now.ToString("HH:mm:ss");
+            txtLocalTime.Text = now.ToString("h:mm:ss tt");
             txtJerusalemTime.Text = jerusalemTime.ToString("HH:mm:ss");
         }
 
@@ -110,7 +110,6 @@ namespace Jewochron.Views
                 txtTzait.Text = tzait.ToString("h:mm tt");
 
                 // Prayer times
-                txtCurrentTime.Text = now.ToString("h:mm tt");
                 txtShacharitTime.Text = $"{alotHaShachar.ToString("h:mm tt")} - {chatzot.ToString("h:mm tt")}";
                 txtMinchaTime.Text = $"{minGedolah.ToString("h:mm tt")} - {sunset.ToString("h:mm tt")}";
                 txtMaarivTime.Text = $"{tzait.ToString("h:mm tt")} onwards";
