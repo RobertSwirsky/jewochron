@@ -381,26 +381,24 @@ namespace Jewochron.Views
                 txtMoonAge.Text = $"Day {Math.Floor(moonAge) + 1} of lunar cycle";
 
                 // Molad (New Moon) calculation
-                var (moladDateTime, moladDayOfWeek, moladHour, moladChalakim, moladDayName) = moladService.GetNextMolad(now);
-                string hebrewDayName = moladService.GetHebrewDayName(moladDayOfWeek);
+                var (moladDateTime, moladDayOfWeek, moladHour, moladMinutes, moladChalakim, moladFormattedTime, isTwoDayRoshChodesh, roshChodeshInfo) = moladService.GetNextMolad(now);
 
-                // Format molad display - date with both day names
-                txtMoladDate.Text = $"{moladDayName} ({hebrewDayName}), {moladDateTime:MMMM d, yyyy}";
-                
-                // Convert Molad time to Jerusalem time zone
-                TimeZoneInfo jerusalemTz = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
-                DateTime moladJerusalemTime = TimeZoneInfo.ConvertTimeFromUtc(moladDateTime, jerusalemTz);
-                
-                // Display Jerusalem 24-hour time
-                txtMoladJerusalemTime.Text = moladJerusalemTime.ToString("HH:mm:ss");
-                
-                // Calculate Halachic time for the Molad
-                // Get sunrise and sunset for that day in Jerusalem
-                var (alotMolad, sunriseMolad, sunsetMolad, tzaitMolad, chatzotMolad, minGedolahMolad, plagHaMinchaMolad) = 
-                    halachicTimesService.CalculateTimes(moladJerusalemTime.Date, 31.7683, 35.2137); // Jerusalem coordinates
-                
-                string halachicTime = ConvertToHalachicTime(moladJerusalemTime, sunriseMolad, sunsetMolad);
-                txtMoladHalachicTime.Text = halachicTime;
+                // The moladDateTime is already calculated based on the Hebrew calendar
+                // We need to ensure it's in Jerusalem time for display
+                // Since the Hebrew calendar and molad are Jerusalem-based, treat this as Jerusalem time
+                DateTime moladJerusalemTime = DateTime.SpecifyKind(moladDateTime, DateTimeKind.Unspecified);
+
+                // Format molad display with Rosh Chodesh information
+                string gregorianMonthName = moladJerusalemTime.ToString("MMMM");
+                int gregorianDay = moladJerusalemTime.Day;
+                int gregorianYear = moladJerusalemTime.Year;
+
+                // Include Rosh Chodesh info in the date display
+                string roshChodeshIndicator = isTwoDayRoshChodesh ? " 🌙🌙" : " 🌙";
+                txtMoladDate.Text = $"{roshChodeshInfo}{roshChodeshIndicator}\n{moladDayOfWeek}, {gregorianMonthName} {gregorianDay}, {gregorianYear}";
+
+                // Display the Molad time with chalakim (formatted by service)
+                txtMoladJerusalemTime.Text = moladFormattedTime;
             }
             catch (Exception ex)
             {
