@@ -53,17 +53,26 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Two Column Adaptive Layout -->
-                    <VariableSizedWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2">
+                    <!-- Responsive Grid Layout -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" MinWidth="300" />
+                            <ColumnDefinition Width="*" MinWidth="300" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
                         <!-- Torah Portion Card -->
                         <Border 
+                            Grid.Row="0" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
                             Margin="0,0,10,10"
-                            Width="380"
-                            Height="180">
+                            MinHeight="160">
                             <StackPanel Spacing="10">
                                 <TextBlock
                                     Text="📖 Torah Portion"
@@ -91,12 +100,12 @@
 
                         <!-- Daf Yomi Card -->
                         <Border 
+                            Grid.Row="0" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
-                            Margin="0,0,10,10"
-                            Width="380"
-                            Height="180">
+                            Margin="0,0,0,10"
+                            MinHeight="160">
                             <StackPanel Spacing="10">
                                 <TextBlock
                                     Text="📚 Daf Yomi"
@@ -124,13 +133,13 @@
 
                         <!-- Halachic Times Card -->
                         <Border 
+                            Grid.Row="1" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
                             Margin="0,0,10,10"
-                            Width="380"
-                            Height="180">
-                            <StackPanel Spacing="12">
+                            MinHeight="160">
+                            <StackPanel Spacing="12" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="🕐 Halachic Times"
                                     FontSize="16"
@@ -165,13 +174,13 @@
 
                         <!-- Moon Phase Card -->
                         <Border 
+                            Grid.Row="1" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
-                            Margin="0,0,10,10"
-                            Width="380"
-                            Height="180">
-                            <StackPanel Spacing="10">
+                            Margin="0,0,0,10"
+                            MinHeight="160">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="🌙 Moon Phase"
                                     FontSize="16"
@@ -186,16 +195,16 @@
 
                         <!-- Prayer Times Card -->
                         <Border 
+                            Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
-                            Margin="0,0,10,10"
-                            Width="380"
-                            Height="180">
-                            <StackPanel Spacing="8">
+                            Margin="0,0,0,10"
+                            MinHeight="160">
+                            <StackPanel Spacing="8" HorizontalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
                                     <TextBlock
-                                        Text="🕌 Prayer Times"
+                                        Text="✡️ Prayer Times"
                                         FontSize="16"
                                         Foreground="#888888"
                                         VerticalAlignment="Center" />
@@ -241,7 +250,7 @@
                             </StackPanel>
                         </Border>
 
-                    </VariableSizedWrapGrid>
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
