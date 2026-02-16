@@ -1,4 +1,4 @@
-# Jewochron - Jewish Calendar Application
+# Jewochron - Jewish Calendar Digital Sign
 
 A beautiful WinUI 3 desktop application that displays Jewish calendar information, Halachic times, Torah readings, and more.
 
