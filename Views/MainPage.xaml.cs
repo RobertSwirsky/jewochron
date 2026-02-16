@@ -15,7 +15,10 @@ namespace Jewochron.Views
         private readonly JewishHolidaysService jewishHolidaysService;
         private readonly MoladService moladService;
         private DispatcherQueueTimer? clockTimer;
+        private DispatcherQueueTimer? dataRefreshTimer;
         private readonly TimeZoneInfo jerusalemTimeZone;
+        private DateTime lastRefreshDate = DateTime.MinValue;
+        private string lastPrayerIndicator = "";
 
         public MainPage()
         {
@@ -34,8 +37,9 @@ namespace Jewochron.Views
             // Get Jerusalem time zone
             jerusalemTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
 
-            // Start clock timer
+            // Start timers
             StartClockTimer();
+            StartDataRefreshTimer();
 
             // Load data
             _ = LoadDataAsync();
@@ -52,6 +56,55 @@ namespace Jewochron.Views
             UpdateClocks();
         }
 
+        private void StartDataRefreshTimer()
+        {
+            // Check every minute for data that needs refreshing
+            dataRefreshTimer = DispatcherQueue.CreateTimer();
+            dataRefreshTimer.Interval = TimeSpan.FromMinutes(1);
+            dataRefreshTimer.Tick += async (s, e) => await CheckAndRefreshDataAsync();
+            dataRefreshTimer.Start();
+        }
+
+        private async Task CheckAndRefreshDataAsync()
+        {
+            bool needsRefresh = false;
+            DateTime now = DateTime.Now;
+
+            // Check if date has changed (past midnight)
+            if (lastRefreshDate.Date != now.Date)
+            {
+                needsRefresh = true;
+            }
+
+            // Check if prayer time indicator changed (different prayer period)
+            string currentPrayerIndicator = GetCurrentPrayerIndicator(now);
+            if (currentPrayerIndicator != lastPrayerIndicator)
+            {
+                needsRefresh = true;
+                lastPrayerIndicator = currentPrayerIndicator;
+            }
+
+            // Refresh data if needed
+            if (needsRefresh)
+            {
+                await LoadDataAsync();
+            }
+        }
+
+        private string GetCurrentPrayerIndicator(DateTime now)
+        {
+            // Quick check to see which prayer period we're in
+            // This is used to detect transitions without recalculating everything
+            var hour = now.Hour;
+
+            if (hour >= 5 && hour < 12)
+                return "shacharit";
+            else if (hour >= 12 && hour < 18)
+                return "mincha";
+            else
+                return "maariv";
+        }
+
         private void UpdateClocks()
         {
             DateTime now = DateTime.Now;
@@ -66,6 +119,7 @@ namespace Jewochron.Views
             try
             {
                 DateTime now = DateTime.Now;
+                lastRefreshDate = now.Date;
 
                 // Get location
                 var (city, state, latitude, longitude) = await locationService.GetLocationAsync();
@@ -122,14 +176,21 @@ namespace Jewochron.Views
                 if (now >= alotHaShachar && now < chatzot)
                 {
                     txtShacharitIndicator.Text = "👉";
+                    lastPrayerIndicator = "shacharit";
                 }
                 else if (now >= minGedolah && now < sunset)
                 {
                     txtMinchaIndicator.Text = "👉";
+                    lastPrayerIndicator = "mincha";
                 }
                 else if (now >= tzait || now < alotHaShachar)
                 {
                     txtMaarivIndicator.Text = "👉";
+                    lastPrayerIndicator = "maariv";
+                }
+                else
+                {
+                    lastPrayerIndicator = "between";
                 }
 
                 // Moon phase
