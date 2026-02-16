@@ -9,6 +9,45 @@
     mc:Ignorable="d">
     <Page.Content>
         <Grid Background="#1E1E1E" Padding="20">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup>
+                    <!-- Narrow: Single column -->
+                    <VisualState x:Name="NarrowState">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="0" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="0" />
+                            <Setter Target="ParshaCard.Grid.Column" Value="0" />
+                            <Setter Target="DafYomiCard.Grid.Column" Value="0" />
+                            <Setter Target="DafYomiCard.Grid.Row" Value="1" />
+                            <Setter Target="HalachicCard.Grid.Row" Value="2" />
+                            <Setter Target="MoonCard.Grid.Column" Value="0" />
+                            <Setter Target="MoonCard.Grid.Row" Value="3" />
+                            <Setter Target="PrayerCard.Grid.Row" Value="4" />
+                            <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Medium: Two columns -->
+                    <VisualState x:Name="MediumState">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="700" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <Setter Target="ParshaCard.Grid.Column" Value="0" />
+                            <Setter Target="DafYomiCard.Grid.Column" Value="1" />
+                            <Setter Target="DafYomiCard.Grid.Row" Value="0" />
+                            <Setter Target="HalachicCard.Grid.Row" Value="1" />
+                            <Setter Target="MoonCard.Grid.Column" Value="1" />
+                            <Setter Target="MoonCard.Grid.Row" Value="1" />
+                            <Setter Target="PrayerCard.Grid.Row" Value="2" />
+                            <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel HorizontalAlignment="Stretch" MaxWidth="1400" Spacing="20">
 
@@ -105,7 +144,7 @@
                     </Border>
 
                     <!-- Responsive Grid Layout -->
-                    <Grid>
+                    <Grid x:Name="CardsGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" MinWidth="300" />
                             <ColumnDefinition Width="*" MinWidth="300" />
@@ -114,17 +153,20 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <!-- Torah Portion Card -->
                         <Border 
+                            x:Name="ParshaCard"
                             Grid.Row="0" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
                             Margin="0,0,10,10"
                             MinHeight="160">
-                            <StackPanel Spacing="10">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="📖 Torah Portion"
                                     FontSize="16"
@@ -151,13 +193,14 @@
 
                         <!-- Daf Yomi Card -->
                         <Border 
+                            x:Name="DafYomiCard"
                             Grid.Row="0" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20"
                             Margin="0,0,0,10"
                             MinHeight="160">
-                            <StackPanel Spacing="10">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="📚 Daf Yomi"
                                     FontSize="16"
@@ -184,6 +227,7 @@
 
                         <!-- Halachic Times Card -->
                         <Border 
+                            x:Name="HalachicCard"
                             Grid.Row="1" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
@@ -225,6 +269,7 @@
 
                         <!-- Moon Phase Card -->
                         <Border 
+                            x:Name="MoonCard"
                             Grid.Row="1" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
@@ -246,6 +291,7 @@
 
                         <!-- Prayer Times Card -->
                         <Border 
+                            x:Name="PrayerCard"
                             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                             Background="#2D2D30" 
                             CornerRadius="12" 
@@ -274,7 +320,7 @@
                                     HorizontalAlignment="Center"
                                     Foreground="#90EE90"
                                     Text="" />
-                                <Grid Margin="0,2,0,0">
+                                <Grid Margin="0,2,0,0" MaxWidth="400">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
