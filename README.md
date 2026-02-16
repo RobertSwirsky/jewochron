@@ -2,6 +2,8 @@
 
 A beautiful WinUI 3 desktop application that displays Jewish calendar information, Halachic times, Torah readings, and more.
 
+<img width="1620" height="1885" alt="image" src="https://github.com/user-attachments/assets/8579ab75-510f-4909-8ef4-49e84d734176" />
+
 ## Features
 
 - **📅 Dates**: Display current date in English and Hebrew (both transliterated and in Hebrew characters)
