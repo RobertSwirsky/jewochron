@@ -11,19 +11,27 @@ namespace Jewochron.Services
 
         public (string english, string hebrew) GetTorahPortion(int hebrewYear, int hebrewMonth, int hebrewDay, bool isLeapYear)
         {
+            // Find the upcoming Saturday
             DateTime gregorianDate = hebrewCalendarService.ToGregorianDate(hebrewYear, hebrewMonth, hebrewDay);
             DayOfWeek dayOfWeek = gregorianDate.DayOfWeek;
 
-            int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)dayOfWeek + 7) % 7;
-            DateTime thisSaturday = gregorianDate.AddDays(daysUntilSaturday);
-            
-            var (_, saturdayMonth, saturdayDay, _) = hebrewCalendarService.GetHebrewDate(thisSaturday);
+            // Calculate days until next Saturday  
+            int daysUntilSaturday = dayOfWeek == DayOfWeek.Saturday ? 0 : ((int)DayOfWeek.Saturday - (int)dayOfWeek + 7) % 7;
+            if (daysUntilSaturday == 0 && DateTime.Now.TimeOfDay > TimeSpan.FromHours(12))
+            {
+                daysUntilSaturday = 7; // If it's Saturday afternoon, get next week's parsha
+            }
 
-            return GetParshaByDate(saturdayMonth, saturdayDay, isLeapYear);
+            DateTime thisSaturday = gregorianDate.AddDays(daysUntilSaturday);
+            var (satYear, saturdayMonth, saturdayDay, satIsLeapYear) = hebrewCalendarService.GetHebrewDate(thisSaturday);
+
+            return GetParshaByDate(satYear, saturdayMonth, saturdayDay, satIsLeapYear);
         }
 
-        private (string english, string hebrew) GetParshaByDate(int month, int day, bool isLeapYear)
+        private (string english, string hebrew) GetParshaByDate(int year, int month, int day, bool isLeapYear)
         {
+            // This is a simplified parsha calculation - for production use, consider using
+            // a complete Hebrew calendar library or validated parsha table
             return month switch
             {
                 1 => day switch { <= 2 => ("Ha'Azinu", "האזינו"), <= 23 => ("Bereishit", "בראשית"), _ => ("Noach", "נח") },

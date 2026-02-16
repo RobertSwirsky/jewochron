@@ -16,8 +16,14 @@ namespace Jewochron.Services
             return (year, month, day, isLeapYear);
         }
 
+        public DateTime ToGregorianDate(int hebrewYear, int hebrewMonth, int hebrewDay)
+        {
+            return hebrewCalendar.ToDateTime(hebrewYear, hebrewMonth, hebrewDay, 0, 0, 0, 0);
+        }
+
         public string GetHebrewMonthName(int month, bool isLeapYear)
         {
+            // Use Zmanim month names
             if (isLeapYear)
             {
                 return month switch
@@ -94,11 +100,6 @@ namespace Jewochron.Services
                 hebrewNumber = hebrewNumber.Insert(hebrewNumber.Length - 1, "״");
 
             return hebrewNumber;
-        }
-
-        public DateTime ToGregorianDate(int hebrewYear, int hebrewMonth, int hebrewDay)
-        {
-            return hebrewCalendar.ToDateTime(hebrewYear, hebrewMonth, hebrewDay, 0, 0, 0, 0);
         }
     }
 }
