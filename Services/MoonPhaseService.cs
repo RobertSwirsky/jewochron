@@ -26,5 +26,39 @@ namespace Jewochron.Services
                 _ => ("🌑", "New Moon")
             };
         }
+        
+        public (string emoji, string name, double illumination, double age) GetDetailedMoonPhase(DateTime date)
+        {
+            DateTime newMoonReference = new DateTime(2000, 1, 6, 18, 14, 0, DateTimeKind.Utc);
+            double synodicMonth = 29.53058867;
+
+            TimeSpan timeSinceReference = date.ToUniversalTime() - newMoonReference;
+            double daysSinceReference = timeSinceReference.TotalDays;
+            double phase = (daysSinceReference % synodicMonth) / synodicMonth;
+            double age = daysSinceReference % synodicMonth;
+
+            if (phase < 0) phase += 1;
+            if (age < 0) age += synodicMonth;
+
+            // Calculate illumination percentage (0-100%)
+            // Illumination is minimum at new moon (0%) and maximum at full moon (100%)
+            double illumination = (1 - Math.Cos(phase * 2 * Math.PI)) / 2 * 100;
+
+            var (emoji, name) = phase switch
+            {
+                < 0.0625 => ("🌑", "New Moon"),
+                < 0.1875 => ("🌒", "Waxing Crescent"),
+                < 0.3125 => ("🌓", "First Quarter"),
+                < 0.4375 => ("🌔", "Waxing Gibbous"),
+                < 0.5625 => ("🌕", "Full Moon"),
+                < 0.6875 => ("🌖", "Waning Gibbous"),
+                < 0.8125 => ("🌗", "Last Quarter"),
+                < 0.9375 => ("🌘", "Waning Crescent"),
+                _ => ("🌑", "New Moon")
+            };
+
+            return (emoji, name, illumination, age);
+        }
     }
 }
+
