@@ -106,10 +106,10 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Spacing="4">
+                                <StackPanel Grid.Column="0" Spacing="2">
                                     <TextBlock
-                                        Text="Local Time"
-                                        FontSize="11"
+                                        Text="Local Time • זמן מקומי"
+                                        FontSize="10"
                                         HorizontalAlignment="Center"
                                         Foreground="#666666" />
                                     <TextBlock
@@ -120,10 +120,10 @@
                                         Foreground="#4EC9B0"
                                         Text="00:00:00 AM" />
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" Spacing="4">
+                                <StackPanel Grid.Column="1" Spacing="2">
                                     <TextBlock
-                                        Text="Jerusalem Time"
-                                        FontSize="11"
+                                        Text="Jerusalem • ירושלים"
+                                        FontSize="10"
                                         HorizontalAlignment="Center"
                                         Foreground="#666666" />
                                     <TextBlock
@@ -197,9 +197,10 @@
                             MinHeight="130">
                             <StackPanel Spacing="6" VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="📖 Torah Portion"
-                                    FontSize="13"
+                                    Text="📖 Torah Portion • פרשת השבוע"
+                                    FontSize="11"
                                     HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtParsha"
@@ -231,9 +232,10 @@
                             MinHeight="130">
                             <StackPanel Spacing="6" VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="📚 Daf Yomi"
-                                    FontSize="13"
+                                    Text="📚 Daf Yomi • דף יומי"
+                                    FontSize="11"
                                     HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtDafYomi"
@@ -265,9 +267,10 @@
                             MinHeight="130">
                             <StackPanel Spacing="8" VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="🕐 Halachic Times"
-                                    FontSize="13"
+                                    Text="🕐 Halachic Times • זמנים"
+                                    FontSize="11"
                                     HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -281,17 +284,17 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Alot HaShachar:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtAlotHaShachar" Grid.Row="0" Grid.Column="1" Foreground="#FFFFFF" Margin="8,2,0,2" FontSize="12" Text="" />
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Alot HaShachar • עלות השחר:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtAlotHaShachar" Grid.Row="0" Grid.Column="1" Foreground="#FFFFFF" Margin="8,2,0,2" FontSize="11" Text="" />
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Sunrise:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtSunrise" Grid.Row="1" Grid.Column="1" Foreground="#FFD700" FontWeight="SemiBold" Margin="8,2,0,2" FontSize="12" Text="" />
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Sunrise • נץ החמה:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtSunrise" Grid.Row="1" Grid.Column="1" Foreground="#FFD700" FontWeight="SemiBold" Margin="8,2,0,2" FontSize="11" Text="" />
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Sunset:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtSunset" Grid.Row="2" Grid.Column="1" Foreground="#FFD700" FontWeight="SemiBold" Margin="8,2,0,2" FontSize="12" Text="" />
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Sunset • שקיעה:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtSunset" Grid.Row="2" Grid.Column="1" Foreground="#FFD700" FontWeight="SemiBold" Margin="8,2,0,2" FontSize="11" Text="" />
 
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Tzait:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtTzait" Grid.Row="3" Grid.Column="1" Foreground="#FFFFFF" Margin="8,2,0,2" FontSize="12" Text="" />
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Tzait • צאת הכוכבים:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtTzait" Grid.Row="3" Grid.Column="1" Foreground="#FFFFFF" Margin="8,2,0,2" FontSize="11" Text="" />
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -307,9 +310,10 @@
                             MinHeight="130">
                             <StackPanel Spacing="6" VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="🌙 Moon Phase"
-                                    FontSize="13"
+                                    Text="🌙 Moon Phase • ירח"
+                                    FontSize="11"
                                     HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
                                     <TextBlock x:Name="txtMoonPhase" FontSize="32" Text="" />
@@ -324,7 +328,7 @@
                                     Margin="0,4,0,0">
                                     <StackPanel Spacing="3">
                                         <TextBlock
-                                            Text="Next Molad (New Moon)"
+                                            Text="Next Molad • מולד"
                                             FontSize="10"
                                             HorizontalAlignment="Center"
                                             Foreground="#888888" />
@@ -357,9 +361,10 @@
                             MinHeight="130">
                             <StackPanel Spacing="6" VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="🎉 Next Holiday"
-                                    FontSize="13"
+                                    Text="🎉 Next Holiday • חג הבא"
+                                    FontSize="11"
                                     HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtNextHolidayEnglish"
@@ -409,25 +414,18 @@
                             Padding="15,12"
                             Margin="0,0,0,10"
                             MinHeight="130">
-                            <StackPanel Spacing="8" HorizontalAlignment="Center">
+                            <StackPanel Spacing="8" VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="✡️ Prayer Times"
-                                    FontSize="13"
+                                    Text="✡️ Prayer Times • תפילות"
+                                    FontSize="11"
                                     HorizontalAlignment="Center"
-                                    Foreground="#888888" />
-                                <TextBlock
-                                    x:Name="txtCurrentPrayer"
-                                    FontSize="15"
-                                    FontWeight="SemiBold"
-                                    HorizontalAlignment="Center"
-                                    Foreground="#90EE90"
                                     TextWrapping="Wrap"
-                                    Text="" />
+                                    Foreground="#888888" />
                                 <Grid Margin="0,4,0,0" MaxWidth="350">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="22" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="22" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -435,17 +433,17 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Shacharit:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="1" Foreground="#87CEEB" Margin="8,2,0,2" FontSize="12" Text="" />
-                                    <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="2" FontSize="14" HorizontalAlignment="Center" Margin="4,2,0,2" Text="" />
+                                    <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="0" FontSize="14" HorizontalAlignment="Center" Margin="0,2" Text="" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="4,2,0,2" FontSize="11" />
+                                    <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="2" Foreground="#87CEEB" Margin="8,2,0,2" FontSize="11" Text="" />
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Mincha:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="1" Foreground="#FFA07A" Margin="8,2,0,2" FontSize="12" Text="" />
-                                    <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="2" FontSize="14" HorizontalAlignment="Center" Margin="4,2,0,2" Text="" />
+                                    <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="0" FontSize="14" HorizontalAlignment="Center" Margin="0,2" Text="" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="4,2,0,2" FontSize="11" />
+                                    <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="2" Foreground="#FFA07A" Margin="8,2,0,2" FontSize="11" Text="" />
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Maariv:" Foreground="#B0B0B0" Margin="0,2" FontSize="12" />
-                                    <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="1" Foreground="#9370DB" Margin="8,2,0,2" FontSize="12" Text="" />
-                                    <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="2" FontSize="14" HorizontalAlignment="Center" Margin="4,2,0,2" Text="" />
+                                    <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="0" FontSize="14" HorizontalAlignment="Center" Margin="0,2" Text="" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="4,2,0,2" FontSize="11" />
+                                    <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="2" Foreground="#9370DB" Margin="8,2,0,2" FontSize="11" Text="" />
                                 </Grid>
                             </StackPanel>
                         </Border>

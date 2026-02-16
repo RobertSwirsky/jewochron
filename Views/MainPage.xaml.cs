@@ -114,37 +114,23 @@ namespace Jewochron.Views
                 txtMinchaTime.Text = $"{minGedolah.ToString("h:mm tt")} - {sunset.ToString("h:mm tt")}";
                 txtMaarivTime.Text = $"{tzait.ToString("h:mm tt")} onwards";
 
-                // Determine which prayer can be done now
-                string currentPrayer = "";
+                // Determine which prayer can be done now (use pointing hand emoji)
                 txtShacharitIndicator.Text = "";
                 txtMinchaIndicator.Text = "";
                 txtMaarivIndicator.Text = "";
 
                 if (now >= alotHaShachar && now < chatzot)
                 {
-                    currentPrayer = "Time for Shacharit";
-                    txtShacharitIndicator.Text = "✓";
+                    txtShacharitIndicator.Text = "👉";
                 }
                 else if (now >= minGedolah && now < sunset)
                 {
-                    currentPrayer = "Time for Mincha";
-                    txtMinchaIndicator.Text = "✓";
+                    txtMinchaIndicator.Text = "👉";
                 }
                 else if (now >= tzait || now < alotHaShachar)
                 {
-                    currentPrayer = "Time for Maariv";
-                    txtMaarivIndicator.Text = "✓";
+                    txtMaarivIndicator.Text = "👉";
                 }
-                else if (now >= chatzot && now < minGedolah)
-                {
-                    currentPrayer = "Between prayers";
-                }
-                else if (now >= sunset && now < tzait)
-                {
-                    currentPrayer = "Twilight - Wait for Maariv";
-                }
-
-                txtCurrentPrayer.Text = currentPrayer;
 
                 // Moon phase
                 var (moonEmoji, moonPhaseName) = moonPhaseService.GetMoonPhase(now);
