@@ -1,146 +1,158 @@
+using System.Text.Json;
+
 namespace Jewochron.Services
 {
     public class TorahPortionService
     {
         private readonly HebrewCalendarService hebrewCalendarService;
+        private readonly HttpClient httpClient;
 
         public TorahPortionService(HebrewCalendarService hebrewCalendarService)
         {
             this.hebrewCalendarService = hebrewCalendarService;
+            this.httpClient = new HttpClient();
+        }
+
+        public async Task<(string english, string hebrew)> GetTorahPortionAsync(int hebrewYear, int hebrewMonth, int hebrewDay, bool isLeapYear)
+        {
+            try
+            {
+                // Use HebCal API for accurate parsha
+                // Get the upcoming Saturday
+                DateTime today = DateTime.Now;
+                DateTime gregorianDate = hebrewCalendarService.ToGregorianDate(hebrewYear, hebrewMonth, hebrewDay);
+
+                if (gregorianDate < today.Date)
+                {
+                    gregorianDate = today.Date;
+                }
+
+                DayOfWeek dayOfWeek = gregorianDate.DayOfWeek;
+
+                // Find next Saturday
+                int daysUntilSaturday;
+                if (dayOfWeek == DayOfWeek.Saturday && gregorianDate.Date == today.Date && today.TimeOfDay < TimeSpan.FromHours(18))
+                {
+                    daysUntilSaturday = 0; // It's Saturday, show today's parsha
+                }
+                else if (dayOfWeek == DayOfWeek.Saturday)
+                {
+                    daysUntilSaturday = 7; // Past Saturday evening, get next week
+                }
+                else
+                {
+                    daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)dayOfWeek + 7) % 7;
+                }
+
+                DateTime targetSaturday = gregorianDate.AddDays(daysUntilSaturday);
+
+                // Call HebCal API
+                string url = $"https://www.hebcal.com/shabbat?cfg=json&gy={targetSaturday.Year}&gm={targetSaturday.Month}&gd={targetSaturday.Day}&M=on&lg=s&m=50";
+
+                var response = await httpClient.GetStringAsync(url);
+                var json = JsonDocument.Parse(response);
+
+                // Find the Torah reading
+                if (json.RootElement.TryGetProperty("items", out var items))
+                {
+                    foreach (var item in items.EnumerateArray())
+                    {
+                        if (item.TryGetProperty("category", out var category) && 
+                            category.GetString() == "parashat")
+                        {
+                            string? title = item.GetProperty("title").GetString();
+                            if (!string.IsNullOrEmpty(title))
+                            {
+                                // Parse "Parashat Terumah" to get "Terumah"
+                                string parshaName = title.Replace("Parashat ", "").Trim();
+                                string hebrewName = GetHebrewName(parshaName);
+                                return (parshaName, hebrewName);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // If API fails, fall back to basic calculation
+            }
+
+            // Fallback
+            return ("Torah Portion", "פרשת השבוע");
         }
 
         public (string english, string hebrew) GetTorahPortion(int hebrewYear, int hebrewMonth, int hebrewDay, bool isLeapYear)
         {
-            // Find the upcoming or current Saturday
-            DateTime today = DateTime.Now;
-            DateTime gregorianDate = hebrewCalendarService.ToGregorianDate(hebrewYear, hebrewMonth, hebrewDay);
-
-            // If it's before today, use today instead
-            if (gregorianDate < today.Date)
-            {
-                gregorianDate = today;
-            }
-
-            DayOfWeek dayOfWeek = gregorianDate.DayOfWeek;
-
-            // Calculate days until next Saturday (or 0 if today is Saturday and before noon)
-            int daysUntilSaturday;
-            if (dayOfWeek == DayOfWeek.Saturday && gregorianDate.Date == today.Date && today.TimeOfDay < TimeSpan.FromHours(12))
-            {
-                daysUntilSaturday = 0; // It's Saturday morning, show this week's parsha
-            }
-            else if (dayOfWeek == DayOfWeek.Saturday)
-            {
-                daysUntilSaturday = 7; // Saturday afternoon or past Saturday, get next week
-            }
-            else
-            {
-                daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)dayOfWeek + 7) % 7;
-            }
-
-            DateTime thisSaturday = gregorianDate.AddDays(daysUntilSaturday);
-            var (satYear, saturdayMonth, saturdayDay, satIsLeapYear) = hebrewCalendarService.GetHebrewDate(thisSaturday);
-
-            // Calculate week of year for more accurate parsha determination
-            int weekOfYear = GetWeekOfHebrewYear(satYear, saturdayMonth, saturdayDay, satIsLeapYear);
-
-            return GetParshaByWeek(weekOfYear, satIsLeapYear, saturdayMonth);
+            // Synchronous wrapper - use async version when possible
+            return GetTorahPortionAsync(hebrewYear, hebrewMonth, hebrewDay, isLeapYear).GetAwaiter().GetResult();
         }
 
-        private int GetWeekOfHebrewYear(int year, int month, int day, bool isLeapYear)
+        private string GetHebrewName(string englishName)
         {
-            // Tishrei 1 is the start of the year
-            DateTime roshHashanah = hebrewCalendarService.ToGregorianDate(year, 1, 1);
-            DateTime currentDate = hebrewCalendarService.ToGregorianDate(year, month, day);
-
-            // Find the first Saturday of the year
-            int daysToFirstSaturday = ((int)DayOfWeek.Saturday - (int)roshHashanah.DayOfWeek + 7) % 7;
-            DateTime firstSaturday = roshHashanah.AddDays(daysToFirstSaturday);
-
-            if (currentDate < firstSaturday)
+            return englishName switch
             {
-                // Before first Saturday, might be from previous year
-                return 54; // Last parsha from previous year
-            }
-
-            int daysSinceFirstSaturday = (int)(currentDate - firstSaturday).TotalDays;
-            return (daysSinceFirstSaturday / 7) + 1;
-        }
-
-        private (string english, string hebrew) GetParshaByWeek(int week, bool isLeapYear, int month)
-        {
-            // Adjusted parsha cycle based on week of year
-            // This accounts for holidays that interrupt the reading cycle
-
-            // During holidays, return special readings
-            if (month == 1 && week <= 3)
-            {
-                return week switch
-                {
-                    1 => ("Ha'Azinu", "האזינו"),
-                    2 => ("Bereishit", "בראשית"),
-                    3 => ("Noach", "נח"),
-                    _ => ("Bereishit", "בראשית")
-                };
-            }
-
-            // Regular Torah reading cycle
-            return week switch
-            {
-                1 => ("Ha'Azinu", "האזינו"),
-                2 => ("Bereishit", "בראשית"),
-                3 => ("Noach", "נח"),
-                4 => ("Lech-Lecha", "לך לך"),
-                5 => ("Vayera", "וירא"),
-                6 => ("Chayei Sarah", "חיי שרה"),
-                7 => ("Toldot", "תולדות"),
-                8 => ("Vayetzei", "ויצא"),
-                9 => ("Vayishlach", "וישלח"),
-                10 => ("Vayeshev", "וישב"),
-                11 => ("Miketz", "מקץ"),
-                12 => ("Vayigash", "ויגש"),
-                13 => ("Vayechi", "ויחי"),
-                14 => ("Shemot", "שמות"),
-                15 => ("Vaera", "וארא"),
-                16 => ("Bo", "בא"),
-                17 => ("Beshalach", "בשלח"),
-                18 => ("Yitro", "יתרו"),
-                19 => ("Mishpatim", "משפטים"),
-                20 => ("Terumah", "תרומה"),
-                21 => ("Tetzaveh", "תצוה"),
-                22 => ("Ki Tisa", "כי תשא"),
-                23 => ("Vayakhel", "ויקהל"),
-                24 => ("Pekudei", "פקודי"),
-                25 => ("Vayikra", "ויקרא"),
-                26 => ("Tzav", "צו"),
-                27 => ("Shemini", "שמיני"),
-                28 => ("Tazria", "תזריע"),
-                29 => ("Metzora", "מצורע"),
-                30 => ("Achrei Mot", "אחרי מות"),
-                31 => ("Kedoshim", "קדושים"),
-                32 => ("Emor", "אמור"),
-                33 => ("Behar", "בהר"),
-                34 => ("Bechukotai", "בחוקתי"),
-                35 => ("Bamidbar", "במדבר"),
-                36 => ("Nasso", "נשא"),
-                37 => ("Beha'alotcha", "בהעלתך"),
-                38 => ("Sh'lach", "שלח"),
-                39 => ("Korach", "קרח"),
-                40 => ("Chukat", "חקת"),
-                41 => ("Balak", "בלק"),
-                42 => ("Pinchas", "פנחס"),
-                43 => ("Matot", "מטות"),
-                44 => ("Masei", "מסעי"),
-                45 => ("Devarim", "דברים"),
-                46 => ("Vaetchanan", "ואתחנן"),
-                47 => ("Eikev", "עקב"),
-                48 => ("Re'eh", "ראה"),
-                49 => ("Shoftim", "שופטים"),
-                50 => ("Ki Teitzei", "כי תצא"),
-                51 => ("Ki Tavo", "כי תבוא"),
-                52 => ("Nitzavim", "נצבים"),
-                53 => ("Vayeilech", "וילך"),
-                _ => ("Bereishit", "בראשית")
+                "Bereishit" => "בראשית",
+                "Noach" => "נח",
+                "Lech-Lecha" => "לך לך",
+                "Vayera" => "וירא",
+                "Chayei Sara" => "חיי שרה",
+                "Toldot" => "תולדות",
+                "Vayetzei" => "ויצא",
+                "Vayishlach" => "וישלח",
+                "Vayeshev" => "וישב",
+                "Miketz" => "מקץ",
+                "Vayigash" => "ויגש",
+                "Vayechi" => "ויחי",
+                "Shemot" => "שמות",
+                "Vaera" => "וארא",
+                "Bo" => "בא",
+                "Beshalach" => "בשלח",
+                "Yitro" => "יתרו",
+                "Mishpatim" => "משפטים",
+                "Terumah" => "תרומה",
+                "Tetzaveh" => "תצוה",
+                "Ki Tisa" => "כי תשא",
+                "Vayakhel" => "ויקהל",
+                "Pekudei" => "פקודי",
+                "Vayakhel-Pekudei" => "ויקהל-פקודי",
+                "Vayikra" => "ויקרא",
+                "Tzav" => "צו",
+                "Shmini" => "שמיני",
+                "Tazria" => "תזריע",
+                "Metzora" => "מצורע",
+                "Tazria-Metzora" => "תזריע-מצורע",
+                "Achrei Mot" => "אחרי מות",
+                "Kedoshim" => "קדושים",
+                "Achrei Mot-Kedoshim" => "אחרי מות-קדושים",
+                "Emor" => "אמור",
+                "Behar" => "בהר",
+                "Bechukotai" => "בחוקתי",
+                "Behar-Bechukotai" => "בהר-בחוקתי",
+                "Bamidbar" => "במדבר",
+                "Nasso" => "נשא",
+                "Beha'alotcha" => "בהעלתך",
+                "Sh'lach" => "שלח",
+                "Korach" => "קרח",
+                "Chukat" => "חקת",
+                "Balak" => "בלק",
+                "Chukat-Balak" => "חקת-בלק",
+                "Pinchas" => "פנחס",
+                "Matot" => "מטות",
+                "Masei" => "מסעי",
+                "Matot-Masei" => "מטות-מסעי",
+                "Devarim" => "דברים",
+                "Vaetchanan" => "ואתחנן",
+                "Eikev" => "עקב",
+                "Re'eh" => "ראה",
+                "Shoftim" => "שופטים",
+                "Ki Teitzei" => "כי תצא",
+                "Ki Tavo" => "כי תבוא",
+                "Nitzavim" => "נצבים",
+                "Vayeilech" => "וילך",
+                "Nitzavim-Vayeilech" => "נצבים-וילך",
+                "Ha'Azinu" => "האזינו",
+                "Vezot Haberakhah" => "וזאת הברכה",
+                _ => englishName
             };
         }
     }

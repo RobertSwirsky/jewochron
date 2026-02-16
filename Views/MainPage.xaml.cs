@@ -90,8 +90,8 @@ namespace Jewochron.Views
                 txtDaysUntilHoliday.Text = daysUntil.ToString();
                 txtHolidayDate.Text = holidayDate.ToString("MMMM d, yyyy");
 
-                // Torah portion
-                var (parshaEnglish, parshaHebrew) = torahPortionService.GetTorahPortion(hebrewYear, hebrewMonth, hebrewDay, isLeapYear);
+                // Torah portion - use async method for accurate results
+                var (parshaEnglish, parshaHebrew) = await torahPortionService.GetTorahPortionAsync(hebrewYear, hebrewMonth, hebrewDay, isLeapYear);
                 txtParsha.Text = parshaEnglish;
                 txtParshaHebrew.Text = parshaHebrew;
 
