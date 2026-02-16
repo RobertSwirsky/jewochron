@@ -94,6 +94,48 @@
                         Margin="0,5,0,0"
                         Text="Loading location..." />
 
+                    <!-- Live Time Display -->
+                    <Border 
+                        Background="#2D2D30" 
+                        CornerRadius="12" 
+                        Padding="15,12"
+                        HorizontalAlignment="Stretch">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock
+                                    Text="Local Time"
+                                    FontSize="12"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#888888" />
+                                <TextBlock
+                                    x:Name="txtLocalTime"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#4EC9B0"
+                                    Text="00:00:00" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock
+                                    Text="Jerusalem Time"
+                                    FontSize="12"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#888888" />
+                                <TextBlock
+                                    x:Name="txtJerusalemTime"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#FFD700"
+                                    Text="00:00:00" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
                     <!-- Date Card -->
                     <Border 
                         x:Name="DateCard"

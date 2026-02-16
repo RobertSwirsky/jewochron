@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml.Controls;
 using Jewochron.Services;
+using Microsoft.UI.Dispatching;
 
 namespace Jewochron.Views
 {
@@ -12,6 +13,8 @@ namespace Jewochron.Views
         private readonly MoonPhaseService moonPhaseService;
         private readonly LocationService locationService;
         private readonly JewishHolidaysService jewishHolidaysService;
+        private DispatcherQueueTimer? clockTimer;
+        private readonly TimeZoneInfo jerusalemTimeZone;
 
         public MainPage()
         {
@@ -26,8 +29,34 @@ namespace Jewochron.Views
             locationService = new LocationService();
             jewishHolidaysService = new JewishHolidaysService(hebrewCalendarService);
 
+            // Get Jerusalem time zone
+            jerusalemTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
+
+            // Start clock timer
+            StartClockTimer();
+
             // Load data
             _ = LoadDataAsync();
+        }
+
+        private void StartClockTimer()
+        {
+            clockTimer = DispatcherQueue.CreateTimer();
+            clockTimer.Interval = TimeSpan.FromSeconds(1);
+            clockTimer.Tick += (s, e) => UpdateClocks();
+            clockTimer.Start();
+
+            // Update immediately
+            UpdateClocks();
+        }
+
+        private void UpdateClocks()
+        {
+            DateTime now = DateTime.Now;
+            DateTime jerusalemTime = TimeZoneInfo.ConvertTime(now, jerusalemTimeZone);
+
+            txtLocalTime.Text = now.ToString("HH:mm:ss");
+            txtJerusalemTime.Text = jerusalemTime.ToString("HH:mm:ss");
         }
 
         private async Task LoadDataAsync()
