@@ -11,6 +11,7 @@ namespace Jewochron.Views
         private readonly HalachicTimesService halachicTimesService;
         private readonly MoonPhaseService moonPhaseService;
         private readonly LocationService locationService;
+        private readonly JewishHolidaysService jewishHolidaysService;
 
         public MainPage()
         {
@@ -23,6 +24,7 @@ namespace Jewochron.Views
             halachicTimesService = new HalachicTimesService();
             moonPhaseService = new MoonPhaseService();
             locationService = new LocationService();
+            jewishHolidaysService = new JewishHolidaysService(hebrewCalendarService);
 
             // Load data
             _ = LoadDataAsync();
@@ -51,6 +53,13 @@ namespace Jewochron.Views
                 // Hebrew date in Hebrew
                 string monthNameHebrew = hebrewCalendarService.GetHebrewMonthNameInHebrew(hebrewMonth, isLeapYear);
                 txtHebrewDateInHebrew.Text = $"{hebrewCalendarService.ConvertToHebrewNumber(hebrewDay)} {monthNameHebrew} {hebrewCalendarService.ConvertToHebrewNumber(hebrewYear)}";
+
+                // Next holiday
+                var (holidayEnglish, holidayHebrew, holidayDate, daysUntil) = jewishHolidaysService.GetNextHoliday(now);
+                txtNextHolidayEnglish.Text = holidayEnglish;
+                txtNextHolidayHebrew.Text = holidayHebrew;
+                txtDaysUntilHoliday.Text = daysUntil.ToString();
+                txtHolidayDate.Text = holidayDate.ToString("MMMM d, yyyy");
 
                 // Torah portion
                 var (parshaEnglish, parshaHebrew) = torahPortionService.GetTorahPortion(hebrewYear, hebrewMonth, hebrewDay, isLeapYear);

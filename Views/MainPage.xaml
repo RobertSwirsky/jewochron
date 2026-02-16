@@ -53,6 +53,57 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- Next Holiday Card -->
+                    <Border 
+                        Background="#2D2D30" 
+                        CornerRadius="12" 
+                        Padding="25,20"
+                        HorizontalAlignment="Stretch">
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                Text="🎉 Next Holiday"
+                                FontSize="18"
+                                HorizontalAlignment="Center"
+                                Foreground="#888888" />
+                            <TextBlock
+                                x:Name="txtNextHolidayEnglish"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Center"
+                                TextWrapping="Wrap"
+                                Foreground="#FFD700"
+                                Text="" />
+                            <TextBlock
+                                x:Name="txtNextHolidayHebrew"
+                                FontSize="22"
+                                HorizontalAlignment="Center"
+                                FlowDirection="RightToLeft"
+                                TextWrapping="Wrap"
+                                Foreground="#FFD700"
+                                Text="" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,5,0,0">
+                                <TextBlock
+                                    x:Name="txtDaysUntilHoliday"
+                                    FontSize="32"
+                                    FontWeight="Bold"
+                                    Foreground="#FF6B6B"
+                                    Text="" />
+                                <TextBlock
+                                    Text="days"
+                                    FontSize="18"
+                                    Foreground="#B0B0B0"
+                                    VerticalAlignment="Center"
+                                    Margin="0,8,0,0" />
+                            </StackPanel>
+                            <TextBlock
+                                x:Name="txtHolidayDate"
+                                FontSize="14"
+                                HorizontalAlignment="Center"
+                                Foreground="#888888"
+                                Text="" />
+                        </StackPanel>
+                    </Border>
+
                     <!-- Responsive Grid Layout -->
                     <Grid>
                         <Grid.ColumnDefinitions>
