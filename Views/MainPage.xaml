@@ -19,30 +19,30 @@
                         <VisualState.Setters>
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="0" />
                             <Setter Target="MainStack.Spacing" Value="10" />
-                            <Setter Target="DateCard.Padding" Value="15,12" />
+                            <Setter Target="DateCard.Padding" Value="18,14" />
                             <Setter Target="ParshaCard.Grid.Column" Value="0" />
-                            <Setter Target="ParshaCard.Padding" Value="12,10" />
-                            <Setter Target="ParshaCard.MinHeight" Value="100" />
+                            <Setter Target="ParshaCard.Padding" Value="18,14" />
+                            <Setter Target="ParshaCard.MinHeight" Value="140" />
                             <Setter Target="DafYomiCard.Grid.Column" Value="0" />
                             <Setter Target="DafYomiCard.Grid.Row" Value="1" />
-                            <Setter Target="DafYomiCard.Padding" Value="12,10" />
-                            <Setter Target="DafYomiCard.MinHeight" Value="100" />
+                            <Setter Target="DafYomiCard.Padding" Value="18,14" />
+                            <Setter Target="DafYomiCard.MinHeight" Value="140" />
                             <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
                             <Setter Target="HalachicCard.Grid.Row" Value="2" />
-                            <Setter Target="HalachicCard.Padding" Value="12,10" />
-                            <Setter Target="HalachicCard.MinHeight" Value="100" />
+                            <Setter Target="HalachicCard.Padding" Value="18,14" />
+                            <Setter Target="HalachicCard.MinHeight" Value="140" />
                             <Setter Target="MoonCard.Grid.Column" Value="0" />
                             <Setter Target="MoonCard.Grid.Row" Value="3" />
-                            <Setter Target="MoonCard.Padding" Value="12,10" />
-                            <Setter Target="MoonCard.MinHeight" Value="100" />
+                            <Setter Target="MoonCard.Padding" Value="18,14" />
+                            <Setter Target="MoonCard.MinHeight" Value="140" />
                             <Setter Target="HolidayCard.Grid.Column" Value="0" />
                             <Setter Target="HolidayCard.Grid.Row" Value="4" />
-                            <Setter Target="HolidayCard.Padding" Value="12,10" />
-                            <Setter Target="HolidayCard.MinHeight" Value="100" />
+                            <Setter Target="HolidayCard.Padding" Value="18,14" />
+                            <Setter Target="HolidayCard.MinHeight" Value="140" />
                             <Setter Target="PrayerCard.Grid.Column" Value="0" />
                             <Setter Target="PrayerCard.Grid.Row" Value="5" />
-                            <Setter Target="PrayerCard.Padding" Value="12,10" />
-                            <Setter Target="PrayerCard.MinHeight" Value="100" />
+                            <Setter Target="PrayerCard.Padding" Value="18,14" />
+                            <Setter Target="PrayerCard.MinHeight" Value="140" />
                         </VisualState.Setters>
                     </VisualState>
                     <!-- Medium: Two columns -->
@@ -53,49 +53,402 @@
                         <VisualState.Setters>
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
                             <Setter Target="MainStack.Spacing" Value="15" />
-                            <Setter Target="DateCard.Padding" Value="20,15" />
+                            <Setter Target="DateCard.Padding" Value="22,18" />
                             <Setter Target="ParshaCard.Grid.Column" Value="0" />
-                            <Setter Target="ParshaCard.Padding" Value="15,12" />
-                            <Setter Target="ParshaCard.MinHeight" Value="130" />
+                            <Setter Target="ParshaCard.Padding" Value="20,16" />
+                            <Setter Target="ParshaCard.MinHeight" Value="160" />
                             <Setter Target="DafYomiCard.Grid.Column" Value="1" />
                             <Setter Target="DafYomiCard.Grid.Row" Value="0" />
-                            <Setter Target="DafYomiCard.Padding" Value="15,12" />
-                            <Setter Target="DafYomiCard.MinHeight" Value="130" />
+                            <Setter Target="DafYomiCard.Padding" Value="20,16" />
+                            <Setter Target="DafYomiCard.MinHeight" Value="160" />
                             <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
                             <Setter Target="HalachicCard.Grid.Row" Value="1" />
-                            <Setter Target="HalachicCard.Padding" Value="15,12" />
-                            <Setter Target="HalachicCard.MinHeight" Value="130" />
+                            <Setter Target="HalachicCard.Padding" Value="20,16" />
+                            <Setter Target="HalachicCard.MinHeight" Value="160" />
                             <Setter Target="MoonCard.Grid.Column" Value="1" />
                             <Setter Target="MoonCard.Grid.Row" Value="1" />
-                            <Setter Target="MoonCard.Padding" Value="15,12" />
-                            <Setter Target="MoonCard.MinHeight" Value="130" />
+                            <Setter Target="MoonCard.Padding" Value="20,16" />
+                            <Setter Target="MoonCard.MinHeight" Value="160" />
                             <Setter Target="HolidayCard.Grid.Column" Value="0" />
                             <Setter Target="HolidayCard.Grid.Row" Value="2" />
-                            <Setter Target="HolidayCard.Padding" Value="15,12" />
-                            <Setter Target="HolidayCard.MinHeight" Value="130" />
+                            <Setter Target="HolidayCard.Padding" Value="20,16" />
+                            <Setter Target="HolidayCard.MinHeight" Value="160" />
                             <Setter Target="PrayerCard.Grid.Column" Value="1" />
                             <Setter Target="PrayerCard.Grid.Row" Value="2" />
-                            <Setter Target="PrayerCard.Padding" Value="15,12" />
-                            <Setter Target="PrayerCard.MinHeight" Value="130" />
+                            <Setter Target="PrayerCard.Padding" Value="20,16" />
+                            <Setter Target="PrayerCard.MinHeight" Value="160" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="MainStack" HorizontalAlignment="Stretch" MaxWidth="1200" Spacing="15">
+                <StackPanel x:Name="MainStack" HorizontalAlignment="Center" MaxWidth="1200" Spacing="15">
+
+                    <!-- Jerusalem Skyline Graphic -->
+                    <Canvas Width="1200" Height="150" HorizontalAlignment="Center" Margin="0,10,0,5">
+                        <!-- Twilight sky gradient (multiple layers) -->
+                        <Rectangle Width="1200" Height="150" Fill="#2C3E50" />
+                        <Rectangle Width="1200" Height="80" Fill="#34495E" Opacity="0.6" />
+                        <Rectangle Width="1200" Height="40" Fill="#5D6D7E" Opacity="0.3" />
+                        
+                        <!-- Moon with glow -->
+                        <Ellipse Canvas.Left="945" Canvas.Top="18" Width="45" Height="45" Fill="#FFF8DC" Opacity="0.3" />
+                        <Ellipse Canvas.Left="950" Canvas.Top="23" Width="35" Height="35" Fill="#FFFACD" Opacity="0.95" />
+                        <Ellipse Canvas.Left="955" Canvas.Top="26" Width="28" Height="28" Fill="#FFFFE0" />
+                        <!-- Moon craters -->
+                        <Ellipse Canvas.Left="960" Canvas.Top="30" Width="5" Height="5" Fill="#E8E8D0" Opacity="0.5" />
+                        <Ellipse Canvas.Left="968" Canvas.Top="35" Width="4" Height="4" Fill="#E8E8D0" Opacity="0.5" />
+                        
+                        <!-- More realistic stars with varying brightness -->
+                        <Ellipse Canvas.Left="100" Canvas.Top="15" Width="2" Height="2" Fill="#FFFACD" Opacity="0.8" />
+                        <Ellipse Canvas.Left="180" Canvas.Top="25" Width="3" Height="3" Fill="#FFFACD" />
+                        <Ellipse Canvas.Left="250" Canvas.Top="18" Width="2" Height="2" Fill="#FFFACD" Opacity="0.7" />
+                        <Ellipse Canvas.Left="320" Canvas.Top="22" Width="2" Height="2" Fill="#FFFACD" Opacity="0.9" />
+                        <Ellipse Canvas.Left="420" Canvas.Top="12" Width="3" Height="3" Fill="#FFFACD" />
+                        <Ellipse Canvas.Left="680" Canvas.Top="20" Width="2" Height="2" Fill="#FFFACD" Opacity="0.8" />
+                        <Ellipse Canvas.Left="750" Canvas.Top="28" Width="2" Height="2" Fill="#FFFACD" Opacity="0.7" />
+                        <Ellipse Canvas.Left="840" Canvas.Top="16" Width="3" Height="3" Fill="#FFFACD" />
+                        <Ellipse Canvas.Left="1070" Canvas.Top="24" Width="2" Height="2" Fill="#FFFACD" Opacity="0.9" />
+                        <Ellipse Canvas.Left="1120" Canvas.Top="30" Width="2" Height="2" Fill="#FFFACD" Opacity="0.8" />
+                        
+                        <!-- Distant Mount of Olives (layered hills with depth) -->
+                        <Ellipse Canvas.Left="-80" Canvas.Top="100" Width="350" Height="60" Fill="#1C2833" Opacity="0.6" />
+                        <Ellipse Canvas.Left="200" Canvas.Top="105" Width="450" Height="55" Fill="#212F3D" Opacity="0.5" />
+                        <Ellipse Canvas.Left="550" Canvas.Top="102" Width="400" Height="58" Fill="#1C2833" Opacity="0.6" />
+                        <Ellipse Canvas.Left="850" Canvas.Top="105" Width="380" Height="52" Fill="#212F3D" Opacity="0.5" />
+                        
+                        <!-- LEFT SECTION: Ancient City Walls with depth and shadows -->
+                        <!-- Wall shadow -->
+                        <Rectangle Canvas.Left="35" Canvas.Top="78" Width="90" Height="72" Fill="#1A1A1A" Opacity="0.3" />
+                        <!-- Main wall -->
+                        <Rectangle Canvas.Left="30" Canvas.Top="75" Width="90" Height="70" Fill="#8B7355" />
+                        <!-- Wall texture/highlight -->
+                        <Rectangle Canvas.Left="30" Canvas.Top="75" Width="90" Height="3" Fill="#A5957F" />
+                        <Rectangle Canvas.Left="30" Canvas.Top="73" Width="90" Height="2" Fill="#C5B5A0" Opacity="0.3" />
+                        <!-- Detailed battlements with shadows -->
+                        <Rectangle Canvas.Left="35" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="35" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="53" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="53" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="71" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="71" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="89" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="89" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="107" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="107" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <!-- Wall stone texture lines -->
+                        <Rectangle Canvas.Left="30" Canvas.Top="95" Width="90" Height="1" Fill="#7A6A50" Opacity="0.4" />
+                        <Rectangle Canvas.Left="30" Canvas.Top="115" Width="90" Height="1" Fill="#7A6A50" Opacity="0.4" />
+                        <Rectangle Canvas.Left="30" Canvas.Top="130" Width="90" Height="1" Fill="#7A6A50" Opacity="0.4" />
+                        
+                        <!-- OLD CITY Buildings with realistic shading -->
+                        <!-- Building 1 with shadow and depth -->
+                        <Rectangle Canvas.Left="145" Canvas.Top="88" Width="45" Height="57" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="140" Canvas.Top="85" Width="45" Height="57" Fill="#B8A588" />
+                        <Rectangle Canvas.Left="140" Canvas.Top="85" Width="45" Height="3" Fill="#C8B598" />
+                        <Rectangle Canvas.Left="140" Canvas.Top="80" Width="45" Height="5" Fill="#D5C2A8" />
+                        <!-- Windows with depth -->
+                        <Rectangle Canvas.Left="148" Canvas.Top="95" Width="8" Height="12" Fill="#2C2C2C" />
+                        <Rectangle Canvas.Left="149" Canvas.Top="96" Width="6" Height="2" Fill="#4A4A4A" Opacity="0.3" />
+                        <Rectangle Canvas.Left="162" Canvas.Top="95" Width="8" Height="12" Fill="#2C2C2C" />
+                        <Rectangle Canvas.Left="163" Canvas.Top="96" Width="6" Height="2" Fill="#4A4A4A" Opacity="0.3" />
+                        <Rectangle Canvas.Left="148" Canvas.Top="115" Width="8" Height="12" Fill="#2C2C2C" />
+                        <Rectangle Canvas.Left="162" Canvas.Top="115" Width="8" Height="12" Fill="#2C2C2C" />
+                        <!-- Star of David on building -->
+                        <Path Canvas.Left="153" Canvas.Top="123"
+                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Fill="#6BA4D8"
+                              Stroke="#4A90E2"
+                              StrokeThickness="0.5" />
+                        
+                        <!-- Building 2 -->
+                        <Rectangle Canvas.Left="200" Canvas.Top="93" Width="38" Height="52" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="195" Canvas.Top="90" Width="38" Height="52" Fill="#A89968" />
+                        <Rectangle Canvas.Left="195" Canvas.Top="90" Width="38" Height="3" Fill="#B8A978" />
+                        <Rectangle Canvas.Left="195" Canvas.Top="86" Width="38" Height="4" Fill="#C8B988" />
+                        
+                        <!-- Building 3 -->
+                        <Rectangle Canvas.Left="248" Canvas.Top="85" Width="42" Height="60" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="243" Canvas.Top="82" Width="42" Height="60" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="243" Canvas.Top="82" Width="42" Height="3" Fill="#AB9B8E" />
+                        <Rectangle Canvas.Left="243" Canvas.Top="77" Width="42" Height="5" Fill="#BBB09E" />
+                        <!-- Star of David on building -->
+                        <Path Canvas.Left="254" Canvas.Top="92"
+                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Fill="#5A8FC8"
+                              Stroke="#3A7BC8"
+                              StrokeThickness="0.5" />
+                        
+                        <!-- TOWER OF DAVID - More detailed and realistic -->
+                        <Rectangle Canvas.Left="305" Canvas.Top="63" Width="35" Height="82" Fill="#1A1A1A" Opacity="0.25" />
+                        <Rectangle Canvas.Left="300" Canvas.Top="60" Width="35" Height="82" Fill="#8B7355" />
+                        <!-- Tower highlight -->
+                        <Rectangle Canvas.Left="300" Canvas.Top="60" Width="2" Height="82" Fill="#A5957F" Opacity="0.5" />
+                        <!-- Tower top -->
+                        <Rectangle Canvas.Left="300" Canvas.Top="55" Width="35" Height="5" Fill="#9B8365" />
+                        <Rectangle Canvas.Left="305" Canvas.Top="48" Width="25" Height="10" Fill="#A0826D" />
+                        <Rectangle Canvas.Left="305" Canvas.Top="48" Width="25" Height="2" Fill="#B59270" />
+                        <!-- Tower windows -->
+                        <Rectangle Canvas.Left="310" Canvas.Top="75" Width="6" Height="10" Fill="#2C2C2C" />
+                        <Rectangle Canvas.Left="319" Canvas.Top="75" Width="6" Height="10" Fill="#2C2C2C" />
+                        <Rectangle Canvas.Left="310" Canvas.Top="100" Width="6" Height="10" Fill="#2C2C2C" />
+                        <Rectangle Canvas.Left="319" Canvas.Top="100" Width="6" Height="10" Fill="#2C2C2C" />
+                        
+                        <!-- CHURCH OF THE HOLY SEPULCHRE - Enhanced dome -->
+                        <!-- Building base -->
+                        <Rectangle Canvas.Left="375" Canvas.Top="93" Width="20" Height="52" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="370" Canvas.Top="90" Width="20" Height="52" Fill="#9B8B7E" />
+                        <!-- Dome with realistic shading -->
+                        <Ellipse Canvas.Left="355" Canvas.Top="68" Width="50" Height="28" Fill="#A89978" Stroke="#988868" StrokeThickness="2" />
+                        <Ellipse Canvas.Left="358" Canvas.Top="70" Width="44" Height="22" Fill="#B8A988" Opacity="0.7" />
+                        <Ellipse Canvas.Left="362" Canvas.Top="72" Width="36" Height="18" Fill="#C8B998" Opacity="0.4" />
+                        <!-- Cross on top -->
+                        <Rectangle Canvas.Left="378" Canvas.Top="60" Width="2" Height="12" Fill="#8B7355" />
+                        <Rectangle Canvas.Left="374" Canvas.Top="64" Width="10" Height="2" Fill="#8B7355" />
+                        
+                        <!-- Center-left buildings cluster -->
+                        <Rectangle Canvas.Left="425" Canvas.Top="91" Width="40" Height="54" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="420" Canvas.Top="88" Width="40" Height="54" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="420" Canvas.Top="88" Width="40" Height="3" Fill="#D5C2A8" />
+                        <!-- Star of David on building -->
+                        <Path Canvas.Left="432" Canvas.Top="98"
+                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Fill="#4A90E2"
+                              Stroke="#3A7BC8"
+                              StrokeThickness="0.5" />
+                        
+                        <!-- THE JEWISH TEMPLE (Second Temple) - Magnificent structure -->
+                        <!-- Temple platform/steps (multiple levels) -->
+                        <Rectangle Canvas.Left="460" Canvas.Top="95" Width="70" Height="5" Fill="#B8A588" />
+                        <Rectangle Canvas.Left="463" Canvas.Top="90" Width="64" Height="5" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="466" Canvas.Top="85" Width="58" Height="5" Fill="#D4C5B0" />
+                        
+                        <!-- Main Temple building with shadow -->
+                        <Rectangle Canvas.Left="473" Canvas.Top="58" Width="54" Height="52" Fill="#1A1A1A" Opacity="0.25" />
+                        <Rectangle Canvas.Left="468" Canvas.Top="55" Width="54" Height="52" Fill="#E5D6C1" />
+                        <!-- Temple front facade highlight -->
+                        <Rectangle Canvas.Left="468" Canvas.Top="55" Width="54" Height="3" Fill="#F5E6D1" />
+                        <Rectangle Canvas.Left="468" Canvas.Top="55" Width="2" Height="52" Fill="#F5E6D1" Opacity="0.5" />
+                        
+                        <!-- Temple columns (6 columns representing the portico) -->
+                        <!-- Column 1 -->
+                        <Rectangle Canvas.Left="472" Canvas.Top="65" Width="5" Height="42" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="472" Canvas.Top="65" Width="5" Height="2" Fill="#D5C2A8" />
+                        <Rectangle Canvas.Left="472" Canvas.Top="105" Width="5" Height="2" Fill="#B5A288" />
+                        <!-- Column 2 -->
+                        <Rectangle Canvas.Left="481" Canvas.Top="65" Width="5" Height="42" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="481" Canvas.Top="65" Width="5" Height="2" Fill="#D5C2A8" />
+                        <Rectangle Canvas.Left="481" Canvas.Top="105" Width="5" Height="2" Fill="#B5A288" />
+                        <!-- Column 3 -->
+                        <Rectangle Canvas.Left="490" Canvas.Top="65" Width="5" Height="42" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="490" Canvas.Top="65" Width="5" Height="2" Fill="#D5C2A8" />
+                        <Rectangle Canvas.Left="490" Canvas.Top="105" Width="5" Height="2" Fill="#B5A288" />
+                        <!-- Column 4 -->
+                        <Rectangle Canvas.Left="499" Canvas.Top="65" Width="5" Height="42" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="499" Canvas.Top="65" Width="5" Height="2" Fill="#D5C2A8" />
+                        <Rectangle Canvas.Left="499" Canvas.Top="105" Width="5" Height="2" Fill="#B5A288" />
+                        <!-- Column 5 -->
+                        <Rectangle Canvas.Left="508" Canvas.Top="65" Width="5" Height="42" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="508" Canvas.Top="65" Width="5" Height="2" Fill="#D5C2A8" />
+                        <Rectangle Canvas.Left="508" Canvas.Top="105" Width="5" Height="2" Fill="#B5A288" />
+                        <!-- Column 6 -->
+                        <Rectangle Canvas.Left="517" Canvas.Top="65" Width="5" Height="42" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="517" Canvas.Top="65" Width="5" Height="2" Fill="#D5C2A8" />
+                        <Rectangle Canvas.Left="517" Canvas.Top="105" Width="5" Height="2" Fill="#B5A288" />
+                        
+                        <!-- Temple pediment (triangular top) -->
+                        <Path Canvas.Left="468" Canvas.Top="45"
+                              Data="M 0,10 L 27,0 L 54,10 Z"
+                              Fill="#D5C2A8"
+                              Stroke="#C5B298"
+                              StrokeThickness="1" />
+                        <!-- Pediment highlight -->
+                        <Path Canvas.Left="470" Canvas.Top="47"
+                              Data="M 2,8 L 25,0 L 48,8 Z"
+                              Fill="#E5D6C1"
+                              Opacity="0.5" />
+                        
+                        <!-- Large Golden Menorah symbol in the pediment -->
+                        <Path Canvas.Left="488" Canvas.Top="50"
+                              Data="M 7,0 L 7,2 M 4,2 Q 4,6 7,6 M 10,2 Q 10,6 7,6 M 1,4 Q 1,8 7,8 M 13,4 Q 13,8 7,8 M 0,6 Q 0,10 7,10 M 14,6 Q 14,10 7,10 M 7,10 L 7,12"
+                              Stroke="#DAA520"
+                              StrokeThickness="1.5"
+                              Fill="None" />
+                        <!-- Menorah base -->
+                        <Rectangle Canvas.Left="493" Canvas.Top="62" Width="8" Height="2" Fill="#DAA520" />
+                        
+                        <!-- Temple entrance/doors -->
+                        <Rectangle Canvas.Left="488" Canvas.Top="88" Width="12" Height="19" Fill="#3D3D3D" RadiusX="2" RadiusY="2" />
+                        <Rectangle Canvas.Left="489" Canvas.Top="89" Width="10" Height="4" Fill="#5D5D5D" Opacity="0.3" />
+                        
+                        <!-- ===== DOME OF THE ROCK - THE MASTERPIECE ===== -->
+                        <!-- Shadow underneath -->
+                        <Rectangle Canvas.Left="520" Canvas.Top="73" Width="90" Height="75" Fill="#000000" Opacity="0.3" />
+                        
+                        <!-- Main octagonal building base -->
+                        <Rectangle Canvas.Left="515" Canvas.Top="70" Width="90" Height="75" Fill="#D4C5B0" />
+                        <!-- Building highlights and texture -->
+                        <Rectangle Canvas.Left="515" Canvas.Top="70" Width="90" Height="4" Fill="#E4D5C0" />
+                        <Rectangle Canvas.Left="515" Canvas.Top="70" Width="3" Height="75" Fill="#E4D5C0" Opacity="0.6" />
+                        <!-- Octagonal upper band (decorative) -->
+                        <Rectangle Canvas.Left="520" Canvas.Top="72" Width="80" Height="18" Fill="#E5D6C1" />
+                        <Rectangle Canvas.Left="520" Canvas.Top="72" Width="80" Height="3" Fill="#F5E6D1" />
+                        
+                        <!-- The magnificent GOLDEN DOME with realistic metallic appearance -->
+                        <!-- Dome shadow/base -->
+                        <Ellipse Canvas.Left="530" Canvas.Top="48" Width="60" Height="37" Fill="#B8941E" Opacity="0.5" />
+                        <!-- Main golden dome -->
+                        <Ellipse Canvas.Left="530" Canvas.Top="45" Width="60" Height="35" Fill="#DAA520" />
+                        <Ellipse Canvas.Left="532" Canvas.Top="46" Width="56" Height="33" Fill="#FFD700" />
+                        <!-- Dome highlight (metallic shine) -->
+                        <Ellipse Canvas.Left="535" Canvas.Top="48" Width="50" Height="28" Fill="#FFE44D" Opacity="0.7" />
+                        <Ellipse Canvas.Left="538" Canvas.Top="50" Width="40" Height="20" Fill="#FFF4A3" Opacity="0.5" />
+                        <Ellipse Canvas.Left="542" Canvas.Top="52" Width="25" Height="12" Fill="#FFFACD" Opacity="0.6" />
+                        <!-- Dome rim/edge detail -->
+                        <Ellipse Canvas.Left="530" Canvas.Top="77" Width="60" Height="8" Fill="#B8941E" />
+                        <Ellipse Canvas.Left="532" Canvas.Top="78" Width="56" Height="6" Fill="#DAA520" />
+                        
+                        <!-- Golden crescent on top (more detailed) -->
+                        <Ellipse Canvas.Left="558" Canvas.Top="38" Width="4" Height="10" Fill="#B8941E" />
+                        <Path Canvas.Left="556" Canvas.Top="36" 
+                              Data="M 5,0 A 5,5 0 1,1 5,12 A 4,4 0 1,0 5,0" 
+                              Fill="#DAA520" 
+                              Stretch="Fill" 
+                              Width="10" 
+                              Height="14" />
+                        <Path Canvas.Left="557" Canvas.Top="37" 
+                              Data="M 5,0 A 5,5 0 1,1 5,12 A 4,4 0 1,0 5,0" 
+                              Fill="#FFD700" 
+                              Stretch="Fill" 
+                              Width="8" 
+                              Height="12" />
+                        
+                        <!-- Arched windows with Islamic patterns (two rows) -->
+                        <Rectangle Canvas.Left="525" Canvas.Top="80" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="526" Canvas.Top="81" Width="6" Height="3" Fill="#3D3D3D" />
+                        <Rectangle Canvas.Left="540" Canvas.Top="80" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="541" Canvas.Top="81" Width="6" Height="3" Fill="#3D3D3D" />
+                        <Rectangle Canvas.Left="555" Canvas.Top="80" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="556" Canvas.Top="81" Width="6" Height="3" Fill="#3D3D3D" />
+                        <Rectangle Canvas.Left="570" Canvas.Top="80" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="571" Canvas.Top="81" Width="6" Height="3" Fill="#3D3D3D" />
+                        <Rectangle Canvas.Left="585" Canvas.Top="80" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="586" Canvas.Top="81" Width="6" Height="3" Fill="#3D3D3D" />
+                        
+                        <Rectangle Canvas.Left="525" Canvas.Top="108" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="540" Canvas.Top="108" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="555" Canvas.Top="108" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="570" Canvas.Top="108" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        <Rectangle Canvas.Left="585" Canvas.Top="108" Width="8" Height="14" Fill="#1A1A1A" RadiusX="4" RadiusY="4" />
+                        
+                        <!-- AL-AQSA MOSQUE area -->
+                        <Rectangle Canvas.Left="620" Canvas.Top="86" Width="55" Height="59" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="615" Canvas.Top="83" Width="55" Height="59" Fill="#A89968" />
+                        <Rectangle Canvas.Left="615" Canvas.Top="83" Width="55" Height="3" Fill="#B8A978" />
+                        <Rectangle Canvas.Left="615" Canvas.Top="79" Width="55" Height="4" Fill="#C8B988" />
+                        <!-- Al-Aqsa silver dome -->
+                        <Ellipse Canvas.Left="630" Canvas.Top="70" Width="25" Height="15" Fill="#7A8088" />
+                        <Ellipse Canvas.Left="632" Canvas.Top="71" Width="21" Height="12" Fill="#8B9298" Opacity="0.7" />
+                        <Ellipse Canvas.Left="635" Canvas.Top="72" Width="15" Height="9" Fill="#9BA2A8" Opacity="0.5" />
+                        
+                        <!-- Center-right buildings -->
+                        <Rectangle Canvas.Left="685" Canvas.Top="93" Width="38" Height="52" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="680" Canvas.Top="90" Width="38" Height="52" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="680" Canvas.Top="90" Width="38" Height="3" Fill="#AB9B8E" />
+                        <!-- Star of David on building -->
+                        <Path Canvas.Left="690" Canvas.Top="100"
+                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Fill="#7AA8E0"
+                              Stroke="#5A8FC8"
+                              StrokeThickness="0.5" />
+                        
+                        <Rectangle Canvas.Left="733" Canvas.Top="90" Width="35" Height="55" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="728" Canvas.Top="87" Width="35" Height="55" Fill="#B8A588" />
+                        <Rectangle Canvas.Left="728" Canvas.Top="87" Width="35" Height="3" Fill="#C8B598" />
+                        
+                        <!-- TALL MINARET - More detailed -->
+                        <Rectangle Canvas.Left="780" Canvas.Top="53" Width="22" Height="92" Fill="#1A1A1A" Opacity="0.25" />
+                        <Rectangle Canvas.Left="775" Canvas.Top="50" Width="22" Height="92" Fill="#A0826D" />
+                        <!-- Minaret highlight -->
+                        <Rectangle Canvas.Left="775" Canvas.Top="50" Width="2" Height="92" Fill="#B59270" Opacity="0.5" />
+                        <!-- Balcony/band details -->
+                        <Rectangle Canvas.Left="773" Canvas.Top="75" Width="26" Height="3" Fill="#8B7355" />
+                        <Rectangle Canvas.Left="773" Canvas.Top="46" Width="26" Height="4" Fill="#B09070" />
+                        <!-- Top dome -->
+                        <Ellipse Canvas.Left="771" Canvas.Top="40" Width="30" Height="10" Fill="#8B7355" />
+                        <Ellipse Canvas.Left="772" Canvas.Top="41" Width="28" Height="8" Fill="#9B8365" Opacity="0.7" />
+                        <!-- Crescent -->
+                        <Ellipse Canvas.Left="783" Canvas.Top="34" Width="6" Height="10" Fill="#B8941E" />
+                        <Path Canvas.Left="782" Canvas.Top="32" 
+                              Data="M 3,0 A 3,3 0 1,1 3,8 A 2,2 0 1,0 3,0" 
+                              Fill="#DAA520" 
+                              Stretch="Fill" 
+                              Width="6" 
+                              Height="10" />
+                        
+                        <!-- Right cluster buildings -->
+                        <Rectangle Canvas.Left="820" Canvas.Top="91" Width="42" Height="54" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="815" Canvas.Top="88" Width="42" Height="54" Fill="#C5B298" />
+                        <Rectangle Canvas.Left="815" Canvas.Top="88" Width="42" Height="3" Fill="#D5C2A8" />
+                        <!-- Star of David on building -->
+                        <Path Canvas.Left="827" Canvas.Top="98"
+                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Fill="#5A8FC8"
+                              Stroke="#3A7BC8"
+                              StrokeThickness="0.5" />
+                        
+                        <Rectangle Canvas.Left="872" Canvas.Top="88" Width="40" Height="57" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="867" Canvas.Top="85" Width="40" Height="57" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="867" Canvas.Top="85" Width="40" Height="3" Fill="#AB9B8E" />
+                        <!-- Star of David on building -->
+                        <Path Canvas.Left="878" Canvas.Top="95"
+                              Data="M 8,0 L 10,4 L 14,4 L 11,7 L 12,11 L 8,8 L 4,11 L 5,7 L 2,4 L 6,4 Z"
+                              Fill="#6BA4D8"
+                              Stroke="#4A90E2"
+                              StrokeThickness="0.5" />
+                        
+                        <Rectangle Canvas.Left="922" Canvas.Top="85" Width="45" Height="60" Fill="#1A1A1A" Opacity="0.2" />
+                        <Rectangle Canvas.Left="917" Canvas.Top="82" Width="45" Height="60" Fill="#A89968" />
+                        <Rectangle Canvas.Left="917" Canvas.Top="82" Width="45" Height="3" Fill="#B8A978" />
+                        
+                        <!-- RIGHT SECTION: City Walls with depth -->
+                        <Rectangle Canvas.Left="980" Canvas.Top="78" Width="95" Height="72" Fill="#1A1A1A" Opacity="0.3" />
+                        <Rectangle Canvas.Left="975" Canvas.Top="75" Width="95" Height="70" Fill="#8B7355" />
+                        <Rectangle Canvas.Left="975" Canvas.Top="75" Width="95" Height="3" Fill="#A5957F" />
+                        <Rectangle Canvas.Left="975" Canvas.Top="73" Width="95" Height="2" Fill="#C5B5A0" Opacity="0.3" />
+                        <!-- Battlements -->
+                        <Rectangle Canvas.Left="980" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="980" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="998" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="998" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="1016" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="1016" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="1034" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="1034" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <Rectangle Canvas.Left="1052" Canvas.Top="68" Width="13" Height="9" Fill="#9B8B7E" />
+                        <Rectangle Canvas.Left="1052" Canvas.Top="68" Width="13" Height="2" Fill="#ABA090" />
+                        <!-- Wall texture -->
+                        <Rectangle Canvas.Left="975" Canvas.Top="95" Width="95" Height="1" Fill="#7A6A50" Opacity="0.4" />
+                        <Rectangle Canvas.Left="975" Canvas.Top="115" Width="95" Height="1" Fill="#7A6A50" Opacity="0.4" />
+                        <Rectangle Canvas.Left="975" Canvas.Top="130" Width="95" Height="1" Fill="#7A6A50" Opacity="0.4" />
+                        
+                        <!-- Ground with subtle shadow -->
+                        <Rectangle Canvas.Left="0" Canvas.Top="145" Width="1200" Height="5" Fill="#1A1A1A" Opacity="0.4" />
+                        <Rectangle Canvas.Left="0" Canvas.Top="148" Width="1200" Height="2" Fill="#5D4E37" />
+                    </Canvas>
 
                     <!-- Live Time Display with Location -->
                     <Border 
                         Background="#2D2D30" 
                         CornerRadius="12" 
-                        Padding="15,12"
+                        Padding="20,18"
                         HorizontalAlignment="Stretch">
-                        <StackPanel Spacing="6">
+                        <StackPanel Spacing="10">
                             <!-- Location Header -->
                             <TextBlock
                                 x:Name="txtLocation"
-                                FontSize="13"
+                                FontSize="20"
                                 HorizontalAlignment="Center"
                                 Foreground="#888888"
                                 Text="Loading location..." />
@@ -106,30 +459,30 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Spacing="2">
+                                <StackPanel Grid.Column="0" Spacing="4">
                                     <TextBlock
                                         Text="Local Time • זמן מקומי"
-                                        FontSize="10"
+                                        FontSize="16"
                                         HorizontalAlignment="Center"
                                         Foreground="#666666" />
                                     <TextBlock
                                         x:Name="txtLocalTime"
-                                        FontSize="20"
-                                        FontWeight="SemiBold"
+                                        FontSize="48"
+                                        FontWeight="Bold"
                                         HorizontalAlignment="Center"
                                         Foreground="#4EC9B0"
                                         Text="00:00:00 AM" />
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" Spacing="2">
+                                <StackPanel Grid.Column="1" Spacing="4">
                                     <TextBlock
                                         Text="Jerusalem • ירושלים"
-                                        FontSize="10"
+                                        FontSize="16"
                                         HorizontalAlignment="Center"
                                         Foreground="#666666" />
                                     <TextBlock
                                         x:Name="txtJerusalemTime"
-                                        FontSize="20"
-                                        FontWeight="SemiBold"
+                                        FontSize="48"
+                                        FontWeight="Bold"
                                         HorizontalAlignment="Center"
                                         Foreground="#FFD700"
                                         Text="00:00:00" />
@@ -143,26 +496,27 @@
                         x:Name="DateCard"
                         Background="#2D2D30" 
                         CornerRadius="12" 
-                        Padding="20,15">
-                        <StackPanel Spacing="8">
+                        Padding="25,20">
+                        <StackPanel Spacing="12">
                             <TextBlock
                                 x:Name="txtEnglishDate"
-                                FontSize="16"
+                                FontSize="24"
                                 HorizontalAlignment="Center"
                                 Foreground="#B0B0B0"
                                 TextWrapping="Wrap"
                                 Text="Loading..." />
                             <TextBlock
                                 x:Name="txtHebrewDate"
-                                FontSize="20"
-                                FontWeight="SemiBold"
+                                FontSize="36"
+                                FontWeight="Bold"
                                 HorizontalAlignment="Center"
                                 TextWrapping="Wrap"
                                 Foreground="#FFFFFF"
                                 Text="" />
                             <TextBlock
                                 x:Name="txtHebrewDateInHebrew"
-                                FontSize="18"
+                                FontSize="32"
+                                FontWeight="SemiBold"
                                 HorizontalAlignment="Center"
                                 FlowDirection="RightToLeft"
                                 TextWrapping="Wrap"
@@ -192,27 +546,28 @@
                             Grid.Row="0" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
-                            Padding="15,12"
+                            Padding="20,18"
                             Margin="0,0,10,10"
-                            MinHeight="130">
-                            <StackPanel Spacing="6" VerticalAlignment="Center">
+                            MinHeight="160">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="📖 Torah Portion • פרשת השבוע"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtParsha"
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
+                                    FontSize="32"
+                                    FontWeight="Bold"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#4EC9B0"
                                     Text="" />
                                 <TextBlock
                                     x:Name="txtParshaHebrew"
-                                    FontSize="16"
+                                    FontSize="28"
+                                    FontWeight="SemiBold"
                                     HorizontalAlignment="Center"
                                     FlowDirection="RightToLeft"
                                     TextWrapping="Wrap"
@@ -227,27 +582,28 @@
                             Grid.Row="0" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
-                            Padding="15,12"
+                            Padding="20,18"
                             Margin="0,0,0,10"
-                            MinHeight="130">
-                            <StackPanel Spacing="6" VerticalAlignment="Center">
+                            MinHeight="160">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="📚 Daf Yomi • דף יומי"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtDafYomi"
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
+                                    FontSize="32"
+                                    FontWeight="Bold"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#CE9178"
                                     Text="" />
                                 <TextBlock
                                     x:Name="txtDafYomiHebrew"
-                                    FontSize="16"
+                                    FontSize="28"
+                                    FontWeight="SemiBold"
                                     HorizontalAlignment="Center"
                                     FlowDirection="RightToLeft"
                                     TextWrapping="Wrap"
@@ -262,13 +618,13 @@
                             Grid.Row="1" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
-                            Padding="15,12"
+                            Padding="20,18"
                             Margin="0,0,10,10"
-                            MinHeight="130">
-                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                            MinHeight="160">
+                            <StackPanel Spacing="12" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="🕐 Halachic Times • זמנים"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#888888" />
@@ -284,17 +640,17 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Alot HaShachar • עלות השחר:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
-                                    <TextBlock x:Name="txtAlotHaShachar" Grid.Row="0" Grid.Column="1" Foreground="#FFFFFF" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Alot HaShachar • עלות השחר:" Foreground="#B0B0B0" Margin="0,3" FontSize="16" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtAlotHaShachar" Grid.Row="0" Grid.Column="1" Foreground="#FFFFFF" Margin="12,3,0,3" FontSize="16" FontWeight="SemiBold" Text="" />
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Sunrise • נץ החמה:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
-                                    <TextBlock x:Name="txtSunrise" Grid.Row="1" Grid.Column="1" Foreground="#FFD700" FontWeight="SemiBold" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Sunrise • נץ החמה:" Foreground="#B0B0B0" Margin="0,3" FontSize="16" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtSunrise" Grid.Row="1" Grid.Column="1" Foreground="#FFD700" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Sunset • שקיעה:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
-                                    <TextBlock x:Name="txtSunset" Grid.Row="2" Grid.Column="1" Foreground="#FFD700" FontWeight="SemiBold" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Sunset • שקיעה:" Foreground="#B0B0B0" Margin="0,3" FontSize="16" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtSunset" Grid.Row="2" Grid.Column="1" Foreground="#FFD700" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
 
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Tzait • צאת הכוכבים:" Foreground="#B0B0B0" Margin="0,2" FontSize="11" TextWrapping="Wrap" />
-                                    <TextBlock x:Name="txtTzait" Grid.Row="3" Grid.Column="1" Foreground="#FFFFFF" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Tzait • צאת הכוכבים:" Foreground="#B0B0B0" Margin="0,3" FontSize="16" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtTzait" Grid.Row="3" Grid.Column="1" Foreground="#FFFFFF" Margin="12,3,0,3" FontSize="16" FontWeight="SemiBold" Text="" />
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -305,43 +661,44 @@
                             Grid.Row="1" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
-                            Padding="15,12"
+                            Padding="20,18"
                             Margin="0,0,0,10"
-                            MinHeight="130">
-                            <StackPanel Spacing="6" VerticalAlignment="Center">
+                            MinHeight="160">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="🌙 Moon Phase • ירח"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#888888" />
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                                    <TextBlock x:Name="txtMoonPhase" FontSize="32" Text="" />
-                                    <TextBlock x:Name="txtMoonPhaseName" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="#B0B0B0" Text="" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
+                                    <TextBlock x:Name="txtMoonPhase" FontSize="48" Text="" />
+                                    <TextBlock x:Name="txtMoonPhaseName" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="#B0B0B0" Text="" />
                                 </StackPanel>
 
                                 <!-- Molad Information -->
                                 <Border 
                                     Background="#1E1E1E" 
                                     CornerRadius="6" 
-                                    Padding="8,6"
-                                    Margin="0,4,0,0">
-                                    <StackPanel Spacing="3">
+                                    Padding="12,8"
+                                    Margin="0,6,0,0">
+                                    <StackPanel Spacing="4">
                                         <TextBlock
                                             Text="Next Molad • מולד"
-                                            FontSize="10"
+                                            FontSize="14"
                                             HorizontalAlignment="Center"
                                             Foreground="#888888" />
                                         <TextBlock
                                             x:Name="txtMoladDate"
-                                            FontSize="11"
+                                            FontSize="16"
+                                            FontWeight="SemiBold"
                                             HorizontalAlignment="Center"
                                             Foreground="#FFD700"
                                             TextWrapping="Wrap"
                                             Text="" />
                                         <TextBlock
                                             x:Name="txtMoladTime"
-                                            FontSize="11"
+                                            FontSize="15"
                                             HorizontalAlignment="Center"
                                             Foreground="#B0B0B0"
                                             Text="" />
@@ -356,49 +713,51 @@
                             Grid.Row="2" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
-                            Padding="15,12"
+                            Padding="20,18"
                             Margin="0,0,10,10"
-                            MinHeight="130">
-                            <StackPanel Spacing="6" VerticalAlignment="Center">
+                            MinHeight="160">
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="🎉 Next Holiday • חג הבא"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#888888" />
                                 <TextBlock
                                     x:Name="txtNextHolidayEnglish"
-                                    FontSize="16"
-                                    FontWeight="SemiBold"
+                                    FontSize="28"
+                                    FontWeight="Bold"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#FFD700"
                                     Text="" />
                                 <TextBlock
                                     x:Name="txtNextHolidayHebrew"
-                                    FontSize="14"
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
                                     HorizontalAlignment="Center"
                                     FlowDirection="RightToLeft"
                                     TextWrapping="Wrap"
                                     Foreground="#FFD700"
                                     Text="" />
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5" Margin="0,2,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,4,0,0">
                                     <TextBlock
                                         x:Name="txtDaysUntilHoliday"
-                                        FontSize="20"
+                                        FontSize="36"
                                         FontWeight="Bold"
                                         Foreground="#FF6B6B"
                                         Text="" />
                                     <TextBlock
                                         Text="days"
-                                        FontSize="12"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
                                         Foreground="#B0B0B0"
                                         VerticalAlignment="Center"
-                                        Margin="0,4,0,0" />
+                                        Margin="0,6,0,0" />
                                 </StackPanel>
                                 <TextBlock
                                     x:Name="txtHolidayDate"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     Foreground="#888888"
                                     Text="" />
@@ -411,19 +770,19 @@
                             Grid.Row="2" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
-                            Padding="15,12"
+                            Padding="20,18"
                             Margin="0,0,0,10"
-                            MinHeight="130">
-                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                            MinHeight="160">
+                            <StackPanel Spacing="12" VerticalAlignment="Center">
                                 <TextBlock
                                     Text="✡️ Prayer Times • תפילות"
-                                    FontSize="11"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"
                                     Foreground="#888888" />
-                                <Grid Margin="0,4,0,0" MaxWidth="350">
+                                <Grid Margin="0,6,0,0" MaxWidth="500">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="22" />
+                                        <ColumnDefinition Width="36" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
@@ -433,17 +792,17 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="0" FontSize="14" HorizontalAlignment="Center" Margin="0,2" Text="" />
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="4,2,0,2" FontSize="11" />
-                                    <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="2" Foreground="#87CEEB" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                    <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="2" Foreground="#87CEEB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
 
-                                    <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="0" FontSize="14" HorizontalAlignment="Center" Margin="0,2" Text="" />
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="4,2,0,2" FontSize="11" />
-                                    <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="2" Foreground="#FFA07A" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                    <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="2" Foreground="#FFA07A" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
 
-                                    <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="0" FontSize="14" HorizontalAlignment="Center" Margin="0,2" Text="" />
-                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="4,2,0,2" FontSize="11" />
-                                    <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="2" Foreground="#9370DB" Margin="8,2,0,2" FontSize="11" Text="" />
+                                    <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                    <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="2" Foreground="#9370DB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
                                 </Grid>
                             </StackPanel>
                         </Border>
