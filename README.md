@@ -79,12 +79,71 @@ The application has been refactored into a modular architecture:
 
 ## Responsive Design
 
-The app uses a responsive grid layout that automatically adjusts to window size:
-- **Small windows**: Cards stack vertically in a single column
-- **Medium windows**: Cards flow in 2 columns
-- **Large windows**: Cards spread across multiple columns with a max width of 1400px
+The app features **aspect-ratio aware responsive design** specifically optimized for synagogue digital displays:
 
-Each card is 380px wide and adapts to available space.
+### Portrait Mode (9:16)
+- **Use case**: Vertical entrance signs, hallway displays
+- **Layout**: Single-column card stack
+- **Skyline**: Scaled down (50%) to fit vertical space
+- **Time display**: Stacks vertically (Local time above Jerusalem time)
+- **Cards**: Full width, compact padding
+- **Font sizes**: Optimized for vertical reading
+
+### Landscape Narrow (16:9 at smaller sizes)
+- **Use case**: Smaller displays, windowed mode, testing
+- **Resolution**: Width < 1400px
+- **Layout**: Two-column card grid
+- **Skyline**: Full size (1200x150)
+- **Time display**: Side-by-side horizontal layout
+- **Cards**: Standard padding and fonts
+
+### Landscape Wide (16:9 at larger sizes)
+- **Use case**: Large sanctuary displays, social hall screens
+- **Resolution**: 1920x1080, 2560x1440, 3840x2160 (width >= 1400px)
+- **Layout**: Two-column card grid with enhanced spacing
+- **Skyline**: Full size with optimal visibility
+- **Font sizes**: Larger for far-viewing (56px clocks, 42px dates)
+- **Padding**: Generous spacing for comfortable viewing from distance
+
+### Adaptive Features
+- **Automatic detection**: Layout switches automatically based on window size
+- **Smooth transitions**: Visual state changes animate smoothly
+- **Handles all ratios**: Also adapts to 4:3, square, and other aspect ratios
+- **Real-time adjustment**: Updates immediately when display orientation or size changes
+
+The app uses **VisualStateManager** with custom **aspect ratio detection** to ensure optimal display in any configuration.
+
+## Usage for Synagogue Digital Displays
+
+### Recommended Display Configurations
+
+**Landscape (16:9) - Most Common**
+- **Resolution**: 1920x1080 (Full HD), 2560x1440 (2K), or 3840x2160 (4K)
+- **Placement**: Sanctuary, social hall, or main entrance
+- **Layout**: Two-column card grid with large fonts
+- **Optimal viewing distance**: 6-20 feet
+
+**Portrait (9:16) - Vertical Displays**
+- **Resolution**: 1080x1920 (rotate 1080p display)
+- **Placement**: Entrance hallways, narrow wall spaces
+- **Layout**: Single-column stack, compact design
+- **Optimal viewing distance**: 3-10 feet
+
+### Setup Instructions for Kiosk Mode
+
+1. **Set display to run full-screen**:
+   - Press `F11` in the app or use Windows kiosk mode
+   - Configure display settings to match physical orientation
+
+2. **Prevent screen sleep**:
+   - Windows Settings → System → Power & Sleep
+   - Set "Screen" to "Never" when plugged in
+
+3. **Auto-start on boot** (optional):
+   - Place shortcut in: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`
+
+4. **Hide taskbar** (optional):
+   - Right-click taskbar → Taskbar settings → "Automatically hide taskbar"
 
 ## Permissions Required
 
