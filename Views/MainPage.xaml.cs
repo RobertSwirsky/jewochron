@@ -20,7 +20,6 @@ namespace Jewochron.Views
         private readonly TimeZoneInfo jerusalemTimeZone;
         private DateTime lastRefreshDate = DateTime.MinValue;
         private string lastPrayerIndicator = "";
-        private Microsoft.UI.Xaml.Media.Animation.Storyboard? camelStoryboard;
 
         public MainPage()
         {
