@@ -99,9 +99,9 @@ namespace Jewochron.Views
         {
             try
             {
-                // Camel walks once per minute
+                // Camel walks every 2 minutes
                 camelTimer = DispatcherQueue.CreateTimer();
-                camelTimer.Interval = TimeSpan.FromMinutes(1);
+                camelTimer.Interval = TimeSpan.FromMinutes(2);
                 camelTimer.Tick += (s, e) => 
                 {
                     try
@@ -115,9 +115,9 @@ namespace Jewochron.Views
                 };
                 camelTimer.Start();
 
-                // Start first animation after 10 seconds using a one-shot timer
+                // Start first animation after 5 seconds using a one-shot timer
                 var initialTimer = DispatcherQueue.CreateTimer();
-                initialTimer.Interval = TimeSpan.FromSeconds(10);
+                initialTimer.Interval = TimeSpan.FromSeconds(5);
                 initialTimer.IsRepeating = false;
                 initialTimer.Tick += (s, e) =>
                 {
