@@ -506,27 +506,27 @@ namespace Jewochron.Views
                 double timeOfDay = hour + (minute / 60.0); // 0-24 as decimal
 
                 // Calculate sun/moon positions (moves across sky throughout day)
-                // Position range: 100 (left) to 1100 (right)
-                double sunPosition = 100 + ((timeOfDay - 6) / 12.0) * 1000; // 6am to 6pm
-                double moonPosition = 100 + ((timeOfDay + 12) % 24 / 12.0) * 1000; // Opposite of sun
+                // Position range: 150 (left) to 1050 (right) - keep within visible buildings area
+                double sunPosition = 150 + ((timeOfDay - 6) / 12.0) * 900; // 6am to 6pm
+                double moonPosition = 150 + ((timeOfDay + 12) % 24 / 12.0) * 900; // Opposite of sun
 
-                // Update sun position (clamped to visible range)
-                double sunLeft = Math.Clamp(sunPosition, 100, 1100);
+                // Update sun position (clamped to visible range above buildings)
+                double sunLeft = Math.Clamp(sunPosition, 150, 1050);
 
-                // Calculate sun height (arc across sky)
+                // Calculate sun height (arc across sky) - keep it in the sky area (above buildings)
                 double sunArc = Math.Sin((timeOfDay - 6) / 12.0 * Math.PI); // 0 at dawn/dusk, 1 at noon
-                double sunTop = 80 - (sunArc * 50); // Higher at noon, lower at dawn/dusk
-                sunTop = Math.Clamp(sunTop, 20, 80);
+                double sunTop = 60 - (sunArc * 45); // Higher at noon, lower at dawn/dusk
+                sunTop = Math.Clamp(sunTop, 5, 60);
 
                 // Set sun canvas position
                 Canvas.SetLeft(sunCanvas, sunLeft);
                 Canvas.SetTop(sunCanvas, sunTop);
 
-                // Update moon position
-                double moonLeft = Math.Clamp(moonPosition, 100, 1100);
+                // Update moon position - keep it higher in sky and within bounds
+                double moonLeft = Math.Clamp(moonPosition, 150, 1050);
                 double moonArc = Math.Sin(((timeOfDay + 12) % 24) / 12.0 * Math.PI);
-                double moonTop = 80 - (moonArc * 40);
-                moonTop = Math.Clamp(moonTop, 15, 80);
+                double moonTop = 50 - (moonArc * 40); // Higher position overall
+                moonTop = Math.Clamp(moonTop, 5, 50); // Clamp to stay in sky area
 
                 // Set moon canvas position
                 Canvas.SetLeft(moonCanvas, moonLeft);
