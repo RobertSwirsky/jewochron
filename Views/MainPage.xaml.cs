@@ -19,9 +19,12 @@ namespace Jewochron.Views
         private DispatcherQueueTimer? dataRefreshTimer;
         private DispatcherQueueTimer? camelTimer;
         private DispatcherQueueTimer? jewishManTimer;
+        private DispatcherQueueTimer? camelMoveTimer;
+        private DispatcherQueueTimer? jewishManMoveTimer;
         private readonly TimeZoneInfo jerusalemTimeZone;
         private DateTime lastRefreshDate = DateTime.MinValue;
         private string lastPrayerIndicator = "";
+        private double currentMoonIllumination = 50.0; // Store current moon phase (0-100%)
 
         public MainPage()
         {
@@ -52,8 +55,8 @@ namespace Jewochron.Views
 
         private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // Determine the appropriate visual state based on aspect ratio
-            // Optimized for synagogue digital displays (16:9 landscape and 9:16 portrait)
+            // Determine the appropriate visual state based on width
+            // Optimized for synagogue digital displays with responsive column layouts
             double width = e.NewSize.Width;
             double height = e.NewSize.Height;
 
@@ -68,26 +71,40 @@ namespace Jewochron.Views
             {
                 // Portrait mode: Height > Width (e.g., 9:16 = 0.5625 ratio)
                 // Perfect for vertical digital signs in synagogue entrance
+                // SINGLE COLUMN layout (narrow width)
                 targetState = "PortraitState";
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Portrait mode (1 column): {width}x{height}");
             }
-            else if (aspectRatio < 1.6)
+            else if (aspectRatio < 1.6 || width < 1000)
             {
-                // Landscape but narrow (e.g., 4:3 = 1.33, square = 1.0)
-                // Use landscape narrow for these aspect ratios
+                // Landscape but narrow (e.g., 4:3 = 1.33, square = 1.0) or small width
+                // TWO COLUMN layout (compact landscape)
                 targetState = "LandscapeNarrowState";
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Narrow (2 columns): {width}x{height}");
             }
-            else if (width < 1400)
+            else if (width < 1800)
             {
-                // Landscape 16:9 (1.778 ratio) at smaller size
-                // Good for smaller displays or windowed mode
-                targetState = "LandscapeNarrowState";
+                // Standard landscape 16:9 at moderate size
+                // THREE COLUMN layout - good use of horizontal space
+                // Good for 1920×1080 and similar displays
+                targetState = "LandscapeWideState";
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Wide (3 columns): {width}x{height}");
+            }
+            else if (width < 2400)
+            {
+                // Extra wide displays
+                // THREE COLUMN layout with larger cards
+                // Good for 2560×1440, 2560×1080 (ultra-wide)
+                targetState = "LandscapeExtraWideState";
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Extra Wide (3 columns, large): {width}x{height}");
             }
             else
             {
-                // Landscape 16:9 at larger size (width >= 1400)
-                // Optimal for large digital displays in sanctuary/social hall
-                // Examples: 1920x1080, 2560x1440, 3840x2160
-                targetState = "LandscapeWideState";
+                // Ultra wide displays
+                // FOUR COLUMN layout
+                // Good for 3840×2160 (4K), 3440×1440 (ultra-wide), 5120×2880 (5K)
+                targetState = "LandscapeUltraWideState";
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Ultra Wide (4 columns): {width}x{height}");
             }
 
             VisualStateManager.GoToState(this, targetState, useTransitions: true);
@@ -97,7 +114,7 @@ namespace Jewochron.Views
         {
             clockTimer = DispatcherQueue.CreateTimer();
             clockTimer.Interval = TimeSpan.FromSeconds(1);
-            clockTimer.Tick += (s, e) => 
+            clockTimer.Tick += (s, e) =>
             {
                 try
                 {
@@ -205,6 +222,13 @@ namespace Jewochron.Views
             // SUPER SIMPLE: Just make it visible and animate directly
             try
             {
+                // Stop any existing animation timer to prevent overlapping animations
+                if (camelMoveTimer != null && camelMoveTimer.IsRunning)
+                {
+                    camelMoveTimer.Stop();
+                    System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Stopped previous animation timer");
+                }
+
                 // Reset to start position
                 camelTransform.X = 0;
                 animatedCamel.Opacity = 1;  // FULLY VISIBLE
@@ -213,26 +237,34 @@ namespace Jewochron.Views
                 System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Look at the skyline NOW - you should see it!");
 
                 // Create a simple timer to move it - slower, more majestic pace
-                var moveTimer = DispatcherQueue.CreateTimer();
-                moveTimer.Interval = TimeSpan.FromMilliseconds(60);
+                camelMoveTimer = DispatcherQueue.CreateTimer();
+                camelMoveTimer.Interval = TimeSpan.FromMilliseconds(60);
                 double currentX = 0;
 
-                moveTimer.Tick += (s, e) =>
+                camelMoveTimer.Tick += (s, e) =>
                 {
-                    currentX -= 2;  // Move 2 pixels left each tick (slower than before)
-                    camelTransform.X = currentX;
-
-                    // After it goes off screen, stop and reset
-                    if (currentX < -1300)
+                    try
                     {
-                        moveTimer.Stop();
-                        animatedCamel.Opacity = 0;
-                        camelTransform.X = 0;
-                        System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Animation complete!");
+                        currentX -= 2;  // Move 2 pixels left each tick (slower than before)
+                        camelTransform.X = currentX;
+
+                        // After it goes off screen, stop and reset
+                        if (currentX < -1300)
+                        {
+                            camelMoveTimer?.Stop();
+                            animatedCamel.Opacity = 0;
+                            camelTransform.X = 0;
+                            System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Animation complete!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Tick error: {ex.Message}");
+                        camelMoveTimer?.Stop();
                     }
                 };
 
-                moveTimer.Start();
+                camelMoveTimer.Start();
                 System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Timer animation started!");
                 System.Diagnostics.Debug.WriteLine("========================================");
             }
@@ -307,6 +339,13 @@ namespace Jewochron.Views
 
             try
             {
+                // Stop any existing animation timer to prevent overlapping animations
+                if (jewishManMoveTimer != null && jewishManMoveTimer.IsRunning)
+                {
+                    jewishManMoveTimer.Stop();
+                    System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Stopped previous animation timer");
+                }
+
                 // Reset to start position (left side)
                 manTransform.X = 0;
                 animatedMan.Opacity = 1;  // FULLY VISIBLE
@@ -314,26 +353,34 @@ namespace Jewochron.Views
                 System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Jewish man is now VISIBLE at opacity 1");
 
                 // Create a simple timer to move him LEFT to RIGHT (opposite of camel)
-                var moveTimer = DispatcherQueue.CreateTimer();
-                moveTimer.Interval = TimeSpan.FromMilliseconds(60);
+                jewishManMoveTimer = DispatcherQueue.CreateTimer();
+                jewishManMoveTimer.Interval = TimeSpan.FromMilliseconds(60);
                 double currentX = 0;
 
-                moveTimer.Tick += (s, e) =>
+                jewishManMoveTimer.Tick += (s, e) =>
                 {
-                    currentX += 2;  // Move 2 pixels RIGHT each tick
-                    manTransform.X = currentX;
-
-                    // After he goes off screen, stop and reset
-                    if (currentX > 1250)
+                    try
                     {
-                        moveTimer.Stop();
-                        animatedMan.Opacity = 0;
-                        manTransform.X = 0;
-                        System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Animation complete!");
+                        currentX += 2;  // Move 2 pixels RIGHT each tick
+                        manTransform.X = currentX;
+
+                        // After he goes off screen, stop and reset
+                        if (currentX > 1250)
+                        {
+                            jewishManMoveTimer?.Stop();
+                            animatedMan.Opacity = 0;
+                            manTransform.X = 0;
+                            System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Animation complete!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[JEWISH MAN DEBUG] Tick error: {ex.Message}");
+                        jewishManMoveTimer?.Stop();
                     }
                 };
 
-                moveTimer.Start();
+                jewishManMoveTimer.Start();
                 System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Timer animation started!");
                 System.Diagnostics.Debug.WriteLine("========================================");
             }

@@ -1,6 +1,6 @@
 <Solution>
     <Project Path="Jewochron.csproj">
-        <Platform Solution="Debug|*" Project="ARM64" />
+        <Platform Solution="Debug|*" Project="x64" />
         <Deploy />
     </Project>
 </Solution>

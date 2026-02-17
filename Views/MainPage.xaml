@@ -30,10 +30,10 @@
 
                             <!-- Time Display: Vertical stack instead of horizontal -->
                             <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="0" />
-                            <Setter Target="LocalTimeStack.Grid.Column" Value="0" />
-                            <Setter Target="LocalTimeStack.Grid.Row" Value="0" />
-                            <Setter Target="JerusalemTimeStack.Grid.Column" Value="0" />
-                            <Setter Target="JerusalemTimeStack.Grid.Row" Value="1" />
+                            <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
+                            <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="1" />
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="Auto" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="16,14" />
 
@@ -43,38 +43,45 @@
                             <Setter Target="txtHebrewDate.FontSize" Value="28" />
                             <Setter Target="txtHebrewDateInHebrew.FontSize" Value="24" />
 
-                            <!-- Cards Grid: Single column, all cards stacked -->
+                            <!-- Cards Grid: SINGLE column in portrait (narrow width, vertical layout) -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="0" />
+                            <Setter Target="CardsGrid.ColumnDefinitions[2].Width" Value="0" />
                             <Setter Target="CardsGrid.Margin" Value="0" />
 
-                            <!-- Reposition all cards to column 0, sequential rows -->
-                            <Setter Target="ParshaCard.Grid.Column" Value="0" />
-                            <Setter Target="ParshaCard.Grid.Row" Value="0" />
+                            <!-- All cards in column 0, stacked vertically -->
+                            <Setter Target="ParshaCard.(Grid.Column)" Value="0" />
+                            <Setter Target="ParshaCard.(Grid.Row)" Value="0" />
+                            <Setter Target="ParshaCard.Margin" Value="0,0,0,10" />
                             <Setter Target="ParshaCard.Padding" Value="16,14" />
                             <Setter Target="ParshaCard.MinHeight" Value="130" />
 
-                            <Setter Target="DafYomiCard.Grid.Column" Value="0" />
-                            <Setter Target="DafYomiCard.Grid.Row" Value="1" />
+                            <Setter Target="DafYomiCard.(Grid.Column)" Value="0" />
+                            <Setter Target="DafYomiCard.(Grid.Row)" Value="1" />
+                            <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
                             <Setter Target="DafYomiCard.Padding" Value="16,14" />
                             <Setter Target="DafYomiCard.MinHeight" Value="130" />
 
-                            <Setter Target="HalachicCard.Grid.Column" Value="0" />
-                            <Setter Target="HalachicCard.Grid.Row" Value="2" />
+                            <Setter Target="HalachicCard.(Grid.Column)" Value="0" />
+                            <Setter Target="HalachicCard.(Grid.Row)" Value="2" />
+                            <Setter Target="HalachicCard.Margin" Value="0,0,0,10" />
                             <Setter Target="HalachicCard.Padding" Value="16,14" />
                             <Setter Target="HalachicCard.MinHeight" Value="130" />
 
-                            <Setter Target="MoonCard.Grid.Column" Value="0" />
-                            <Setter Target="MoonCard.Grid.Row" Value="3" />
+                            <Setter Target="MoonCard.(Grid.Column)" Value="0" />
+                            <Setter Target="MoonCard.(Grid.Row)" Value="3" />
+                            <Setter Target="MoonCard.Margin" Value="0,0,0,10" />
                             <Setter Target="MoonCard.Padding" Value="16,14" />
                             <Setter Target="MoonCard.MinHeight" Value="130" />
 
-                            <Setter Target="HolidayCard.Grid.Column" Value="0" />
-                            <Setter Target="HolidayCard.Grid.Row" Value="4" />
+                            <Setter Target="HolidayCard.(Grid.Column)" Value="0" />
+                            <Setter Target="HolidayCard.(Grid.Row)" Value="4" />
+                            <Setter Target="HolidayCard.Margin" Value="0,0,0,10" />
                             <Setter Target="HolidayCard.Padding" Value="16,14" />
                             <Setter Target="HolidayCard.MinHeight" Value="130" />
 
-                            <Setter Target="PrayerCard.Grid.Column" Value="0" />
-                            <Setter Target="PrayerCard.Grid.Row" Value="5" />
+                            <Setter Target="PrayerCard.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerCard.(Grid.Row)" Value="5" />
+                            <Setter Target="PrayerCard.Margin" Value="0,0,0,10" />
                             <Setter Target="PrayerCard.Padding" Value="16,14" />
                             <Setter Target="PrayerCard.MinHeight" Value="130" />
                         </VisualState.Setters>
@@ -94,10 +101,10 @@
 
                             <!-- Time Display: Horizontal -->
                             <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
-                            <Setter Target="LocalTimeStack.Grid.Column" Value="0" />
-                            <Setter Target="LocalTimeStack.Grid.Row" Value="0" />
-                            <Setter Target="JerusalemTimeStack.Grid.Column" Value="1" />
-                            <Setter Target="JerusalemTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
+                            <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="1" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="20,18" />
 
                             <!-- Date Card -->
@@ -110,33 +117,33 @@
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
 
                             <!-- Position cards in 2-column layout -->
-                            <Setter Target="ParshaCard.Grid.Column" Value="0" />
-                            <Setter Target="ParshaCard.Grid.Row" Value="0" />
+                            <Setter Target="ParshaCard.(Grid.Column)" Value="0" />
+                            <Setter Target="ParshaCard.(Grid.Row)" Value="0" />
                             <Setter Target="ParshaCard.Padding" Value="20,16" />
                             <Setter Target="ParshaCard.MinHeight" Value="160" />
 
-                            <Setter Target="DafYomiCard.Grid.Column" Value="1" />
-                            <Setter Target="DafYomiCard.Grid.Row" Value="0" />
+                            <Setter Target="DafYomiCard.(Grid.Column)" Value="1" />
+                            <Setter Target="DafYomiCard.(Grid.Row)" Value="0" />
                             <Setter Target="DafYomiCard.Padding" Value="20,16" />
                             <Setter Target="DafYomiCard.MinHeight" Value="160" />
 
-                            <Setter Target="HalachicCard.Grid.Column" Value="0" />
-                            <Setter Target="HalachicCard.Grid.Row" Value="1" />
+                            <Setter Target="HalachicCard.(Grid.Column)" Value="0" />
+                            <Setter Target="HalachicCard.(Grid.Row)" Value="1" />
                             <Setter Target="HalachicCard.Padding" Value="20,16" />
                             <Setter Target="HalachicCard.MinHeight" Value="160" />
 
-                            <Setter Target="MoonCard.Grid.Column" Value="1" />
-                            <Setter Target="MoonCard.Grid.Row" Value="1" />
+                            <Setter Target="MoonCard.(Grid.Column)" Value="1" />
+                            <Setter Target="MoonCard.(Grid.Row)" Value="1" />
                             <Setter Target="MoonCard.Padding" Value="20,16" />
                             <Setter Target="MoonCard.MinHeight" Value="160" />
 
-                            <Setter Target="HolidayCard.Grid.Column" Value="0" />
-                            <Setter Target="HolidayCard.Grid.Row" Value="2" />
+                            <Setter Target="HolidayCard.(Grid.Column)" Value="0" />
+                            <Setter Target="HolidayCard.(Grid.Row)" Value="2" />
                             <Setter Target="HolidayCard.Padding" Value="20,16" />
                             <Setter Target="HolidayCard.MinHeight" Value="160" />
 
-                            <Setter Target="PrayerCard.Grid.Column" Value="1" />
-                            <Setter Target="PrayerCard.Grid.Row" Value="2" />
+                            <Setter Target="PrayerCard.(Grid.Column)" Value="1" />
+                            <Setter Target="PrayerCard.(Grid.Row)" Value="2" />
                             <Setter Target="PrayerCard.Padding" Value="20,16" />
                             <Setter Target="PrayerCard.MinHeight" Value="160" />
                         </VisualState.Setters>
@@ -156,10 +163,10 @@
 
                             <!-- Time Display: Horizontal, larger fonts -->
                             <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
-                            <Setter Target="LocalTimeStack.Grid.Column" Value="0" />
-                            <Setter Target="LocalTimeStack.Grid.Row" Value="0" />
-                            <Setter Target="JerusalemTimeStack.Grid.Column" Value="1" />
-                            <Setter Target="JerusalemTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
+                            <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="1" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="24,20" />
                             <Setter Target="txtLocalTime.FontSize" Value="56" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="56" />
@@ -170,39 +177,47 @@
                             <Setter Target="txtHebrewDate.FontSize" Value="42" />
                             <Setter Target="txtHebrewDateInHebrew.FontSize" Value="38" />
 
-                            <!-- Cards Grid: Two columns, larger cards -->
+                            <!-- Cards Grid: THREE columns for 1920×1080 displays -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <Setter Target="CardsGrid.ColumnDefinitions[2].Width" Value="*" />
 
-                            <!-- Position cards in 2-column layout with larger spacing -->
-                            <Setter Target="ParshaCard.Grid.Column" Value="0" />
-                            <Setter Target="ParshaCard.Grid.Row" Value="0" />
-                            <Setter Target="ParshaCard.Padding" Value="24,20" />
-                            <Setter Target="ParshaCard.MinHeight" Value="180" />
+                            <!-- Row 0: Parsha, Daf Yomi, Halachic -->
+                            <Setter Target="ParshaCard.(Grid.Column)" Value="0" />
+                            <Setter Target="ParshaCard.(Grid.Row)" Value="0" />
+                            <Setter Target="ParshaCard.Margin" Value="0,0,10,10" />
+                            <Setter Target="ParshaCard.Padding" Value="20,18" />
+                            <Setter Target="ParshaCard.MinHeight" Value="160" />
 
-                            <Setter Target="DafYomiCard.Grid.Column" Value="1" />
-                            <Setter Target="DafYomiCard.Grid.Row" Value="0" />
-                            <Setter Target="DafYomiCard.Padding" Value="24,20" />
-                            <Setter Target="DafYomiCard.MinHeight" Value="180" />
+                            <Setter Target="DafYomiCard.(Grid.Column)" Value="1" />
+                            <Setter Target="DafYomiCard.(Grid.Row)" Value="0" />
+                            <Setter Target="DafYomiCard.Margin" Value="0,0,10,10" />
+                            <Setter Target="DafYomiCard.Padding" Value="20,18" />
+                            <Setter Target="DafYomiCard.MinHeight" Value="160" />
 
-                            <Setter Target="HalachicCard.Grid.Column" Value="0" />
-                            <Setter Target="HalachicCard.Grid.Row" Value="1" />
-                            <Setter Target="HalachicCard.Padding" Value="24,20" />
-                            <Setter Target="HalachicCard.MinHeight" Value="180" />
+                            <Setter Target="HalachicCard.(Grid.Column)" Value="2" />
+                            <Setter Target="HalachicCard.(Grid.Row)" Value="0" />
+                            <Setter Target="HalachicCard.Margin" Value="0,0,0,10" />
+                            <Setter Target="HalachicCard.Padding" Value="20,18" />
+                            <Setter Target="HalachicCard.MinHeight" Value="160" />
 
-                            <Setter Target="MoonCard.Grid.Column" Value="1" />
-                            <Setter Target="MoonCard.Grid.Row" Value="1" />
-                            <Setter Target="MoonCard.Padding" Value="24,20" />
-                            <Setter Target="MoonCard.MinHeight" Value="180" />
+                            <!-- Row 1: Moon, Holiday, Prayer -->
+                            <Setter Target="MoonCard.(Grid.Column)" Value="0" />
+                            <Setter Target="MoonCard.(Grid.Row)" Value="1" />
+                            <Setter Target="MoonCard.Margin" Value="0,0,10,10" />
+                            <Setter Target="MoonCard.Padding" Value="20,18" />
+                            <Setter Target="MoonCard.MinHeight" Value="160" />
 
-                            <Setter Target="HolidayCard.Grid.Column" Value="0" />
-                            <Setter Target="HolidayCard.Grid.Row" Value="2" />
-                            <Setter Target="HolidayCard.Padding" Value="24,20" />
-                            <Setter Target="HolidayCard.MinHeight" Value="180" />
+                            <Setter Target="HolidayCard.(Grid.Column)" Value="1" />
+                            <Setter Target="HolidayCard.(Grid.Row)" Value="1" />
+                            <Setter Target="HolidayCard.Margin" Value="0,0,10,10" />
+                            <Setter Target="HolidayCard.Padding" Value="20,18" />
+                            <Setter Target="HolidayCard.MinHeight" Value="160" />
 
-                            <Setter Target="PrayerCard.Grid.Column" Value="1" />
-                            <Setter Target="PrayerCard.Grid.Row" Value="2" />
-                            <Setter Target="PrayerCard.Padding" Value="24,20" />
-                            <Setter Target="PrayerCard.MinHeight" Value="180" />
+                            <Setter Target="PrayerCard.(Grid.Column)" Value="2" />
+                            <Setter Target="PrayerCard.(Grid.Row)" Value="1" />
+                            <Setter Target="PrayerCard.Margin" Value="0,0,0,10" />
+                            <Setter Target="PrayerCard.Padding" Value="20,18" />
+                            <Setter Target="PrayerCard.MinHeight" Value="160" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -756,6 +771,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" MinWidth="280" />
                             <ColumnDefinition Width="*" MinWidth="280" />
+                            <ColumnDefinition Width="0" MinWidth="280" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
