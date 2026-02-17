@@ -57,24 +57,42 @@ namespace Jewochron.Views
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Force initial visual state update by getting the current size
+            // Apply initial visual state immediately without transitions
             // This ensures the layout is correct on first display
             var rootGrid = this.FindName("RootGrid") as Grid;
             if (rootGrid != null)
             {
-                UpdateVisualState(rootGrid.ActualWidth, rootGrid.ActualHeight);
+                // Get actual dimensions
+                double width = rootGrid.ActualWidth;
+                double height = rootGrid.ActualHeight;
+
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Initial load: {width}x{height}");
+
+                // If dimensions are not yet available, try to get them from XamlRoot
+                if (width == 0 || height == 0 && this.XamlRoot != null)
+                {
+                    width = this.XamlRoot.Size.Width - 20; // Account for padding
+                    height = this.XamlRoot.Size.Height - 20;
+                    System.Diagnostics.Debug.WriteLine($"[LAYOUT] Using XamlRoot size: {width}x{height}");
+                }
+
+                // Apply visual state without transitions for immediate effect
+                if (width > 0 && height > 0)
+                {
+                    UpdateVisualState(width, height, useTransitions: false);
+                }
             }
         }
 
         private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdateVisualState(e.NewSize.Width, e.NewSize.Height);
+            UpdateVisualState(e.NewSize.Width, e.NewSize.Height, useTransitions: true);
         }
 
-        private void UpdateVisualState(double width, double height)
+        private void UpdateVisualState(double width, double height, bool useTransitions = true)
         {
-            // Avoid division by zero
-            if (height == 0) return;
+            // Avoid division by zero or invalid dimensions
+            if (height == 0 || width == 0) return;
 
             double aspectRatio = width / height;
 
@@ -127,7 +145,7 @@ namespace Jewochron.Views
                 System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Ultra Wide (4 columns): {width}x{height}");
             }
 
-            VisualStateManager.GoToState(this, targetState, useTransitions: true);
+            VisualStateManager.GoToState(this, targetState, useTransitions);
         }
 
         private void StartClockTimer()

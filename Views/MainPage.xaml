@@ -900,7 +900,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" MinWidth="280" />
                             <ColumnDefinition Width="*" MinWidth="280" />
-                            <ColumnDefinition Width="0" MinWidth="280" />
+                            <ColumnDefinition Width="*" MinWidth="280" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -1037,7 +1037,7 @@
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20,18"
-                            Margin="0,0,0,10"
+                            Margin="0,0,10,10"
                             MinHeight="160">
                             <StackPanel Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
@@ -1069,11 +1069,11 @@
                         <!-- Halachic Times Card -->
                         <Border 
                             x:Name="HalachicCard"
-                            Grid.Row="1" Grid.Column="0"
+                            Grid.Row="0" Grid.Column="2"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20,18"
-                            Margin="0,0,10,10"
+                            Margin="0,0,0,10"
                             MinHeight="160">
                             <StackPanel Spacing="12" VerticalAlignment="Center">
                                 <TextBlock
@@ -1112,11 +1112,11 @@
                         <!-- Molad (New Moon) Card - Redesigned with Molad as primary feature -->
                         <Border 
                             x:Name="MoonCard"
-                            Grid.Row="1" Grid.Column="1"
+                            Grid.Row="1" Grid.Column="0"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20,18"
-                            Margin="0,0,0,10"
+                            Margin="0,0,10,10"
                             MinHeight="160">
                             <StackPanel Spacing="12" VerticalAlignment="Center">
                                 <!-- Main Molad Title -->
@@ -1206,7 +1206,7 @@
                         <!-- Next Holiday Card -->
                         <Border 
                             x:Name="HolidayCard"
-                            Grid.Row="2" Grid.Column="0"
+                            Grid.Row="1" Grid.Column="1"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20,18"
@@ -1270,7 +1270,7 @@
                         <!-- Prayer Times Card -->
                         <Border 
                             x:Name="PrayerCard"
-                            Grid.Row="2" Grid.Column="1"
+                            Grid.Row="1" Grid.Column="2"
                             Background="#2D2D30" 
                             CornerRadius="12" 
                             Padding="20,18"
