@@ -115,14 +115,15 @@ namespace Jewochron.Views
                 };
                 camelTimer.Start();
 
-                // Start first animation after 5 seconds using a one-shot timer
+                // Start first animation after 1 second using a one-shot timer
                 var initialTimer = DispatcherQueue.CreateTimer();
-                initialTimer.Interval = TimeSpan.FromSeconds(5);
+                initialTimer.Interval = TimeSpan.FromSeconds(1);
                 initialTimer.IsRepeating = false;
                 initialTimer.Tick += (s, e) =>
                 {
                     try
                     {
+                        System.Diagnostics.Debug.WriteLine("Starting INITIAL camel animation NOW!");
                         AnimateCamelWalk();
                     }
                     catch (Exception ex)
@@ -131,6 +132,7 @@ namespace Jewochron.Views
                     }
                 };
                 initialTimer.Start();
+                System.Diagnostics.Debug.WriteLine("Camel animation timer initialized - first animation in 1 second");
             }
             catch (Exception ex)
             {

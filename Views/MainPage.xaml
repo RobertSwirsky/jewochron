@@ -214,9 +214,7 @@
                         <Ellipse Canvas.Left="355" Canvas.Top="68" Width="50" Height="28" Fill="#A89978" Stroke="#988868" StrokeThickness="2" />
                         <Ellipse Canvas.Left="358" Canvas.Top="70" Width="44" Height="22" Fill="#B8A988" Opacity="0.7" />
                         <Ellipse Canvas.Left="362" Canvas.Top="72" Width="36" Height="18" Fill="#C8B998" Opacity="0.4" />
-                        <!-- Cross on top -->
-                        <Rectangle Canvas.Left="378" Canvas.Top="60" Width="2" Height="12" Fill="#8B7355" />
-                        <Rectangle Canvas.Left="374" Canvas.Top="64" Width="10" Height="2" Fill="#8B7355" />
+                        <!-- Dome top removed cross -->
                         
                         <!-- Center-left buildings cluster -->
                         <Rectangle Canvas.Left="425" Canvas.Top="91" Width="40" Height="54" Fill="#1A1A1A" Opacity="0.2" />
@@ -447,12 +445,12 @@
                         <Rectangle Canvas.Left="0" Canvas.Top="145" Width="1200" Height="5" Fill="#1A1A1A" Opacity="0.4" />
                         <Rectangle Canvas.Left="0" Canvas.Top="148" Width="1200" Height="2" Fill="#5D4E37" />
 
-                        <!-- Animated Camel (walks from right to left every minute) -->
+                        <!-- Animated Camel (walks from right to left every 2 minutes) -->
                         <TextBlock 
                             x:Name="AnimatedCamel"
-                            Canvas.Left="1200"
-                            Canvas.Top="108"
-                            FontSize="48"
+                            Canvas.Left="1100"
+                            Canvas.Top="105"
+                            FontSize="52"
                             Text="🐫"
                             Opacity="0"
                             Canvas.ZIndex="100">
