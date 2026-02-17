@@ -445,12 +445,12 @@
                         <Rectangle Canvas.Left="0" Canvas.Top="145" Width="1200" Height="5" Fill="#1A1A1A" Opacity="0.4" />
                         <Rectangle Canvas.Left="0" Canvas.Top="148" Width="1200" Height="2" Fill="#5D4E37" />
 
-                        <!-- Animated Camel (walks from right to left every 2 minutes) -->
+                        <!-- Animated Camel - Walks across Jerusalem skyline -->
                         <TextBlock 
                             x:Name="AnimatedCamel"
-                            Canvas.Left="1100"
-                            Canvas.Top="105"
-                            FontSize="52"
+                            Canvas.Left="1150"
+                            Canvas.Top="102"
+                            FontSize="56"
                             Text="🐫"
                             Opacity="0"
                             Canvas.ZIndex="100">
