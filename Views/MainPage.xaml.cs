@@ -166,14 +166,14 @@ namespace Jewochron.Views
                 System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Camel is now VISIBLE at opacity 1");
                 System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Look at the skyline NOW - you should see it!");
 
-                // Create a simple timer to move it
+                // Create a simple timer to move it - slower, more majestic pace
                 var moveTimer = DispatcherQueue.CreateTimer();
-                moveTimer.Interval = TimeSpan.FromMilliseconds(50);
+                moveTimer.Interval = TimeSpan.FromMilliseconds(60);
                 double currentX = 0;
 
                 moveTimer.Tick += (s, e) =>
                 {
-                    currentX -= 4;  // Move 4 pixels left each tick
+                    currentX -= 2;  // Move 2 pixels left each tick (slower than before)
                     camelTransform.X = currentX;
 
                     // After it goes off screen, stop and reset
