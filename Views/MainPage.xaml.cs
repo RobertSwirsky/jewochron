@@ -17,6 +17,7 @@ namespace Jewochron.Views
         private DispatcherQueueTimer? clockTimer;
         private DispatcherQueueTimer? dataRefreshTimer;
         private DispatcherQueueTimer? camelTimer;
+        private DispatcherQueueTimer? jewishManTimer;
         private readonly TimeZoneInfo jerusalemTimeZone;
         private DateTime lastRefreshDate = DateTime.MinValue;
         private string lastPrayerIndicator = "";
@@ -42,6 +43,7 @@ namespace Jewochron.Views
             StartClockTimer();
             StartDataRefreshTimer();
             StartCamelAnimation();
+            StartJewishManAnimation();
 
             // Load data
             _ = LoadDataAsync();
@@ -193,6 +195,107 @@ namespace Jewochron.Views
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] ERROR: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine("========================================");
+            }
+        }
+
+        private void StartJewishManAnimation()
+        {
+            try
+            {
+                // Jewish man walks every 3 minutes (offset from camel)
+                jewishManTimer = DispatcherQueue.CreateTimer();
+                jewishManTimer.Interval = TimeSpan.FromMinutes(3);
+                jewishManTimer.Tick += (s, e) => 
+                {
+                    try
+                    {
+                        AnimateJewishManWalk();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Jewish man animation error: {ex.Message}");
+                    }
+                };
+                jewishManTimer.Start();
+
+                // Start first animation after 30 seconds (offset from camel)
+                var initialTimer = DispatcherQueue.CreateTimer();
+                initialTimer.Interval = TimeSpan.FromSeconds(30);
+                initialTimer.IsRepeating = false;
+                initialTimer.Tick += (s, e) =>
+                {
+                    try
+                    {
+                        System.Diagnostics.Debug.WriteLine("Starting INITIAL Jewish man animation NOW!");
+                        AnimateJewishManWalk();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Initial Jewish man animation error: {ex.Message}");
+                    }
+                };
+                initialTimer.Start();
+                System.Diagnostics.Debug.WriteLine("Jewish man animation timer initialized - first animation in 30 seconds");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to start Jewish man animation: {ex.Message}");
+            }
+        }
+
+        private void AnimateJewishManWalk()
+        {
+            // Get references to the Jewish man elements
+            var animatedMan = this.FindName("AnimatedJewishMan") as Microsoft.UI.Xaml.UIElement;
+            var manTransform = this.FindName("JewishManTransform") as Microsoft.UI.Xaml.Media.TranslateTransform;
+
+            System.Diagnostics.Debug.WriteLine("========================================");
+            System.Diagnostics.Debug.WriteLine($"[JEWISH MAN DEBUG] AnimateJewishManWalk called at {DateTime.Now:HH:mm:ss}");
+
+            if (animatedMan == null || manTransform == null)
+            {
+                System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] ERROR: Elements not found!");
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Starting animation");
+
+            try
+            {
+                // Reset to start position (left side)
+                manTransform.X = 0;
+                animatedMan.Opacity = 1;  // FULLY VISIBLE
+
+                System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Jewish man is now VISIBLE at opacity 1");
+
+                // Create a simple timer to move him LEFT to RIGHT (opposite of camel)
+                var moveTimer = DispatcherQueue.CreateTimer();
+                moveTimer.Interval = TimeSpan.FromMilliseconds(60);
+                double currentX = 0;
+
+                moveTimer.Tick += (s, e) =>
+                {
+                    currentX += 2;  // Move 2 pixels RIGHT each tick
+                    manTransform.X = currentX;
+
+                    // After he goes off screen, stop and reset
+                    if (currentX > 1250)
+                    {
+                        moveTimer.Stop();
+                        animatedMan.Opacity = 0;
+                        manTransform.X = 0;
+                        System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Animation complete!");
+                    }
+                };
+
+                moveTimer.Start();
+                System.Diagnostics.Debug.WriteLine("[JEWISH MAN DEBUG] Timer animation started!");
+                System.Diagnostics.Debug.WriteLine("========================================");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[JEWISH MAN DEBUG] ERROR: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine("========================================");
             }
         }
