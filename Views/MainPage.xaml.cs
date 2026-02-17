@@ -24,6 +24,7 @@ namespace Jewochron.Views
         private readonly TimeZoneInfo jerusalemTimeZone;
         private DateTime lastRefreshDate = DateTime.MinValue;
         private string lastPrayerIndicator = "";
+        private double currentMoonIllumination = 50.0; // Track moon phase for skyline
 
         public MainPage()
         {
@@ -616,12 +617,65 @@ namespace Jewochron.Views
                         starsCanvas.Opacity = 1.0;
                     }
                 }
+
+                // Update moon phase appearance when moon is visible
+                if (moonCanvas.Visibility == Visibility.Visible)
+                {
+                    UpdateSkylineMoonPhase(currentMoonIllumination);
+                }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Skyline update error: {ex.Message}");
                 // Silently ignore skyline update errors to prevent app crashes
                 // The clock will continue to work even if skyline animation fails
+            }
+        }
+
+        private void UpdateSkylineMoonPhase(double illuminationPercent)
+        {
+            try
+            {
+                var moonShadow = this.FindName("SkylineMoonShadow") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                var moonLit = this.FindName("SkylineMoonLit") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                var moonGlow = this.FindName("SkylineMoonGlow") as Microsoft.UI.Xaml.Shapes.Ellipse;
+
+                if (moonShadow == null || moonLit == null) return;
+
+                // Calculate shadow position based on illumination
+                // 0% = new moon (shadow covers all), 100% = full moon (no shadow)
+                // Shadow moves from right to left as moon waxes, then left to right as it wanes
+
+                double moonAge = (DateTime.Now - new DateTime(2000, 1, 6, 18, 14, 0)).TotalDays % 29.53;
+                bool isWaxing = moonAge < 14.765; // First half of lunar cycle
+
+                // Calculate shadow offset (0 at full moon, 40 at new moon)
+                double shadowOffset = 40 * (1 - illuminationPercent / 100.0);
+
+                if (isWaxing)
+                {
+                    // Waxing: shadow on left side, moving left
+                    Canvas.SetLeft(moonShadow, -shadowOffset);
+                }
+                else
+                {
+                    // Waning: shadow on right side, moving right
+                    Canvas.SetLeft(moonShadow, shadowOffset);
+                }
+
+                // Adjust moon brightness based on illumination
+                double glowOpacity = 0.1 + (illuminationPercent / 100.0 * 0.25);
+                if (moonGlow != null)
+                {
+                    moonGlow.Opacity = glowOpacity;
+                }
+
+                // Adjust lit portion opacity based on illumination
+                moonLit.Opacity = 0.3 + (illuminationPercent / 100.0 * 0.7);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Moon phase update error: {ex.Message}");
             }
         }
         
@@ -827,6 +881,7 @@ namespace Jewochron.Views
 
                 // Detailed Moon phase with exact illumination
                 var (moonEmoji, moonPhaseName, moonIllumination, moonAge) = moonPhaseService.GetDetailedMoonPhase(now);
+                currentMoonIllumination = moonIllumination; // Store for skyline moon rendering
                 txtMoonPhaseIcon.Text = moonEmoji;
                 txtMoonPhaseName.Text = moonPhaseName;
                 txtMoonIllumination.Text = $"{moonIllumination:F1}% illuminated";
