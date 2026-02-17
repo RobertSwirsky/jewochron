@@ -146,17 +146,22 @@ namespace Jewochron.Views
             var animatedCamel = this.FindName("AnimatedCamel") as Microsoft.UI.Xaml.Controls.TextBlock;
             var camelTransform = this.FindName("CamelTransform") as Microsoft.UI.Xaml.Media.TranslateTransform;
 
-            System.Diagnostics.Debug.WriteLine($"AnimateCamelWalk called - camel: {(animatedCamel != null ? "found" : "NULL")}, transform: {(camelTransform != null ? "found" : "NULL")}");
+            System.Diagnostics.Debug.WriteLine("========================================");
+            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] AnimateCamelWalk called at {DateTime.Now:HH:mm:ss}");
+            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Camel element: {(animatedCamel != null ? "FOUND" : "NULL")}");
+            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Transform: {(camelTransform != null ? "FOUND" : "NULL")}");
 
             if (animatedCamel == null || camelTransform == null)
             {
-                System.Diagnostics.Debug.WriteLine("Camel animation elements not found!");
+                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] ERROR: Elements not found!");
+                System.Diagnostics.Debug.WriteLine("========================================");
                 return;
             }
 
-            System.Diagnostics.Debug.WriteLine($"Starting camel animation - Initial opacity: {animatedCamel.Opacity}");
+            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Current opacity: {animatedCamel.Opacity}");
+            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Current X position: {camelTransform.X}");
 
-            // Create animation from right to left
+            // SIMPLE TEST: Just fade in and move slowly
             var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard();
 
             // Fade in animation
@@ -164,19 +169,19 @@ namespace Jewochron.Views
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromSeconds(0.5)
+                Duration = TimeSpan.FromSeconds(1)
             };
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeIn, animatedCamel);
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeIn, "Opacity");
             storyboard.Children.Add(fadeIn);
 
-            // Walk animation (translate from right to left)
+            // Slow walk animation - VERY SLOW for visibility
             var walkAnimation = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
             {
                 From = 0,
-                To = -1300, // Walk off the left side
-                Duration = TimeSpan.FromSeconds(20),
-                BeginTime = TimeSpan.FromSeconds(0.5)
+                To = -1200,
+                Duration = TimeSpan.FromSeconds(30), // SLOWER - 30 seconds
+                BeginTime = TimeSpan.FromSeconds(1)
             };
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(walkAnimation, camelTransform);
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(walkAnimation, "X");
@@ -187,8 +192,8 @@ namespace Jewochron.Views
             {
                 From = 1,
                 To = 0,
-                Duration = TimeSpan.FromSeconds(1),
-                BeginTime = TimeSpan.FromSeconds(19.5)
+                Duration = TimeSpan.FromSeconds(2),
+                BeginTime = TimeSpan.FromSeconds(29)
             };
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeOut, animatedCamel);
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeOut, "Opacity");
@@ -197,14 +202,25 @@ namespace Jewochron.Views
             // Reset position when complete
             storyboard.Completed += (s, e) =>
             {
-                System.Diagnostics.Debug.WriteLine("Camel animation completed!");
+                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Animation COMPLETED!");
                 camelTransform.X = 0;
                 animatedCamel.Opacity = 0;
+                System.Diagnostics.Debug.WriteLine("========================================");
             };
 
-            storyboard.Begin();
-            System.Diagnostics.Debug.WriteLine("Camel storyboard started!");
-            camelStoryboard = storyboard;
+            try
+            {
+                storyboard.Begin();
+                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Storyboard.Begin() called successfully!");
+                System.Diagnostics.Debug.WriteLine("========================================");
+                camelStoryboard = storyboard;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] ERROR starting storyboard: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Stack trace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine("========================================");
+            }
         }
 
         private async Task CheckAndRefreshDataAsync()
