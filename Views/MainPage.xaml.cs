@@ -148,80 +148,52 @@ namespace Jewochron.Views
 
             System.Diagnostics.Debug.WriteLine("========================================");
             System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] AnimateCamelWalk called at {DateTime.Now:HH:mm:ss}");
-            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Camel element: {(animatedCamel != null ? "FOUND" : "NULL")}");
-            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Transform: {(camelTransform != null ? "FOUND" : "NULL")}");
 
             if (animatedCamel == null || camelTransform == null)
             {
                 System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] ERROR: Elements not found!");
-                System.Diagnostics.Debug.WriteLine("========================================");
                 return;
             }
 
-            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Current opacity: {animatedCamel.Opacity}");
-            System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Current X position: {camelTransform.X}");
+            System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Starting SIMPLE direct animation");
 
-            // FIXED: Create storyboard with proper WinUI 3 syntax
-            var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard();
-
-            // Fade in animation - using SetTargetName instead of SetTarget
-            var fadeIn = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
-            {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromSeconds(1),
-                EnableDependentAnimation = true  // Required for non-theme animations
-            };
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetName(fadeIn, "AnimatedCamel");
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeIn, "Opacity");
-            storyboard.Children.Add(fadeIn);
-
-            // Walk animation - animate the TranslateTransform
-            var walkAnimation = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
-            {
-                From = 0,
-                To = -1200,
-                Duration = TimeSpan.FromSeconds(30),
-                BeginTime = TimeSpan.FromSeconds(1),
-                EnableDependentAnimation = true  // Required for non-theme animations
-            };
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetName(walkAnimation, "CamelTransform");
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(walkAnimation, "X");
-            storyboard.Children.Add(walkAnimation);
-
-            // Fade out at the end
-            var fadeOut = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
-            {
-                From = 1,
-                To = 0,
-                Duration = TimeSpan.FromSeconds(2),
-                BeginTime = TimeSpan.FromSeconds(29),
-                EnableDependentAnimation = true  // Required for non-theme animations
-            };
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetName(fadeOut, "AnimatedCamel");
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeOut, "Opacity");
-            storyboard.Children.Add(fadeOut);
-
-            // Reset position when complete
-            storyboard.Completed += (s, e) =>
-            {
-                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Animation COMPLETED!");
-                camelTransform.X = 0;
-                animatedCamel.Opacity = 0;
-                System.Diagnostics.Debug.WriteLine("========================================");
-            };
-
+            // SUPER SIMPLE: Just make it visible and animate directly
             try
             {
-                storyboard.Begin();
-                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Storyboard.Begin() called successfully!");
+                // Reset to start position
+                camelTransform.X = 0;
+                animatedCamel.Opacity = 1;  // FULLY VISIBLE
+
+                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Camel is now VISIBLE at opacity 1");
+                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Look at the skyline NOW - you should see it!");
+
+                // Create a simple timer to move it
+                var moveTimer = DispatcherQueue.CreateTimer();
+                moveTimer.Interval = TimeSpan.FromMilliseconds(50);
+                double currentX = 0;
+
+                moveTimer.Tick += (s, e) =>
+                {
+                    currentX -= 4;  // Move 4 pixels left each tick
+                    camelTransform.X = currentX;
+
+                    // After it goes off screen, stop and reset
+                    if (currentX < -1300)
+                    {
+                        moveTimer.Stop();
+                        animatedCamel.Opacity = 0;
+                        camelTransform.X = 0;
+                        System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Animation complete!");
+                    }
+                };
+
+                moveTimer.Start();
+                System.Diagnostics.Debug.WriteLine("[CAMEL DEBUG] Timer animation started!");
                 System.Diagnostics.Debug.WriteLine("========================================");
-                camelStoryboard = storyboard;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] ERROR starting storyboard: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Stack trace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] ERROR: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine("========================================");
             }
         }
