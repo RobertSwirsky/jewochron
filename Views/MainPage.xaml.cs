@@ -144,8 +144,15 @@ namespace Jewochron.Views
             var animatedCamel = this.FindName("AnimatedCamel") as Microsoft.UI.Xaml.Controls.TextBlock;
             var camelTransform = this.FindName("CamelTransform") as Microsoft.UI.Xaml.Media.TranslateTransform;
 
+            System.Diagnostics.Debug.WriteLine($"AnimateCamelWalk called - camel: {(animatedCamel != null ? "found" : "NULL")}, transform: {(camelTransform != null ? "found" : "NULL")}");
+
             if (animatedCamel == null || camelTransform == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Camel animation elements not found!");
                 return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Starting camel animation - Initial opacity: {animatedCamel.Opacity}");
 
             // Create animation from right to left
             var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard();
@@ -188,11 +195,13 @@ namespace Jewochron.Views
             // Reset position when complete
             storyboard.Completed += (s, e) =>
             {
+                System.Diagnostics.Debug.WriteLine("Camel animation completed!");
                 camelTransform.X = 0;
                 animatedCamel.Opacity = 0;
             };
 
             storyboard.Begin();
+            System.Diagnostics.Debug.WriteLine("Camel storyboard started!");
             camelStoryboard = storyboard;
         }
 
