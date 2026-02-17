@@ -16,9 +16,11 @@ namespace Jewochron.Views
         private readonly MoladService moladService;
         private DispatcherQueueTimer? clockTimer;
         private DispatcherQueueTimer? dataRefreshTimer;
+        private DispatcherQueueTimer? camelTimer;
         private readonly TimeZoneInfo jerusalemTimeZone;
         private DateTime lastRefreshDate = DateTime.MinValue;
         private string lastPrayerIndicator = "";
+        private Microsoft.UI.Xaml.Media.Animation.Storyboard? camelStoryboard;
 
         public MainPage()
         {
@@ -40,6 +42,7 @@ namespace Jewochron.Views
             // Start timers
             StartClockTimer();
             StartDataRefreshTimer();
+            StartCamelAnimation();
 
             // Load data
             _ = LoadDataAsync();
@@ -63,6 +66,79 @@ namespace Jewochron.Views
             dataRefreshTimer.Interval = TimeSpan.FromMinutes(1);
             dataRefreshTimer.Tick += async (s, e) => await CheckAndRefreshDataAsync();
             dataRefreshTimer.Start();
+        }
+
+        private void StartCamelAnimation()
+        {
+            // Camel walks once per minute
+            camelTimer = DispatcherQueue.CreateTimer();
+            camelTimer.Interval = TimeSpan.FromMinutes(1);
+            camelTimer.Tick += (s, e) => AnimateCamelWalk();
+            camelTimer.Start();
+
+            // Start first animation after 10 seconds
+            Task.Delay(10000).ContinueWith(_ =>
+            {
+                DispatcherQueue.TryEnqueue(() => AnimateCamelWalk());
+            });
+        }
+
+        private void AnimateCamelWalk()
+        {
+            // Get references to the camel elements
+            var animatedCamel = this.FindName("AnimatedCamel") as Microsoft.UI.Xaml.Controls.TextBlock;
+            var camelTransform = this.FindName("CamelTransform") as Microsoft.UI.Xaml.Media.TranslateTransform;
+
+            if (animatedCamel == null || camelTransform == null)
+                return;
+
+            // Create animation from right to left
+            var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard();
+
+            // Fade in animation
+            var fadeIn = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.5)
+            };
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeIn, animatedCamel);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeIn, "Opacity");
+            storyboard.Children.Add(fadeIn);
+
+            // Walk animation (translate from right to left)
+            var walkAnimation = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
+            {
+                From = 0,
+                To = -1300, // Walk off the left side
+                Duration = TimeSpan.FromSeconds(20),
+                BeginTime = TimeSpan.FromSeconds(0.5)
+            };
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(walkAnimation, camelTransform);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(walkAnimation, "X");
+            storyboard.Children.Add(walkAnimation);
+
+            // Fade out at the end
+            var fadeOut = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(1),
+                BeginTime = TimeSpan.FromSeconds(19.5)
+            };
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeOut, animatedCamel);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeOut, "Opacity");
+            storyboard.Children.Add(fadeOut);
+
+            // Reset position when complete
+            storyboard.Completed += (s, e) =>
+            {
+                camelTransform.X = 0;
+                animatedCamel.Opacity = 0;
+            };
+
+            storyboard.Begin();
+            camelStoryboard = storyboard;
         }
 
         private async Task CheckAndRefreshDataAsync()
@@ -347,6 +423,13 @@ namespace Jewochron.Views
                 txtNextHolidayEnglish.Text = holidayEnglish;
                 txtNextHolidayHebrew.Text = holidayHebrew;
                 txtDaysUntilHoliday.Text = daysUntil.ToString();
+
+                // Add day of week
+                var holidayDayOfWeek = this.FindName("txtHolidayDayOfWeek") as Microsoft.UI.Xaml.Controls.TextBlock;
+                if (holidayDayOfWeek != null)
+                {
+                    holidayDayOfWeek.Text = holidayDate.ToString("dddd");
+                }
                 txtHolidayDate.Text = holidayDate.ToString("MMMM d, yyyy");
 
                 // Torah portion - use async method for accurate results

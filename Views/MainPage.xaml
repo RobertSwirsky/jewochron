@@ -446,6 +446,19 @@
                         <!-- Ground with subtle shadow -->
                         <Rectangle Canvas.Left="0" Canvas.Top="145" Width="1200" Height="5" Fill="#1A1A1A" Opacity="0.4" />
                         <Rectangle Canvas.Left="0" Canvas.Top="148" Width="1200" Height="2" Fill="#5D4E37" />
+
+                        <!-- Animated Camel -->
+                        <TextBlock 
+                            x:Name="AnimatedCamel"
+                            Canvas.Left="1200"
+                            Canvas.Top="110"
+                            FontSize="32"
+                            Text="🐫"
+                            Opacity="0">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform x:Name="CamelTransform" />
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
                     </Canvas>
 
                     <!-- Live Time Display with Location -->
@@ -892,6 +905,13 @@
                                         VerticalAlignment="Center"
                                         Margin="0,6,0,0" />
                                 </StackPanel>
+                                <TextBlock
+                                    x:Name="txtHolidayDayOfWeek"
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#B0B0B0"
+                                    Margin="0,4,0,0"
+                                    Text="" />
                                 <TextBlock
                                     x:Name="txtHolidayDate"
                                     FontSize="16"
