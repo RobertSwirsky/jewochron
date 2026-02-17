@@ -448,13 +448,14 @@
                         <Rectangle Canvas.Left="0" Canvas.Top="148" Width="1200" Height="2" Fill="#5D4E37" />
 
                         <!-- Animated Camel (starts off-screen right, walks to off-screen left) -->
+                        <!-- TESTING: Temporarily visible to verify rendering -->
                         <TextBlock 
                             x:Name="AnimatedCamel"
-                            Canvas.Left="1150"
+                            Canvas.Left="600"
                             Canvas.Top="108"
-                            FontSize="36"
+                            FontSize="48"
                             Text="🐫"
-                            Opacity="0"
+                            Opacity="1"
                             Canvas.ZIndex="100">
                             <TextBlock.RenderTransform>
                                 <TranslateTransform x:Name="CamelTransform" X="0" />
