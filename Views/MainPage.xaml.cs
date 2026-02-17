@@ -1,3 +1,4 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Jewochron.Services;
 using Microsoft.UI.Dispatching;
@@ -47,6 +48,49 @@ namespace Jewochron.Views
 
             // Load data
             _ = LoadDataAsync();
+        }
+
+        private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Determine the appropriate visual state based on aspect ratio
+            // Optimized for synagogue digital displays (16:9 landscape and 9:16 portrait)
+            double width = e.NewSize.Width;
+            double height = e.NewSize.Height;
+
+            // Avoid division by zero
+            if (height == 0) return;
+
+            double aspectRatio = width / height;
+
+            string targetState;
+
+            if (height > width)
+            {
+                // Portrait mode: Height > Width (e.g., 9:16 = 0.5625 ratio)
+                // Perfect for vertical digital signs in synagogue entrance
+                targetState = "PortraitState";
+            }
+            else if (aspectRatio < 1.6)
+            {
+                // Landscape but narrow (e.g., 4:3 = 1.33, square = 1.0)
+                // Use landscape narrow for these aspect ratios
+                targetState = "LandscapeNarrowState";
+            }
+            else if (width < 1400)
+            {
+                // Landscape 16:9 (1.778 ratio) at smaller size
+                // Good for smaller displays or windowed mode
+                targetState = "LandscapeNarrowState";
+            }
+            else
+            {
+                // Landscape 16:9 at larger size (width >= 1400)
+                // Optimal for large digital displays in sanctuary/social hall
+                // Examples: 1920x1080, 2560x1440, 3840x2160
+                targetState = "LandscapeWideState";
+            }
+
+            VisualStateManager.GoToState(this, targetState, useTransitions: true);
         }
 
         private void StartClockTimer()

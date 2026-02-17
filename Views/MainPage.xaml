@@ -8,75 +8,201 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Content>
-        <Grid Background="#1E1E1E" Padding="10">
+        <Grid x:Name="RootGrid" Background="#1E1E1E" Padding="10" SizeChanged="RootGrid_SizeChanged">
             <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup>
-                    <!-- Narrow: Single column, compact -->
-                    <VisualState x:Name="NarrowState">
-                        <VisualState.StateTriggers>
-                            <AdaptiveTrigger MinWindowWidth="0" />
-                        </VisualState.StateTriggers>
+                <VisualStateGroup x:Name="LayoutStates">
+                    <!-- Portrait Mode (9:16) - Height > Width, stack everything vertically -->
+                    <VisualState x:Name="PortraitState">
                         <VisualState.Setters>
+                            <!-- Skyline: Smaller and centered -->
+                            <Setter Target="SkylineCanvas.Width" Value="600" />
+                            <Setter Target="SkylineCanvas.Height" Value="100" />
+                            <Setter Target="SkylineCanvas.RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.5" ScaleY="0.67" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Target="SkylineCanvas.Margin" Value="0,5,0,5" />
+
+                            <!-- MainStack: Full width, no max width -->
+                            <Setter Target="MainStack.MaxWidth" Value="9999" />
+                            <Setter Target="MainStack.Spacing" Value="12" />
+
+                            <!-- Time Display: Vertical stack instead of horizontal -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="0" />
+                            <Setter Target="LocalTimeStack.Grid.Column" Value="0" />
+                            <Setter Target="LocalTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="JerusalemTimeStack.Grid.Column" Value="0" />
+                            <Setter Target="JerusalemTimeStack.Grid.Row" Value="1" />
+                            <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="Auto" />
+                            <Setter Target="TimeDisplayBorder.Padding" Value="16,14" />
+
+                            <!-- Date Card: Compact -->
+                            <Setter Target="DateCard.Padding" Value="16,14" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="18" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="28" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="24" />
+
+                            <!-- Cards Grid: Single column, all cards stacked -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="0" />
-                            <Setter Target="MainStack.Spacing" Value="10" />
-                            <Setter Target="DateCard.Padding" Value="18,14" />
+                            <Setter Target="CardsGrid.Margin" Value="0" />
+
+                            <!-- Reposition all cards to column 0, sequential rows -->
                             <Setter Target="ParshaCard.Grid.Column" Value="0" />
-                            <Setter Target="ParshaCard.Padding" Value="18,14" />
-                            <Setter Target="ParshaCard.MinHeight" Value="140" />
+                            <Setter Target="ParshaCard.Grid.Row" Value="0" />
+                            <Setter Target="ParshaCard.Padding" Value="16,14" />
+                            <Setter Target="ParshaCard.MinHeight" Value="130" />
+
                             <Setter Target="DafYomiCard.Grid.Column" Value="0" />
                             <Setter Target="DafYomiCard.Grid.Row" Value="1" />
-                            <Setter Target="DafYomiCard.Padding" Value="18,14" />
-                            <Setter Target="DafYomiCard.MinHeight" Value="140" />
-                            <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
+                            <Setter Target="DafYomiCard.Padding" Value="16,14" />
+                            <Setter Target="DafYomiCard.MinHeight" Value="130" />
+
+                            <Setter Target="HalachicCard.Grid.Column" Value="0" />
                             <Setter Target="HalachicCard.Grid.Row" Value="2" />
-                            <Setter Target="HalachicCard.Padding" Value="18,14" />
-                            <Setter Target="HalachicCard.MinHeight" Value="140" />
+                            <Setter Target="HalachicCard.Padding" Value="16,14" />
+                            <Setter Target="HalachicCard.MinHeight" Value="130" />
+
                             <Setter Target="MoonCard.Grid.Column" Value="0" />
                             <Setter Target="MoonCard.Grid.Row" Value="3" />
-                            <Setter Target="MoonCard.Padding" Value="18,14" />
-                            <Setter Target="MoonCard.MinHeight" Value="140" />
+                            <Setter Target="MoonCard.Padding" Value="16,14" />
+                            <Setter Target="MoonCard.MinHeight" Value="130" />
+
                             <Setter Target="HolidayCard.Grid.Column" Value="0" />
                             <Setter Target="HolidayCard.Grid.Row" Value="4" />
-                            <Setter Target="HolidayCard.Padding" Value="18,14" />
-                            <Setter Target="HolidayCard.MinHeight" Value="140" />
+                            <Setter Target="HolidayCard.Padding" Value="16,14" />
+                            <Setter Target="HolidayCard.MinHeight" Value="130" />
+
                             <Setter Target="PrayerCard.Grid.Column" Value="0" />
                             <Setter Target="PrayerCard.Grid.Row" Value="5" />
-                            <Setter Target="PrayerCard.Padding" Value="18,14" />
-                            <Setter Target="PrayerCard.MinHeight" Value="140" />
+                            <Setter Target="PrayerCard.Padding" Value="16,14" />
+                            <Setter Target="PrayerCard.MinHeight" Value="130" />
                         </VisualState.Setters>
                     </VisualState>
-                    <!-- Medium: Two columns -->
-                    <VisualState x:Name="MediumState">
-                        <VisualState.StateTriggers>
-                            <AdaptiveTrigger MinWindowWidth="700" />
-                        </VisualState.StateTriggers>
+
+                    <!-- Landscape Narrow (16:9 at smaller size or other narrow landscape) -->
+                    <VisualState x:Name="LandscapeNarrowState">
                         <VisualState.Setters>
-                            <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <!-- Skyline: Full size -->
+                            <Setter Target="SkylineCanvas.Width" Value="1200" />
+                            <Setter Target="SkylineCanvas.Height" Value="150" />
+                            <Setter Target="SkylineCanvas.Margin" Value="0,10,0,5" />
+
+                            <!-- MainStack: Reasonable max width -->
+                            <Setter Target="MainStack.MaxWidth" Value="1400" />
                             <Setter Target="MainStack.Spacing" Value="15" />
+
+                            <!-- Time Display: Horizontal -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <Setter Target="LocalTimeStack.Grid.Column" Value="0" />
+                            <Setter Target="LocalTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="JerusalemTimeStack.Grid.Column" Value="1" />
+                            <Setter Target="JerusalemTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="TimeDisplayBorder.Padding" Value="20,18" />
+
+                            <!-- Date Card -->
                             <Setter Target="DateCard.Padding" Value="22,18" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="24" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="36" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="32" />
+
+                            <!-- Cards Grid: Two columns -->
+                            <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
+
+                            <!-- Position cards in 2-column layout -->
                             <Setter Target="ParshaCard.Grid.Column" Value="0" />
+                            <Setter Target="ParshaCard.Grid.Row" Value="0" />
                             <Setter Target="ParshaCard.Padding" Value="20,16" />
                             <Setter Target="ParshaCard.MinHeight" Value="160" />
+
                             <Setter Target="DafYomiCard.Grid.Column" Value="1" />
                             <Setter Target="DafYomiCard.Grid.Row" Value="0" />
                             <Setter Target="DafYomiCard.Padding" Value="20,16" />
                             <Setter Target="DafYomiCard.MinHeight" Value="160" />
-                            <Setter Target="DafYomiCard.Margin" Value="0,0,0,10" />
+
+                            <Setter Target="HalachicCard.Grid.Column" Value="0" />
                             <Setter Target="HalachicCard.Grid.Row" Value="1" />
                             <Setter Target="HalachicCard.Padding" Value="20,16" />
                             <Setter Target="HalachicCard.MinHeight" Value="160" />
+
                             <Setter Target="MoonCard.Grid.Column" Value="1" />
                             <Setter Target="MoonCard.Grid.Row" Value="1" />
                             <Setter Target="MoonCard.Padding" Value="20,16" />
                             <Setter Target="MoonCard.MinHeight" Value="160" />
+
                             <Setter Target="HolidayCard.Grid.Column" Value="0" />
                             <Setter Target="HolidayCard.Grid.Row" Value="2" />
                             <Setter Target="HolidayCard.Padding" Value="20,16" />
                             <Setter Target="HolidayCard.MinHeight" Value="160" />
+
                             <Setter Target="PrayerCard.Grid.Column" Value="1" />
                             <Setter Target="PrayerCard.Grid.Row" Value="2" />
                             <Setter Target="PrayerCard.Padding" Value="20,16" />
                             <Setter Target="PrayerCard.MinHeight" Value="160" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <!-- Landscape Wide (16:9 at larger size, optimal for large displays) -->
+                    <VisualState x:Name="LandscapeWideState">
+                        <VisualState.Setters>
+                            <!-- Skyline: Full size -->
+                            <Setter Target="SkylineCanvas.Width" Value="1200" />
+                            <Setter Target="SkylineCanvas.Height" Value="150" />
+                            <Setter Target="SkylineCanvas.Margin" Value="0,10,0,5" />
+
+                            <!-- MainStack: Larger max width for big displays -->
+                            <Setter Target="MainStack.MaxWidth" Value="1800" />
+                            <Setter Target="MainStack.Spacing" Value="20" />
+
+                            <!-- Time Display: Horizontal, larger fonts -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <Setter Target="LocalTimeStack.Grid.Column" Value="0" />
+                            <Setter Target="LocalTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="JerusalemTimeStack.Grid.Column" Value="1" />
+                            <Setter Target="JerusalemTimeStack.Grid.Row" Value="0" />
+                            <Setter Target="TimeDisplayBorder.Padding" Value="24,20" />
+                            <Setter Target="txtLocalTime.FontSize" Value="56" />
+                            <Setter Target="txtJerusalemTime.FontSize" Value="56" />
+
+                            <!-- Date Card: Larger -->
+                            <Setter Target="DateCard.Padding" Value="28,22" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="28" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="42" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="38" />
+
+                            <!-- Cards Grid: Two columns, larger cards -->
+                            <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
+
+                            <!-- Position cards in 2-column layout with larger spacing -->
+                            <Setter Target="ParshaCard.Grid.Column" Value="0" />
+                            <Setter Target="ParshaCard.Grid.Row" Value="0" />
+                            <Setter Target="ParshaCard.Padding" Value="24,20" />
+                            <Setter Target="ParshaCard.MinHeight" Value="180" />
+
+                            <Setter Target="DafYomiCard.Grid.Column" Value="1" />
+                            <Setter Target="DafYomiCard.Grid.Row" Value="0" />
+                            <Setter Target="DafYomiCard.Padding" Value="24,20" />
+                            <Setter Target="DafYomiCard.MinHeight" Value="180" />
+
+                            <Setter Target="HalachicCard.Grid.Column" Value="0" />
+                            <Setter Target="HalachicCard.Grid.Row" Value="1" />
+                            <Setter Target="HalachicCard.Padding" Value="24,20" />
+                            <Setter Target="HalachicCard.MinHeight" Value="180" />
+
+                            <Setter Target="MoonCard.Grid.Column" Value="1" />
+                            <Setter Target="MoonCard.Grid.Row" Value="1" />
+                            <Setter Target="MoonCard.Padding" Value="24,20" />
+                            <Setter Target="MoonCard.MinHeight" Value="180" />
+
+                            <Setter Target="HolidayCard.Grid.Column" Value="0" />
+                            <Setter Target="HolidayCard.Grid.Row" Value="2" />
+                            <Setter Target="HolidayCard.Padding" Value="24,20" />
+                            <Setter Target="HolidayCard.MinHeight" Value="180" />
+
+                            <Setter Target="PrayerCard.Grid.Column" Value="1" />
+                            <Setter Target="PrayerCard.Grid.Row" Value="2" />
+                            <Setter Target="PrayerCard.Padding" Value="24,20" />
+                            <Setter Target="PrayerCard.MinHeight" Value="180" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -531,6 +657,7 @@
 
                     <!-- Live Time Display with Location -->
                     <Border 
+                        x:Name="TimeDisplayBorder"
                         Background="#2D2D30" 
                         CornerRadius="12" 
                         Padding="20,18"
@@ -544,13 +671,18 @@
                                 Foreground="#888888"
                                 Text="Loading location..." />
 
-                            <!-- Times Grid -->
-                            <Grid>
+                            <!-- Times Grid - supports both horizontal and vertical layouts -->
+                            <Grid x:Name="TimeGrid">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Spacing="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="0" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel x:Name="LocalTimeStack" Grid.Column="0" Grid.Row="0" Spacing="4">
                                     <TextBlock
                                         Text="Local Time • זמן מקומי"
                                         FontSize="16"
@@ -565,7 +697,8 @@
                                         Foreground="#4EC9B0"
                                         Text="00:00:00 AM" />
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" Spacing="4">
+
+                                <StackPanel x:Name="JerusalemTimeStack" Grid.Column="1" Grid.Row="0" Spacing="4">
                                     <TextBlock
                                         Text="Jerusalem • ירושלים"
                                         FontSize="16"
