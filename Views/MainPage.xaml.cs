@@ -161,29 +161,31 @@ namespace Jewochron.Views
             System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Current opacity: {animatedCamel.Opacity}");
             System.Diagnostics.Debug.WriteLine($"[CAMEL DEBUG] Current X position: {camelTransform.X}");
 
-            // SIMPLE TEST: Just fade in and move slowly
+            // FIXED: Create storyboard with proper WinUI 3 syntax
             var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard();
 
-            // Fade in animation
+            // Fade in animation - using SetTargetName instead of SetTarget
             var fadeIn = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromSeconds(1)
+                Duration = TimeSpan.FromSeconds(1),
+                EnableDependentAnimation = true  // Required for non-theme animations
             };
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeIn, animatedCamel);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetName(fadeIn, "AnimatedCamel");
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeIn, "Opacity");
             storyboard.Children.Add(fadeIn);
 
-            // Slow walk animation - VERY SLOW for visibility
+            // Walk animation - animate the TranslateTransform
             var walkAnimation = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
             {
                 From = 0,
                 To = -1200,
-                Duration = TimeSpan.FromSeconds(30), // SLOWER - 30 seconds
-                BeginTime = TimeSpan.FromSeconds(1)
+                Duration = TimeSpan.FromSeconds(30),
+                BeginTime = TimeSpan.FromSeconds(1),
+                EnableDependentAnimation = true  // Required for non-theme animations
             };
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(walkAnimation, camelTransform);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetName(walkAnimation, "CamelTransform");
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(walkAnimation, "X");
             storyboard.Children.Add(walkAnimation);
 
@@ -193,9 +195,10 @@ namespace Jewochron.Views
                 From = 1,
                 To = 0,
                 Duration = TimeSpan.FromSeconds(2),
-                BeginTime = TimeSpan.FromSeconds(29)
+                BeginTime = TimeSpan.FromSeconds(29),
+                EnableDependentAnimation = true  // Required for non-theme animations
             };
-            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fadeOut, animatedCamel);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetName(fadeOut, "AnimatedCamel");
             Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fadeOut, "Opacity");
             storyboard.Children.Add(fadeOut);
 
