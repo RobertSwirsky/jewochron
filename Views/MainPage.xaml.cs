@@ -42,6 +42,9 @@ namespace Jewochron.Views
             // Get Jerusalem time zone
             jerusalemTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
 
+            // Hook up Loaded event to ensure initial visual state is applied
+            this.Loaded += MainPage_Loaded;
+
             // Start timers
             StartClockTimer();
             StartDataRefreshTimer();
@@ -52,13 +55,24 @@ namespace Jewochron.Views
             _ = LoadDataAsync();
         }
 
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Force initial visual state update by getting the current size
+            // This ensures the layout is correct on first display
+            var rootGrid = this.FindName("RootGrid") as Grid;
+            if (rootGrid != null)
+            {
+                UpdateVisualState(rootGrid.ActualWidth, rootGrid.ActualHeight);
+            }
+        }
+
         private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // Determine the appropriate visual state based on width
-            // Optimized for synagogue digital displays with responsive column layouts
-            double width = e.NewSize.Width;
-            double height = e.NewSize.Height;
+            UpdateVisualState(e.NewSize.Width, e.NewSize.Height);
+        }
 
+        private void UpdateVisualState(double width, double height)
+        {
             // Avoid division by zero
             if (height == 0) return;
 
@@ -84,9 +98,9 @@ namespace Jewochron.Views
             else if (aspectRatio < 1.6 || width < 900)
             {
                 // Landscape but narrow (e.g., 4:3 = 1.33, square = 1.0) or very small width
-                // TWO COLUMN layout (compact landscape)
+                // THREE COLUMN layout (changed from 2-column for consistency)
                 targetState = "LandscapeNarrowState";
-                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Narrow (2 columns): {width}x{height}");
+                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Narrow (3 columns): {width}x{height}");
             }
             else if (width < 1600)
             {
