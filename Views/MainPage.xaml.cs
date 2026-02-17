@@ -24,7 +24,6 @@ namespace Jewochron.Views
         private readonly TimeZoneInfo jerusalemTimeZone;
         private DateTime lastRefreshDate = DateTime.MinValue;
         private string lastPrayerIndicator = "";
-        private double currentMoonIllumination = 50.0; // Store current moon phase (0-100%)
 
         public MainPage()
         {
@@ -70,19 +69,26 @@ namespace Jewochron.Views
             if (height > width)
             {
                 // Portrait mode: Height > Width (e.g., 9:16 = 0.5625 ratio)
-                // Perfect for vertical digital signs in synagogue entrance
-                // SINGLE COLUMN layout (narrow width)
-                targetState = "PortraitState";
-                System.Diagnostics.Debug.WriteLine($"[LAYOUT] Portrait mode (1 column): {width}x{height}");
+                // Use 2 columns if width allows, otherwise 1 column
+                if (width >= 600)
+                {
+                    targetState = "PortraitWideState"; // 2 columns
+                    System.Diagnostics.Debug.WriteLine($"[LAYOUT] Portrait Wide mode (2 columns): {width}x{height}");
+                }
+                else
+                {
+                    targetState = "PortraitNarrowState"; // 1 column
+                    System.Diagnostics.Debug.WriteLine($"[LAYOUT] Portrait Narrow mode (1 column): {width}x{height}");
+                }
             }
-            else if (aspectRatio < 1.6 || width < 1000)
+            else if (aspectRatio < 1.6 || width < 900)
             {
-                // Landscape but narrow (e.g., 4:3 = 1.33, square = 1.0) or small width
+                // Landscape but narrow (e.g., 4:3 = 1.33, square = 1.0) or very small width
                 // TWO COLUMN layout (compact landscape)
                 targetState = "LandscapeNarrowState";
                 System.Diagnostics.Debug.WriteLine($"[LAYOUT] Landscape Narrow (2 columns): {width}x{height}");
             }
-            else if (width < 1800)
+            else if (width < 1600)
             {
                 // Standard landscape 16:9 at moderate size
                 // THREE COLUMN layout - good use of horizontal space
