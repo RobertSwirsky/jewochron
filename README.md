@@ -8,6 +8,9 @@ A beautiful WinUI 3 desktop application that displays Jewish calendar informatio
 
 - **📅 Dates**: Display current date in English and Hebrew (both transliterated and in Hebrew characters)
 - **🌆 Jerusalem Skyline**: Animated Jerusalem skyline with dynamic time-of-day visuals (dawn, sunrise, day, sunset, dusk, night)
+  - Responsive scaling via Viewbox - fits any screen width while maintaining aspect ratio
+  - Phase-accurate moon that reflects actual lunar illumination percentage
+  - Sun and moon positioned high in the sky with natural arc movement
 - **⏰ Live Clocks**: Real-time display of local time and Jerusalem time side-by-side
 - **📍 Location**: Automatic location detection (City, State) with user permission
 - **📖 Torah Portion**: Current week's Parsha in English and Hebrew with decorative Torah scroll illustration
@@ -60,8 +63,12 @@ The application has been refactored into a modular architecture:
 
 ### Jerusalem Skyline
 - Detailed architectural illustration featuring iconic landmarks
+- **Responsive scaling**: Automatically scales to fit any screen width using Viewbox
+- **Phase-accurate moon**: Displays actual lunar phase with shadow overlay based on real illumination percentage
 - Animated sun and moon that move across the sky based on real Jerusalem time
+- Celestial bodies positioned high in sky with proper arc movement throughout day/night
 - Dynamic sky colors transitioning through dawn, sunrise, day, sunset, dusk, and night
+- Stars of David visible at night, fading during dawn/dusk transitions
 - Star of David decorations on buildings
 - Traditional Jewish symbols integrated throughout
 
@@ -92,16 +99,16 @@ The app features **aspect-ratio aware responsive design** specifically optimized
 ### Landscape Narrow (16:9 at smaller sizes)
 - **Use case**: Smaller displays, windowed mode, testing
 - **Resolution**: Width < 1400px
-- **Layout**: Two-column card grid
-- **Skyline**: Full size (1200x150)
+- **Layout**: Three-column card grid
+- **Skyline**: Responsive scaling to fit available width
 - **Time display**: Side-by-side horizontal layout
 - **Cards**: Standard padding and fonts
 
 ### Landscape Wide (16:9 at larger sizes)
 - **Use case**: Large sanctuary displays, social hall screens
 - **Resolution**: 1920x1080, 2560x1440, 3840x2160 (width >= 1400px)
-- **Layout**: Two-column card grid with enhanced spacing
-- **Skyline**: Full size with optimal visibility
+- **Layout**: Three-column card grid with enhanced spacing
+- **Skyline**: Full size (1200px) with optimal visibility
 - **Font sizes**: Larger for far-viewing (56px clocks, 42px dates)
 - **Padding**: Generous spacing for comfortable viewing from distance
 
@@ -120,7 +127,7 @@ The app uses **VisualStateManager** with custom **aspect ratio detection** to en
 **Landscape (16:9) - Most Common**
 - **Resolution**: 1920x1080 (Full HD), 2560x1440 (2K), or 3840x2160 (4K)
 - **Placement**: Sanctuary, social hall, or main entrance
-- **Layout**: Two-column card grid with large fonts
+- **Layout**: Three-column card grid with large fonts
 - **Optimal viewing distance**: 6-20 feet
 
 **Portrait (9:16) - Vertical Displays**
