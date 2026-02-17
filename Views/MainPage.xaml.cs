@@ -52,11 +52,28 @@ namespace Jewochron.Views
         {
             clockTimer = DispatcherQueue.CreateTimer();
             clockTimer.Interval = TimeSpan.FromSeconds(1);
-            clockTimer.Tick += (s, e) => UpdateClocks();
+            clockTimer.Tick += (s, e) => 
+            {
+                try
+                {
+                    UpdateClocks();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Clock update error: {ex.Message}");
+                }
+            };
             clockTimer.Start();
 
             // Update immediately
-            UpdateClocks();
+            try
+            {
+                UpdateClocks();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Initial clock update error: {ex.Message}");
+            }
         }
 
         private void StartDataRefreshTimer()
@@ -64,23 +81,61 @@ namespace Jewochron.Views
             // Check every minute for data that needs refreshing
             dataRefreshTimer = DispatcherQueue.CreateTimer();
             dataRefreshTimer.Interval = TimeSpan.FromMinutes(1);
-            dataRefreshTimer.Tick += async (s, e) => await CheckAndRefreshDataAsync();
+            dataRefreshTimer.Tick += async (s, e) => 
+            {
+                try
+                {
+                    await CheckAndRefreshDataAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Data refresh error: {ex.Message}");
+                }
+            };
             dataRefreshTimer.Start();
         }
 
         private void StartCamelAnimation()
         {
-            // Camel walks once per minute
-            camelTimer = DispatcherQueue.CreateTimer();
-            camelTimer.Interval = TimeSpan.FromMinutes(1);
-            camelTimer.Tick += (s, e) => AnimateCamelWalk();
-            camelTimer.Start();
-
-            // Start first animation after 10 seconds
-            Task.Delay(10000).ContinueWith(_ =>
+            try
             {
-                DispatcherQueue.TryEnqueue(() => AnimateCamelWalk());
-            });
+                // Camel walks once per minute
+                camelTimer = DispatcherQueue.CreateTimer();
+                camelTimer.Interval = TimeSpan.FromMinutes(1);
+                camelTimer.Tick += (s, e) => 
+                {
+                    try
+                    {
+                        AnimateCamelWalk();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Camel animation error: {ex.Message}");
+                    }
+                };
+                camelTimer.Start();
+
+                // Start first animation after 10 seconds using a one-shot timer
+                var initialTimer = DispatcherQueue.CreateTimer();
+                initialTimer.Interval = TimeSpan.FromSeconds(10);
+                initialTimer.IsRepeating = false;
+                initialTimer.Tick += (s, e) =>
+                {
+                    try
+                    {
+                        AnimateCamelWalk();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Initial camel animation error: {ex.Message}");
+                    }
+                };
+                initialTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to start camel animation: {ex.Message}");
+            }
         }
 
         private void AnimateCamelWalk()
@@ -197,108 +252,141 @@ namespace Jewochron.Views
         {
             try
             {
+                // Check if skyline elements exist
+                var sunCanvas = this.FindName("SunCanvas");
+                var moonCanvas = this.FindName("MoonCanvas");
+                var starsCanvas = this.FindName("StarsCanvas");
+                var skyLayer1 = this.FindName("SkyLayer1");
+                var skyLayer2 = this.FindName("SkyLayer2");
+                var skyLayer3 = this.FindName("SkyLayer3");
+
+                // If any critical element is missing, skip skyline update
+                if (sunCanvas == null || moonCanvas == null || skyLayer1 == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Skyline elements not found - skipping update");
+                    return;
+                }
+
                 int hour = jerusalemTime.Hour;
                 int minute = jerusalemTime.Minute;
                 double timeOfDay = hour + (minute / 60.0); // 0-24 as decimal
-                
+
                 // Calculate sun/moon positions (moves across sky throughout day)
                 // Position range: 100 (left) to 1100 (right)
                 double sunPosition = 100 + ((timeOfDay - 6) / 12.0) * 1000; // 6am to 6pm
                 double moonPosition = 100 + ((timeOfDay + 12) % 24 / 12.0) * 1000; // Opposite of sun
-                
+
                 // Update sun position (clamped to visible range)
                 double sunLeft = Math.Clamp(sunPosition, 100, 1100);
-                
+
                 // Calculate sun height (arc across sky)
                 double sunArc = Math.Sin((timeOfDay - 6) / 12.0 * Math.PI); // 0 at dawn/dusk, 1 at noon
                 double sunTop = 80 - (sunArc * 50); // Higher at noon, lower at dawn/dusk
                 sunTop = Math.Clamp(sunTop, 20, 80);
-                
+
                 // Set sun canvas position
-                Canvas.SetLeft(SunCanvas, sunLeft);
-                Canvas.SetTop(SunCanvas, sunTop);
-                
+                Canvas.SetLeft(sunCanvas as Microsoft.UI.Xaml.UIElement, sunLeft);
+                Canvas.SetTop(sunCanvas as Microsoft.UI.Xaml.UIElement, sunTop);
+
                 // Update moon position
                 double moonLeft = Math.Clamp(moonPosition, 100, 1100);
                 double moonArc = Math.Sin(((timeOfDay + 12) % 24) / 12.0 * Math.PI);
                 double moonTop = 80 - (moonArc * 40);
                 moonTop = Math.Clamp(moonTop, 15, 80);
-                
+
                 // Set moon canvas position
-                Canvas.SetLeft(MoonCanvas, moonLeft);
-                Canvas.SetTop(MoonCanvas, moonTop);
-                
+                Canvas.SetLeft(moonCanvas as Microsoft.UI.Xaml.UIElement, moonLeft);
+                Canvas.SetTop(moonCanvas as Microsoft.UI.Xaml.UIElement, moonTop);
+
                 // Determine time period and set colors/visibility
                 if (timeOfDay >= 5 && timeOfDay < 6) // Dawn (5am-6am)
                 {
                     SetSkyColors("#4A5568", "#5A6B7D", "#6B7C8F", 0.5, 0.4);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Opacity = 1.0 - ((timeOfDay - 5)); // Fade out stars
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    if (starsCanvas != null)
+                    {
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = 1.0 - ((timeOfDay - 5)); // Fade out stars
+                    }
                 }
                 else if (timeOfDay >= 6 && timeOfDay < 7) // Sunrise (6am-7am)
                 {
                     SetSkyColors("#FF6B6B", "#FFA07A", "#FFD700", 0.6, 0.3);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Collapsed;
-                    StarsCanvas.Visibility = Visibility.Collapsed;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    if (starsCanvas != null)
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 7 && timeOfDay < 10) // Morning (7am-10am)
                 {
                     SetSkyColors("#87CEEB", "#B0E0E6", "#E0F6FF", 0.5, 0.3);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Collapsed;
-                    StarsCanvas.Visibility = Visibility.Collapsed;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    if (starsCanvas != null)
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 10 && timeOfDay < 15) // Midday (10am-3pm)
                 {
                     SetSkyColors("#4A90E2", "#5DA3E8", "#87CEEB", 0.4, 0.2);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Collapsed;
-                    StarsCanvas.Visibility = Visibility.Collapsed;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    if (starsCanvas != null)
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 15 && timeOfDay < 17) // Afternoon (3pm-5pm)
                 {
                     SetSkyColors("#6BA4D8", "#87CEEB", "#B0E0E6", 0.5, 0.3);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Collapsed;
-                    StarsCanvas.Visibility = Visibility.Collapsed;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    if (starsCanvas != null)
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 17 && timeOfDay < 18) // Late afternoon (5pm-6pm)
                 {
                     SetSkyColors("#FF8C42", "#FFB366", "#FFD699", 0.6, 0.4);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Collapsed;
-                    StarsCanvas.Visibility = Visibility.Collapsed;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    if (starsCanvas != null)
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 18 && timeOfDay < 19) // Sunset (6pm-7pm)
                 {
                     SetSkyColors("#FF6B6B", "#FF8C69", "#FFB347", 0.7, 0.5);
-                    SunCanvas.Visibility = Visibility.Visible;
-                    MoonCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Opacity = (timeOfDay - 18); // Fade in stars
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    if (starsCanvas != null)
+                    {
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = (timeOfDay - 18); // Fade in stars
+                    }
                 }
                 else if (timeOfDay >= 19 && timeOfDay < 20) // Dusk (7pm-8pm)
                 {
                     SetSkyColors("#4A5568", "#5A6B7D", "#6B7C8F", 0.6, 0.4);
-                    SunCanvas.Visibility = Visibility.Collapsed;
-                    MoonCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Opacity = 1.0;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    if (starsCanvas != null)
+                    {
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = 1.0;
+                    }
                 }
                 else // Night (8pm-5am)
                 {
                     SetSkyColors("#1A202C", "#2D3748", "#4A5568", 0.7, 0.5);
-                    SunCanvas.Visibility = Visibility.Collapsed;
-                    MoonCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Visibility = Visibility.Visible;
-                    StarsCanvas.Opacity = 1.0;
+                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    if (starsCanvas != null)
+                    {
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = 1.0;
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Skyline update error: {ex.Message}");
                 // Silently ignore skyline update errors to prevent app crashes
                 // The clock will continue to work even if skyline animation fails
             }
@@ -308,28 +396,39 @@ namespace Jewochron.Views
         {
             try
             {
-                SkyLayer1.Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                var skyLayer1 = this.FindName("SkyLayer1") as Microsoft.UI.Xaml.Shapes.Rectangle;
+                var skyLayer2 = this.FindName("SkyLayer2") as Microsoft.UI.Xaml.Shapes.Rectangle;
+                var skyLayer3 = this.FindName("SkyLayer3") as Microsoft.UI.Xaml.Shapes.Rectangle;
+
+                if (skyLayer1 == null || skyLayer2 == null || skyLayer3 == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Sky layer elements not found");
+                    return;
+                }
+
+                skyLayer1.Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
                     Microsoft.UI.ColorHelper.FromArgb(255,
                         Convert.ToByte(color1.Substring(1, 2), 16),
                         Convert.ToByte(color1.Substring(3, 2), 16),
                         Convert.ToByte(color1.Substring(5, 2), 16)));
-                        
-                SkyLayer2.Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+
+                skyLayer2.Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
                     Microsoft.UI.ColorHelper.FromArgb(255,
                         Convert.ToByte(color2.Substring(1, 2), 16),
                         Convert.ToByte(color2.Substring(3, 2), 16),
                         Convert.ToByte(color2.Substring(5, 2), 16)));
-                SkyLayer2.Opacity = opacity2;
-                        
-                SkyLayer3.Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                skyLayer2.Opacity = opacity2;
+
+                skyLayer3.Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
                     Microsoft.UI.ColorHelper.FromArgb(255,
                         Convert.ToByte(color3.Substring(1, 2), 16),
                         Convert.ToByte(color3.Substring(3, 2), 16),
                         Convert.ToByte(color3.Substring(5, 2), 16)));
-                SkyLayer3.Opacity = opacity3;
+                skyLayer3.Opacity = opacity3;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Sky color update error: {ex.Message}");
                 // Silently ignore color update errors
             }
         }
@@ -375,19 +474,29 @@ namespace Jewochron.Views
         {
             try
             {
+                var tallitCanvas = this.FindName("TallitCanvas") as Microsoft.UI.Xaml.UIElement;
+                var tefillinCanvas = this.FindName("TefillinCanvas") as Microsoft.UI.Xaml.UIElement;
+
+                if (tallitCanvas == null || tefillinCanvas == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Prayer man attire elements not found");
+                    return;
+                }
+
                 // Determine current prayer time
                 bool isShacharit = now >= alotHaShachar && now < chatzot;
                 bool isMincha = now >= minGedolah && now < sunset;
                 bool isMaariv = now >= tzait || now < alotHaShachar;
 
                 // Show tallit only during Shacharit
-                TallitCanvas.Visibility = isShacharit ? Visibility.Visible : Visibility.Collapsed;
+                tallitCanvas.Visibility = isShacharit ? Visibility.Visible : Visibility.Collapsed;
 
                 // Show tefillin only during Shacharit on weekdays (not Shabbat)
-                TefillinCanvas.Visibility = (isShacharit && !isShabbat) ? Visibility.Visible : Visibility.Collapsed;
+                tefillinCanvas.Visibility = (isShacharit && !isShabbat) ? Visibility.Visible : Visibility.Collapsed;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Prayer man attire update error: {ex.Message}");
                 // Silently ignore errors in updating prayer man attire
                 // This is a visual element and shouldn't crash the app
             }
