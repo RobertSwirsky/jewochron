@@ -253,9 +253,9 @@ namespace Jewochron.Views
             try
             {
                 // Check if skyline elements exist
-                var sunCanvas = this.FindName("SunCanvas");
-                var moonCanvas = this.FindName("MoonCanvas");
-                var starsCanvas = this.FindName("StarsCanvas");
+                var sunCanvas = this.FindName("SunCanvas") as Microsoft.UI.Xaml.UIElement;
+                var moonCanvas = this.FindName("MoonCanvas") as Microsoft.UI.Xaml.UIElement;
+                var starsCanvas = this.FindName("StarsCanvas") as Microsoft.UI.Xaml.UIElement;
                 var skyLayer1 = this.FindName("SkyLayer1");
                 var skyLayer2 = this.FindName("SkyLayer2");
                 var skyLayer3 = this.FindName("SkyLayer3");
@@ -285,8 +285,8 @@ namespace Jewochron.Views
                 sunTop = Math.Clamp(sunTop, 20, 80);
 
                 // Set sun canvas position
-                Canvas.SetLeft(sunCanvas as Microsoft.UI.Xaml.UIElement, sunLeft);
-                Canvas.SetTop(sunCanvas as Microsoft.UI.Xaml.UIElement, sunTop);
+                Canvas.SetLeft(sunCanvas, sunLeft);
+                Canvas.SetTop(sunCanvas, sunTop);
 
                 // Update moon position
                 double moonLeft = Math.Clamp(moonPosition, 100, 1100);
@@ -295,92 +295,92 @@ namespace Jewochron.Views
                 moonTop = Math.Clamp(moonTop, 15, 80);
 
                 // Set moon canvas position
-                Canvas.SetLeft(moonCanvas as Microsoft.UI.Xaml.UIElement, moonLeft);
-                Canvas.SetTop(moonCanvas as Microsoft.UI.Xaml.UIElement, moonTop);
+                Canvas.SetLeft(moonCanvas, moonLeft);
+                Canvas.SetTop(moonCanvas, moonTop);
 
                 // Determine time period and set colors/visibility
                 if (timeOfDay >= 5 && timeOfDay < 6) // Dawn (5am-6am)
                 {
                     SetSkyColors("#4A5568", "#5A6B7D", "#6B7C8F", 0.5, 0.4);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Visible;
                     if (starsCanvas != null)
                     {
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = 1.0 - ((timeOfDay - 5)); // Fade out stars
+                        starsCanvas.Visibility = Visibility.Visible;
+                        starsCanvas.Opacity = 1.0 - ((timeOfDay - 5)); // Fade out stars
                     }
                 }
                 else if (timeOfDay >= 6 && timeOfDay < 7) // Sunrise (6am-7am)
                 {
                     SetSkyColors("#FF6B6B", "#FFA07A", "#FFD700", 0.6, 0.3);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Collapsed;
                     if (starsCanvas != null)
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                        starsCanvas.Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 7 && timeOfDay < 10) // Morning (7am-10am)
                 {
                     SetSkyColors("#87CEEB", "#B0E0E6", "#E0F6FF", 0.5, 0.3);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Collapsed;
                     if (starsCanvas != null)
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                        starsCanvas.Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 10 && timeOfDay < 15) // Midday (10am-3pm)
                 {
                     SetSkyColors("#4A90E2", "#5DA3E8", "#87CEEB", 0.4, 0.2);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Collapsed;
                     if (starsCanvas != null)
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                        starsCanvas.Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 15 && timeOfDay < 17) // Afternoon (3pm-5pm)
                 {
                     SetSkyColors("#6BA4D8", "#87CEEB", "#B0E0E6", 0.5, 0.3);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Collapsed;
                     if (starsCanvas != null)
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                        starsCanvas.Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 17 && timeOfDay < 18) // Late afternoon (5pm-6pm)
                 {
                     SetSkyColors("#FF8C42", "#FFB366", "#FFD699", 0.6, 0.4);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Collapsed;
                     if (starsCanvas != null)
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
+                        starsCanvas.Visibility = Visibility.Collapsed;
                 }
                 else if (timeOfDay >= 18 && timeOfDay < 19) // Sunset (6pm-7pm)
                 {
                     SetSkyColors("#FF6B6B", "#FF8C69", "#FFB347", 0.7, 0.5);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    sunCanvas.Visibility = Visibility.Visible;
+                    moonCanvas.Visibility = Visibility.Visible;
                     if (starsCanvas != null)
                     {
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = (timeOfDay - 18); // Fade in stars
+                        starsCanvas.Visibility = Visibility.Visible;
+                        starsCanvas.Opacity = (timeOfDay - 18); // Fade in stars
                     }
                 }
                 else if (timeOfDay >= 19 && timeOfDay < 20) // Dusk (7pm-8pm)
                 {
                     SetSkyColors("#4A5568", "#5A6B7D", "#6B7C8F", 0.6, 0.4);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    sunCanvas.Visibility = Visibility.Collapsed;
+                    moonCanvas.Visibility = Visibility.Visible;
                     if (starsCanvas != null)
                     {
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = 1.0;
+                        starsCanvas.Visibility = Visibility.Visible;
+                        starsCanvas.Opacity = 1.0;
                     }
                 }
                 else // Night (8pm-5am)
                 {
                     SetSkyColors("#1A202C", "#2D3748", "#4A5568", 0.7, 0.5);
-                    (sunCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Collapsed;
-                    (moonCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
+                    sunCanvas.Visibility = Visibility.Collapsed;
+                    moonCanvas.Visibility = Visibility.Visible;
                     if (starsCanvas != null)
                     {
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Visibility = Visibility.Visible;
-                        (starsCanvas as Microsoft.UI.Xaml.UIElement).Opacity = 1.0;
+                        starsCanvas.Visibility = Visibility.Visible;
+                        starsCanvas.Opacity = 1.0;
                     }
                 }
             }
