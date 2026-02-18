@@ -47,6 +47,13 @@ namespace Jewochron.Models
         public string NameHebrew { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gender of the deceased (M = Male, F = Female)
+        /// </summary>
+        [Required]
+        [MaxLength(1)]
+        public string Gender { get; set; } = "M";
+
+        /// <summary>
         /// When this record was created
         /// </summary>
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

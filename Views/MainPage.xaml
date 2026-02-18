@@ -1207,12 +1207,56 @@
                                                        Foreground="#888888" 
                                                        Text="" />
                                         </StackPanel>
-                                    </Grid>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
+                                                </Grid>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
 
-                        <!-- Next Holiday Card -->
+                                    <!-- Yahrzeit Memorial Plaque Card -->
+                                    <Border 
+                                        x:Name="YahrzeitCard"
+                                        Grid.Row="1" Grid.Column="2"
+                                        Visibility="Collapsed"
+                                        CornerRadius="12"
+                                        Padding="20,18"
+                                        Margin="0,0,10,10"
+                                        MinHeight="160">
+                                        <!-- Gold gradient background -->
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#8B7355" Offset="0" />
+                                                <GradientStop Color="#D4AF37" Offset="0.5" />
+                                                <GradientStop Color="#8B7355" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <!-- Ornate border -->
+                                        <Border.BorderBrush>
+                                            <SolidColorBrush Color="#FFD700" />
+                                        </Border.BorderBrush>
+                                        <Border.BorderThickness>2</Border.BorderThickness>
+
+                                        <StackPanel Spacing="8" VerticalAlignment="Top">
+                                            <!-- Title -->
+                                            <TextBlock
+                                                Text="🕯️ In Memory • לזכר נצח"
+                                                FontSize="16"
+                                                HorizontalAlignment="Center"
+                                                TextWrapping="Wrap"
+                                                FontWeight="Bold"
+                                                Foreground="#FFFFFF" />
+
+                                            <!-- Memorial candle emoji for emphasis -->
+                                            <TextBlock
+                                                Text="🕎"
+                                                FontSize="32"
+                                                HorizontalAlignment="Center" />
+
+                                            <!-- Container for dynamically added yahrzeits -->
+                                            <StackPanel x:Name="YahrzeitPanel" Spacing="8" Margin="0,8,0,0" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Next Holiday Card -->
                         <Border 
                             x:Name="HolidayCard"
                             Grid.Row="1" Grid.Column="1"

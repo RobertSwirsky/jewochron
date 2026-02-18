@@ -15,6 +15,7 @@ namespace Jewochron.Views
         private readonly LocationService locationService;
         private readonly JewishHolidaysService jewishHolidaysService;
         private readonly MoladService moladService;
+        private readonly YahrzeitService yahrzeitService;
         private DispatcherQueueTimer? clockTimer;
         private DispatcherQueueTimer? dataRefreshTimer;
         private DispatcherQueueTimer? camelTimer;
@@ -39,6 +40,11 @@ namespace Jewochron.Views
             locationService = new LocationService();
             jewishHolidaysService = new JewishHolidaysService(hebrewCalendarService);
             moladService = new MoladService(hebrewCalendarService);
+
+            // Initialize Yahrzeit service
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string dbPath = Path.Combine(appDataPath, "Jewochron", "yahrzeits.db");
+            yahrzeitService = new YahrzeitService(dbPath, hebrewCalendarService);
 
             // Get Jerusalem time zone
             jerusalemTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
@@ -941,11 +947,114 @@ namespace Jewochron.Views
 
                 // Display the Molad time with chalakim (formatted by service)
                 txtMoladJerusalemTime.Text = moladFormattedTime;
+
+                // Check for upcoming yahrzeits
+                await LoadYahrzeitsAsync();
             }
             catch (Exception ex)
             {
                 txtLocation.Text = $"Error: {ex.Message}";
                 txtEnglishDate.Text = "Error loading data";
+            }
+        }
+
+        private async Task LoadYahrzeitsAsync()
+        {
+            try
+            {
+                var upcomingYahrzeits = await yahrzeitService.GetUpcomingYahrzeitsAsync(7);
+
+                // Find the yahrzeit card container in the XAML
+                var yahrzeitCard = this.FindName("YahrzeitCard") as Microsoft.UI.Xaml.UIElement;
+                var yahrzeitPanel = this.FindName("YahrzeitPanel") as Microsoft.UI.Xaml.Controls.StackPanel;
+
+                if (yahrzeitCard == null || yahrzeitPanel == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Yahrzeit card elements not found");
+                    return;
+                }
+
+                if (upcomingYahrzeits.Count == 0)
+                {
+                    // Hide the yahrzeit card if there are no upcoming yahrzeits
+                    yahrzeitCard.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    // Show the card and populate it
+                    yahrzeitCard.Visibility = Visibility.Visible;
+                    yahrzeitPanel.Children.Clear();
+
+                    foreach (var upcoming in upcomingYahrzeits)
+                    {
+                        // Get Hebrew date with Hebrew numerals
+                        string hebrewDay = hebrewCalendarService.ConvertToHebrewNumber(upcoming.HebrewDay);
+                        string hebrewMonthName = hebrewCalendarService.GetHebrewMonthNameInHebrew(upcoming.HebrewMonth, 
+                            hebrewCalendarService.GetHebrewDate(upcoming.Date).isLeapYear);
+                        string hebrewYear = hebrewCalendarService.ConvertToHebrewNumber(upcoming.HebrewYear);
+                        string hebrewDate = $"{hebrewDay} {hebrewMonthName} {hebrewYear}";
+
+                        // Get appropriate honorific
+                        string honorific = yahrzeitService.GetHonorific(upcoming.Yahrzeit.Gender);
+
+                        // Create a text block for this yahrzeit
+                        var nameText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = 24,
+                            FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.White),
+                            TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
+                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 8)
+                        };
+
+                        // Format: "Name English • Name Hebrew ז״ל"
+                        nameText.Text = $"{upcoming.Yahrzeit.NameEnglish} • {upcoming.Yahrzeit.NameHebrew} {honorific}";
+
+                        var dateText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = 20,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                Microsoft.UI.ColorHelper.FromArgb(255, 255, 223, 186)), // Light gold
+                            TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
+                            FlowDirection = Microsoft.UI.Xaml.FlowDirection.RightToLeft,
+                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 8)
+                        };
+                        dateText.Text = hebrewDate;
+
+                        var whenText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = 16,
+                            FontStyle = Windows.UI.Text.FontStyle.Italic,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                Microsoft.UI.ColorHelper.FromArgb(200, 255, 255, 255)),
+                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 16)
+                        };
+                        whenText.Text = upcoming.DaysFromNow == 0 
+                            ? "🕯️ Today" 
+                            : $"🕯️ In {upcoming.DaysFromNow} day{(upcoming.DaysFromNow == 1 ? "" : "s")}";
+
+                        yahrzeitPanel.Children.Add(nameText);
+                        yahrzeitPanel.Children.Add(dateText);
+                        yahrzeitPanel.Children.Add(whenText);
+
+                        // Add separator if there are more entries
+                        if (upcoming != upcomingYahrzeits.Last())
+                        {
+                            var separator = new Microsoft.UI.Xaml.Shapes.Rectangle
+                            {
+                                Height = 1,
+                                Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                    Microsoft.UI.ColorHelper.FromArgb(100, 255, 215, 0)),
+                                Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 16)
+                            };
+                            yahrzeitPanel.Children.Add(separator);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading yahrzeits: {ex.Message}");
             }
         }
     }

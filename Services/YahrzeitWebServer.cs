@@ -398,13 +398,21 @@ namespace Jewochron.Services
                     <input type='text' id='nameEnglish' required 
                            placeholder='Enter name in English'>
                 </div>
-                
+
                 <div class='form-group'>
                     <label for='nameHebrew'>Name (Hebrew)</label>
                     <input type='text' id='nameHebrew' class='hebrew-input' required 
                            placeholder='הזן שם בעברית'>
                 </div>
-                
+
+                <div class='form-group'>
+                    <label for='gender'>Gender</label>
+                    <select id='gender' required>
+                        <option value='M'>Male (זכר)</option>
+                        <option value='F'>Female (נקבה)</option>
+                    </select>
+                </div>
+
                 <button type='submit' class='btn'>Save Yahrzeit</button>
                 <button type='button' class='btn btn-secondary' id='cancelEdit' style='display:none;'>Cancel Edit</button>
             </form>
@@ -478,7 +486,8 @@ namespace Jewochron.Services
                 document.getElementById('hebrewYear').value = yahrzeit.hebrewYear;
                 document.getElementById('nameEnglish').value = yahrzeit.nameEnglish;
                 document.getElementById('nameHebrew').value = yahrzeit.nameHebrew;
-                
+                document.getElementById('gender').value = yahrzeit.gender || 'M';
+
                 document.getElementById('formTitle').textContent = 'Edit Yahrzeit';
                 document.getElementById('cancelEdit').style.display = 'inline-block';
                 
@@ -523,9 +532,10 @@ namespace Jewochron.Services
                 hebrewDay: parseInt(document.getElementById('hebrewDay').value),
                 hebrewYear: parseInt(document.getElementById('hebrewYear').value),
                 nameEnglish: document.getElementById('nameEnglish').value,
-                nameHebrew: document.getElementById('nameHebrew').value
+                nameHebrew: document.getElementById('nameHebrew').value,
+                gender: document.getElementById('gender').value
             };
-            
+
             try {
                 const url = editId ? '/api/yahrzeits/' + editId : '/api/yahrzeits';
                 const method = editId ? 'PUT' : 'POST';
