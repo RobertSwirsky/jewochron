@@ -896,9 +896,40 @@ namespace Jewochron.Views
                 DateTime moladJerusalemTime = DateTime.SpecifyKind(moladDateTime, DateTimeKind.Unspecified);
 
                 // Format molad display with Rosh Chodesh information
-                string gregorianMonthName = moladJerusalemTime.ToString("MMMM");
-                int gregorianDay = moladJerusalemTime.Day;
-                int gregorianYear = moladJerusalemTime.Year;
+                string dateDisplay;
+
+                if (isTwoDayRoshChodesh)
+                {
+                    // Two-day Rosh Chodesh: show both dates
+                    DateTime firstDay = moladJerusalemTime;
+                    DateTime secondDay = moladJerusalemTime.AddDays(1);
+
+                    string firstMonthName = firstDay.ToString("MMMM");
+                    int firstDayNum = firstDay.Day;
+
+                    string secondMonthName = secondDay.ToString("MMMM");
+                    int secondDayNum = secondDay.Day;
+                    int year = secondDay.Year; // Use second day's year (in case it crosses year boundary)
+
+                    if (firstMonthName == secondMonthName)
+                    {
+                        // Same month: "September 17/18 2026"
+                        dateDisplay = $"{moladDayOfWeek}, {firstMonthName} {firstDayNum}/{secondDayNum}, {year}";
+                    }
+                    else
+                    {
+                        // Different months: "September 30/October 1 2027"
+                        dateDisplay = $"{moladDayOfWeek}, {firstMonthName} {firstDayNum}/{secondMonthName} {secondDayNum}, {year}";
+                    }
+                }
+                else
+                {
+                    // Single-day Rosh Chodesh
+                    string gregorianMonthName = moladJerusalemTime.ToString("MMMM");
+                    int gregorianDay = moladJerusalemTime.Day;
+                    int gregorianYear = moladJerusalemTime.Year;
+                    dateDisplay = $"{moladDayOfWeek}, {gregorianMonthName} {gregorianDay}, {gregorianYear}";
+                }
 
                 // Split English and Hebrew on separate lines, no moon emojis
                 // roshChodeshInfo format: "Rosh Chodesh Month • ראש חודש חודש"
@@ -906,7 +937,7 @@ namespace Jewochron.Views
                 string englishPart = parts[0].Trim();
                 string hebrewPart = parts.Length > 1 ? parts[1].Trim() : "";
 
-                txtMoladDate.Text = $"{englishPart}\n{hebrewPart}\n{moladDayOfWeek}, {gregorianMonthName} {gregorianDay}, {gregorianYear}";
+                txtMoladDate.Text = $"{englishPart}\n{hebrewPart}\n{dateDisplay}";
 
                 // Display the Molad time with chalakim (formatted by service)
                 txtMoladJerusalemTime.Text = moladFormattedTime;

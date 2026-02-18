@@ -1,5 +1,12 @@
 <Solution>
+    <Configurations>
+        <BuildType Name="ARM64" />
+        <BuildType Name="Debug" />
+        <BuildType Name="Release" />
+    </Configurations>
     <Project Path="Jewochron.csproj">
+        <BuildType Solution="ARM64|*" Project="Debug" />
+        <Platform Solution="ARM64|*" Project="ARM64" />
         <Platform Solution="Debug|*" Project="x64" />
         <Deploy />
     </Project>

@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Jewochron.Views;
+using Jewochron.Services;
 
 namespace Jewochron
 {
@@ -11,6 +12,7 @@ namespace Jewochron
     public partial class App : Application
     {
         private Window? window;
+        private YahrzeitWebServer? webServer;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -26,7 +28,7 @@ namespace Jewochron
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             window ??= new Window();
 
@@ -39,6 +41,21 @@ namespace Jewochron
 
             _ = rootFrame.Navigate(typeof(MainPage), e.Arguments);
             window.Activate();
+
+            // Start the web server for Yahrzeit management
+            // TODO: Update this connection string with your MySQL server details
+            string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=your_password";
+            webServer = new YahrzeitWebServer(connectionString);
+
+            try
+            {
+                await webServer.StartAsync();
+                System.Diagnostics.Debug.WriteLine("Yahrzeit web interface available at http://localhost:5555");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to start web server: {ex.Message}");
+            }
         }
 
         /// <summary>
