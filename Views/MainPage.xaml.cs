@@ -964,13 +964,15 @@ namespace Jewochron.Views
             {
                 var upcomingYahrzeits = await yahrzeitService.GetUpcomingYahrzeitsAsync(7);
 
+                System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] Found {upcomingYahrzeits.Count} upcoming yahrzeit(s)");
+
                 // Find the yahrzeit card container in the XAML
                 var yahrzeitCard = this.FindName("YahrzeitCard") as Microsoft.UI.Xaml.UIElement;
                 var yahrzeitPanel = this.FindName("YahrzeitPanel") as Microsoft.UI.Xaml.Controls.StackPanel;
 
                 if (yahrzeitCard == null || yahrzeitPanel == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Yahrzeit card elements not found");
+                    System.Diagnostics.Debug.WriteLine("[YAHRZEIT] ERROR: Yahrzeit card elements not found in XAML");
                     return;
                 }
 
@@ -978,15 +980,19 @@ namespace Jewochron.Views
                 {
                     // Hide the yahrzeit card if there are no upcoming yahrzeits
                     yahrzeitCard.Visibility = Visibility.Collapsed;
+                    System.Diagnostics.Debug.WriteLine("[YAHRZEIT] No upcoming yahrzeits - card hidden");
                 }
                 else
                 {
                     // Show the card and populate it
                     yahrzeitCard.Visibility = Visibility.Visible;
                     yahrzeitPanel.Children.Clear();
+                    System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] Displaying {upcomingYahrzeits.Count} yahrzeit(s)");
 
                     foreach (var upcoming in upcomingYahrzeits)
                     {
+                        System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] - {upcoming.Yahrzeit.NameEnglish} ({upcoming.DaysFromNow} day{(upcoming.DaysFromNow == 1 ? "" : "s")} away)");
+
                         // Get Hebrew date with Hebrew numerals
                         string hebrewDay = hebrewCalendarService.ConvertToHebrewNumber(upcoming.HebrewDay);
                         string hebrewMonthName = hebrewCalendarService.GetHebrewMonthNameInHebrew(upcoming.HebrewMonth, 

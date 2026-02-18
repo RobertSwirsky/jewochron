@@ -49,11 +49,48 @@ namespace Jewochron.Services
 
                 _app = builder.Build();
 
-                // Ensure database is created
+                // Ensure database is created and schema is up to date
                 using (var scope = _app.Services.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<YahrzeitDbContext>();
                     await dbContext.Database.EnsureCreatedAsync();
+
+                    // Check if Gender column exists and add it if missing
+                    try
+                    {
+                        var connection = dbContext.Database.GetDbConnection();
+                        await connection.OpenAsync();
+                        using var command = connection.CreateCommand();
+                        command.CommandText = "PRAGMA table_info(yahrzeits)";
+                        using var reader = await command.ExecuteReaderAsync();
+
+                        bool hasGenderColumn = false;
+                        while (await reader.ReadAsync())
+                        {
+                            if (reader.GetString(1) == "Gender")
+                            {
+                                hasGenderColumn = true;
+                                break;
+                            }
+                        }
+
+                        reader.Close();
+
+                        if (!hasGenderColumn)
+                        {
+                            Debug.WriteLine("Gender column not found. Adding it to the database...");
+                            command.CommandText = "ALTER TABLE yahrzeits ADD COLUMN Gender TEXT NOT NULL DEFAULT 'M'";
+                            await command.ExecuteNonQueryAsync();
+                            Debug.WriteLine("Gender column added successfully.");
+                        }
+
+                        await connection.CloseAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error checking/adding Gender column: {ex.Message}");
+                        throw;
+                    }
                 }
 
                 _app.UseCors();
@@ -127,6 +164,7 @@ namespace Jewochron.Services
                 yahrzeit.HebrewYear = updatedYahrzeit.HebrewYear;
                 yahrzeit.NameEnglish = updatedYahrzeit.NameEnglish;
                 yahrzeit.NameHebrew = updatedYahrzeit.NameHebrew;
+                yahrzeit.Gender = updatedYahrzeit.Gender;
                 yahrzeit.UpdatedAt = DateTime.UtcNow;
 
                 await db.SaveChangesAsync();
