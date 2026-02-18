@@ -28,6 +28,62 @@ A beautiful WinUI 3 desktop application that displays Jewish calendar informatio
   - Dynamic display of Tallit (prayer shawl) during Shacharit
   - Dynamic display of Tefillin (phylacteries) during weekday Shacharit
 - **🎨 Dark Mode**: Beautiful dark theme with responsive card layout
+- **📖 Yahrzeit Manager**: Built-in web interface for managing yahrzeit dates (memorial anniversaries)
+  - Accessible at `http://localhost:5555` when app is running
+  - Add, edit, and delete yahrzeit entries
+  - Store Hebrew dates with bilingual names
+  - SQLite database (zero configuration, embedded)
+
+## Yahrzeit Web Interface
+
+The application includes an embedded web server for managing yahrzeit (memorial anniversary) dates.
+
+### Accessing the WebUI
+
+1. **Run the Jewochron application** (Press F5 in Visual Studio)
+2. **Open your web browser** (Chrome, Edge, Firefox, Safari)
+3. **Navigate to:** `http://localhost:5555`
+
+### Features
+
+- ✅ **Add Yahrzeits**: Enter Hebrew month, day, year, and names in English and Hebrew
+- ✅ **View All**: See all saved yahrzeits sorted by Hebrew date
+- ✅ **Edit Entries**: Modify existing yahrzeit information
+- ✅ **Delete Entries**: Remove yahrzeits with confirmation
+- ✅ **Beautiful UI**: Modern purple-gradient design with responsive layout
+- ✅ **Hebrew Support**: Right-to-left text input for Hebrew names
+- ✅ **Zero Setup**: No database installation required - uses embedded SQLite
+
+### Database Location
+
+The SQLite database is automatically created at:
+```
+%LocalAppData%\Jewochron\yahrzeits.db
+
+Example: C:\Users\YourName\AppData\Local\Jewochron\yahrzeits.db
+```
+
+### Backup Your Data
+
+Simply copy the database file to backup your yahrzeits:
+```powershell
+Copy-Item "$env:LOCALAPPDATA\Jewochron\yahrzeits.db" "D:\Backups\"
+```
+
+### API Endpoints
+
+The web server provides a REST API:
+- `GET /api/yahrzeits` - Get all yahrzeits
+- `GET /api/yahrzeits/{id}` - Get specific yahrzeit
+- `POST /api/yahrzeits` - Create new yahrzeit
+- `PUT /api/yahrzeits/{id}` - Update yahrzeit
+- `DELETE /api/yahrzeits/{id}` - Delete yahrzeit
+
+For more details, see:
+- **QUICKSTART.md** - Quick setup guide
+- **DATABASE_SETUP.md** - Database information
+- **YAHRZEIT_WEBUI_SUMMARY.md** - Complete feature documentation
+- **SQLITE_MIGRATION.md** - Technical details about SQLite
 
 ## Architecture
 
