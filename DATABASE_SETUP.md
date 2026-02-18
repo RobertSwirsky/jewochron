@@ -1,71 +1,50 @@
 # Yahrzeit Database Setup
 
-## MySQL Installation
+## SQLite Database
 
-1. **Install MySQL Server** (if not already installed):
-   - Download from: https://dev.mysql.com/downloads/mysql/
-   - Or use MySQL in Docker: `docker run --name mysql-jewochron -e MYSQL_ROOT_PASSWORD=your_password -p 3306:3306 -d mysql:latest`
+The application uses **SQLite**, a lightweight, embedded database that requires **NO installation or configuration**!
 
-2. **Create the Database**:
-   ```sql
-   CREATE DATABASE jewochron CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   ```
+### Automatic Setup
 
-3. **Create a User** (optional, for better security):
-   ```sql
-   CREATE USER 'jewochron_user'@'localhost' IDENTIFIED BY 'secure_password';
-   GRANT ALL PRIVILEGES ON jewochron.* TO 'jewochron_user'@'localhost';
-   FLUSH PRIVILEGES;
-   ```
+The database is **automatically created** when you run the application for the first time. No setup required!
 
-## Connection String Configuration
+### Database Location
 
-Update the connection string in `App.xaml.cs`:
-
-```csharp
-string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=your_password";
+The SQLite database file is stored at:
+```
+%LocalAppData%\Jewochron\yahrzeits.db
 ```
 
-### Connection String Parameters:
-- **server**: MySQL server address (usually `localhost`)
-- **port**: MySQL port (default is `3306`)
-- **database**: Database name (`jewochron`)
-- **user**: MySQL username
-- **password**: MySQL password
-
-### Example Connection Strings:
-
-**Local Development:**
+**Example path:**
 ```
-server=localhost;port=3306;database=jewochron;user=root;password=mypassword
+C:\Users\YourUsername\AppData\Local\Jewochron\yahrzeits.db
 ```
 
-**Docker MySQL:**
-```
-server=localhost;port=3306;database=jewochron;user=root;password=docker_password
-```
+### Benefits of SQLite
 
-**Remote Server:**
-```
-server=192.168.1.100;port=3306;database=jewochron;user=jewochron_user;password=secure_pass
-```
+✅ **Zero Configuration** - No server to install or configure  
+✅ **Embedded** - Database file stored locally with your app  
+✅ **Portable** - Copy the .db file to backup or transfer data  
+✅ **Fast** - Perfect performance for single-user applications  
+✅ **Reliable** - Battle-tested, used by millions of applications  
 
 ## Database Schema
 
-The application will automatically create the `yahrzeits` table with the following structure:
+The application automatically creates the `yahrzeits` table with the following structure:
 
 ```sql
 CREATE TABLE yahrzeits (
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-    HebrewMonth INT NOT NULL,
-    HebrewDay INT NOT NULL,
-    HebrewYear INT NOT NULL,
-    NameEnglish VARCHAR(200) NOT NULL,
-    NameHebrew VARCHAR(200) NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_hebrew_date (HebrewMonth, HebrewDay)
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    HebrewMonth INTEGER NOT NULL,
+    HebrewDay INTEGER NOT NULL,
+    HebrewYear INTEGER NOT NULL,
+    NameEnglish TEXT NOT NULL,
+    NameHebrew TEXT NOT NULL,
+    CreatedAt TEXT DEFAULT (datetime('now')),
+    UpdatedAt TEXT DEFAULT (datetime('now'))
 );
+
+CREATE INDEX idx_hebrew_date ON yahrzeits(HebrewMonth, HebrewDay);
 ```
 
 ## Accessing the Web Interface
@@ -80,19 +59,62 @@ The web interface provides:
 - Edit existing entries
 - Delete entries
 
+## Backup Your Data
+
+### Manual Backup
+Simply copy the database file:
+```
+Copy from: %LocalAppData%\Jewochron\yahrzeits.db
+Copy to: Your backup location
+```
+
+### Restore from Backup
+Replace the database file with your backup:
+```
+Copy your backup file to: %LocalAppData%\Jewochron\yahrzeits.db
+```
+
+## Viewing the Database
+
+You can view/edit the SQLite database using these free tools:
+
+1. **DB Browser for SQLite** (Recommended)
+   - Download: https://sqlitebrowser.org/
+   - Open: File → Open Database → Browse to yahrzeits.db
+
+2. **SQLite Studio**
+   - Download: https://sqlitestudio.pl/
+
+3. **Visual Studio Code** with SQLite extension
+   - Install "SQLite" extension
+   - Right-click .db file → Open Database
+
 ## Troubleshooting
 
-### Connection Failed
-- Verify MySQL is running: `mysql -u root -p`
-- Check firewall settings
-- Verify connection string parameters
+### Database locked error
+- Close any SQLite browser tools
+- Only one application can write to SQLite at a time
 
-### Database Creation Issues
-- Ensure user has CREATE DATABASE permissions
-- Try creating the database manually using MySQL Workbench or command line
+### Can't find database file
+- Check the Debug output in Visual Studio for the exact path
+- Look for: "Database location: C:\Users\..."
 
-### Port Already in Use
-- If port 5555 is in use, change it in `YahrzeitWebServer.cs`:
-  ```csharp
-  private readonly int _port = 5555; // Change to another port
-  ```
+### Reset database
+Delete the file and restart the app:
+```
+Delete: %LocalAppData%\Jewochron\yahrzeits.db
+```
+The app will create a fresh database on next launch.
+
+## Advanced: Custom Database Location
+
+To use a custom database location, modify `App.xaml.cs`:
+
+```csharp
+// Current (automatic):
+string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+string dbPath = Path.Combine(appDataPath, "Jewochron", "yahrzeits.db");
+
+// Custom location example:
+string dbPath = @"D:\MyData\yahrzeits.db";
+```

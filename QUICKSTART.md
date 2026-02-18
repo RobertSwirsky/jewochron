@@ -1,46 +1,20 @@
 # Quick Start Guide - Yahrzeit Web Interface
 
-## 🚀 Get Started in 5 Minutes!
+## 🚀 Get Started in 1 Minute!
 
-### Step 1: Install MySQL (Choose ONE option)
+### That's It! (Seriously)
 
-**Option A: MySQL Installer (Windows)**
-```
-1. Download from: https://dev.mysql.com/downloads/installer/
-2. Run installer, choose "Developer Default"
-3. Set root password (remember this!)
-4. Complete installation
-```
+SQLite is embedded - **no database installation needed!**
 
-**Option B: Docker (Any Platform)**
-```bash
-docker run --name mysql-jewochron -e MYSQL_ROOT_PASSWORD=jewochron123 -p 3306:3306 -d mysql:latest
-```
+Just follow these steps:
 
-### Step 2: Update Connection String
-
-Open `App.xaml.cs` and find this line (~line 41):
-
-```csharp
-string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=your_password";
-```
-
-**Update it with YOUR password:**
-```csharp
-// If you used Docker:
-string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=jewochron123";
-
-// If you used MySQL Installer:
-string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=YOUR_MYSQL_PASSWORD";
-```
-
-### Step 3: Run the App
+### Step 1: Run the App
 
 1. **Build**: Press `Ctrl+Shift+B` in Visual Studio
 2. **Run**: Press `F5`
 3. **Open Browser**: Navigate to `http://localhost:5555`
 
-### Step 4: Add Your First Yahrzeit
+### Step 2: Add Your First Yahrzeit
 
 1. Select Hebrew Month (e.g., "Tishrei")
 2. Select Hebrew Day (e.g., "10")
@@ -50,6 +24,11 @@ string connectionString = "server=localhost;port=3306;database=jewochron;user=ro
 6. Click "Save Yahrzeit"
 
 **Done!** 🎉
+
+The database is automatically created at:
+```
+%LocalAppData%\Jewochron\yahrzeits.db
+```
 
 ## 📝 Example Data
 
@@ -88,23 +67,20 @@ Try adding these sample entries:
 
 ## 🛠️ Troubleshooting
 
-### "Connection failed" error
-```bash
-# Check if MySQL is running:
-mysql -u root -p
-
-# Or for Docker:
-docker ps | grep mysql-jewochron
-```
-
 ### Port 5555 already in use
 Edit `Services/YahrzeitWebServer.cs` line 18:
 ```csharp
 private readonly int _port = 5556; // Changed from 5555
 ```
 
-### Database doesn't exist
-The app creates it automatically! Just make sure MySQL is running.
+### Where is my database?
+Check the Debug output window in Visual Studio for the exact path, or navigate to:
+```
+%LocalAppData%\Jewochron\yahrzeits.db
+```
+
+### Want to backup your data?
+Simply copy the `yahrzeits.db` file to your backup location!
 
 ## 🎯 What's Next?
 

@@ -9,7 +9,7 @@
 
 ### 2. **Database Context** (`Data/YahrzeitDbContext.cs`)
    - Entity Framework Core DbContext
-   - Configures the Yahrzeits table
+   - Configures the Yahrzeits table with SQLite
    - Includes indexes for efficient queries
 
 ### 3. **Web Server** (`Services/YahrzeitWebServer.cs`)
@@ -20,37 +20,27 @@
 
 ### 4. **Updated App.xaml.cs**
    - Starts web server on application launch
-   - Configured with MySQL connection string
+   - Automatically creates SQLite database in user's AppData folder
 
 ### 5. **NuGet Packages Added**
    - `Microsoft.AspNetCore.App` - Web server framework
    - `Microsoft.EntityFrameworkCore` - ORM for database
-   - `Pomelo.EntityFrameworkCore.MySql` - MySQL provider
+   - `Microsoft.EntityFrameworkCore.Sqlite` - SQLite provider
 
 ## 🚀 How to Use
 
-### Setup MySQL Database
+### Zero Setup Required!
 
-1. **Install MySQL** (if not installed):
-   ```bash
-   # Download from: https://dev.mysql.com/downloads/mysql/
-   # Or use Docker:
-   docker run --name mysql-jewochron -e MYSQL_ROOT_PASSWORD=mypassword -p 3306:3306 -d mysql:latest
-   ```
+**SQLite is embedded - no installation needed!**
 
-2. **Create Database**:
-   ```sql
-   CREATE DATABASE jewochron CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   ```
-
-3. **Update Connection String** in `App.xaml.cs`:
-   ```csharp
-   string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=YOUR_PASSWORD";
-   ```
+The database is automatically created at:
+```
+%LocalAppData%\Jewochron\yahrzeits.db
+```
 
 ### Run the Application
 
-1. **Build and run** the Jewochron WinUI app
+1. **Build and run** the Jewochron WinUI app (Press F5)
 2. **Open browser** to: `http://localhost:5555`
 3. **Start adding Yahrzeits!**
 
@@ -111,8 +101,8 @@ Jewochron/
 
 - Currently configured for localhost only
 - No authentication implemented (suitable for local use)
-- Consider adding authentication for production use
-- Store connection strings securely (use secrets manager in production)
+- Database file stored in user's AppData folder
+- Consider adding authentication if exposing to network
 
 ## 🐛 Troubleshooting
 
@@ -120,10 +110,13 @@ Jewochron/
 - Check if port 5555 is already in use
 - Change port in `YahrzeitWebServer.cs` if needed
 
-### Database connection failed
-- Verify MySQL is running
-- Check connection string credentials
-- Ensure database `jewochron` exists
+### Can't find database file
+- Check Debug output in Visual Studio for exact path
+- Default location: `%LocalAppData%\Jewochron\yahrzeits.db`
+
+### Database locked error
+- Close any SQLite browser tools
+- Only one application can write at a time
 
 ### Hebrew text not displaying
 - Ensure browser encoding is set to UTF-8
@@ -144,6 +137,13 @@ Jewochron/
 
 4. **Delete** entries with the Delete button
 
+## 💾 Backup Your Data
+
+Simply copy the database file:
+```
+%LocalAppData%\Jewochron\yahrzeits.db
+```
+
 ## 🎯 Next Steps
 
 Future enhancements could include:
@@ -151,13 +151,17 @@ Future enhancements could include:
 - Email/notification reminders
 - Import/export functionality
 - Hebrew calendar date conversion
-- Multi-user support with authentication
+- Cloud sync option
 - Print-friendly view
 
 ## ✨ Benefits
 
+- **Zero Setup**: No database server to install or configure
 - **No separate app needed**: Web UI embedded in WinUI app
 - **Any device**: Access from any browser on your network
+- **Portable**: Easy to backup - just copy one file
+- **Fast**: SQLite is extremely fast for single-user scenarios
 - **Modern UI**: Beautiful, responsive design
-- **Fast**: Efficient database queries with indexes
-- **Reliable**: Uses industry-standard EF Core and MySQL
+- **Fast**: Efficient database queries with indexes  
+- **Reliable**: Uses industry-standard EF Core and SQLite
+- **Self-contained**: Everything in one application

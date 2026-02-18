@@ -43,14 +43,19 @@ namespace Jewochron
             window.Activate();
 
             // Start the web server for Yahrzeit management
-            // TODO: Update this connection string with your MySQL server details
-            string connectionString = "server=localhost;port=3306;database=jewochron;user=root;password=your_password";
-            webServer = new YahrzeitWebServer(connectionString);
+            // SQLite database will be stored in the app's local data folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string dbFolder = Path.Combine(appDataPath, "Jewochron");
+            Directory.CreateDirectory(dbFolder); // Ensure folder exists
+            string dbPath = Path.Combine(dbFolder, "yahrzeits.db");
+
+            webServer = new YahrzeitWebServer(dbPath);
 
             try
             {
                 await webServer.StartAsync();
-                System.Diagnostics.Debug.WriteLine("Yahrzeit web interface available at http://localhost:5555");
+                System.Diagnostics.Debug.WriteLine($"Yahrzeit web interface available at http://localhost:5555");
+                System.Diagnostics.Debug.WriteLine($"Database location: {dbPath}");
             }
             catch (Exception ex)
             {

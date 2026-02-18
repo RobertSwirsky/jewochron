@@ -22,15 +22,15 @@ namespace Jewochron.Data
             modelBuilder.Entity<Yahrzeit>(entity =>
             {
                 entity.ToTable("yahrzeits");
-                
+
                 entity.HasIndex(e => new { e.HebrewMonth, e.HebrewDay })
                     .HasDatabaseName("idx_hebrew_date");
 
                 entity.Property(e => e.CreatedAt)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("datetime('now')");
 
                 entity.Property(e => e.UpdatedAt)
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("datetime('now')");
             });
         }
     }

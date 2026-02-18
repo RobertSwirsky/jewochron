@@ -17,11 +17,11 @@ namespace Jewochron.Services
     {
         private WebApplication? _app;
         private readonly int _port = 5555;
-        private readonly string _connectionString;
+        private readonly string _databasePath;
 
-        public YahrzeitWebServer(string connectionString)
+        public YahrzeitWebServer(string databasePath)
         {
-            _connectionString = connectionString;
+            _databasePath = databasePath;
         }
 
         public async Task StartAsync()
@@ -32,7 +32,7 @@ namespace Jewochron.Services
 
                 // Configure services
                 builder.Services.AddDbContext<YahrzeitDbContext>(options =>
-                    options.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString)));
+                    options.UseSqlite($"Data Source={_databasePath}"));
 
                 builder.Services.AddCors(options =>
                 {
