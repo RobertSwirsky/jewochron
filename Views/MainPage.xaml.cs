@@ -973,7 +973,8 @@ namespace Jewochron.Views
         {
             try
             {
-                var upcomingYahrzeits = await yahrzeitService.GetUpcomingYahrzeitsAsync(7);
+                // Check for yahrzeits in the next 8 days (including today)
+                var upcomingYahrzeits = await yahrzeitService.GetUpcomingYahrzeitsAsync(8);
 
                 System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] Found {upcomingYahrzeits.Count} upcoming yahrzeit(s)");
 
@@ -995,10 +996,10 @@ namespace Jewochron.Views
                 }
                 else
                 {
-                    // Show the card and populate it
+                    // Show the memorial plaque card and populate it
                     yahrzeitCard.Visibility = Visibility.Visible;
                     yahrzeitPanel.Children.Clear();
-                    System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] Displaying {upcomingYahrzeits.Count} yahrzeit(s)");
+                    System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] Displaying {upcomingYahrzeits.Count} yahrzeit(s) on memorial plaque");
 
                     foreach (var upcoming in upcomingYahrzeits)
                     {
@@ -1014,55 +1015,72 @@ namespace Jewochron.Views
                         // Get appropriate honorific
                         string honorific = yahrzeitService.GetHonorific(upcoming.Yahrzeit.Gender);
 
-                        // Create a text block for this yahrzeit
-                        var nameText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        // Create entry container (horizontal layout for plaque style)
+                        var entryPanel = new Microsoft.UI.Xaml.Controls.StackPanel
                         {
-                            FontSize = 24,
-                            FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
-                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.White),
-                            TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
-                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 8)
+                            Orientation = Microsoft.UI.Xaml.Controls.Orientation.Vertical,
+                            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
+                            Spacing = 4
                         };
 
-                        // Format: "Name English • Name Hebrew ז״ל"
+                        // Name in English and Hebrew with honorific - dark text for bronze plaque
+                        var nameText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = 22,
+                            FontWeight = Microsoft.UI.Text.FontWeights.Bold,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                Microsoft.UI.ColorHelper.FromArgb(255, 26, 26, 26)), // Dark brown/black
+                            TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
+                            TextAlignment = Microsoft.UI.Xaml.TextAlignment.Center,
+                            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center
+                        };
                         nameText.Text = $"{upcoming.Yahrzeit.NameEnglish} • {upcoming.Yahrzeit.NameHebrew} {honorific}";
 
+                        // Hebrew date
                         var dateText = new Microsoft.UI.Xaml.Controls.TextBlock
                         {
-                            FontSize = 20,
+                            FontSize = 18,
                             Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
-                                Microsoft.UI.ColorHelper.FromArgb(255, 255, 223, 186)), // Light gold
+                                Microsoft.UI.ColorHelper.FromArgb(255, 64, 32, 16)), // Dark bronze
                             TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
+                            TextAlignment = Microsoft.UI.Xaml.TextAlignment.Center,
                             FlowDirection = Microsoft.UI.Xaml.FlowDirection.RightToLeft,
-                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 8)
+                            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center
                         };
                         dateText.Text = hebrewDate;
 
+                        // When text (Today, or X days away)
                         var whenText = new Microsoft.UI.Xaml.Controls.TextBlock
                         {
                             FontSize = 16,
-                            FontStyle = Windows.UI.Text.FontStyle.Italic,
+                            FontWeight = upcoming.DaysFromNow == 0 ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.Normal,
                             Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
-                                Microsoft.UI.ColorHelper.FromArgb(200, 255, 255, 255)),
-                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 16)
+                                upcoming.DaysFromNow == 0 
+                                    ? Microsoft.UI.ColorHelper.FromArgb(255, 139, 0, 0) // Dark red for TODAY
+                                    : Microsoft.UI.ColorHelper.FromArgb(200, 64, 32, 16)), // Bronze
+                            TextAlignment = Microsoft.UI.Xaml.TextAlignment.Center,
+                            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center
                         };
                         whenText.Text = upcoming.DaysFromNow == 0 
-                            ? "🕯️ Today" 
-                            : $"🕯️ In {upcoming.DaysFromNow} day{(upcoming.DaysFromNow == 1 ? "" : "s")}";
+                            ? "🕯️ TODAY - Light a candle 🕯️" 
+                            : $"In {upcoming.DaysFromNow} day{(upcoming.DaysFromNow == 1 ? "" : "s")} ({upcoming.Date:dddd, MMM d})";
 
-                        yahrzeitPanel.Children.Add(nameText);
-                        yahrzeitPanel.Children.Add(dateText);
-                        yahrzeitPanel.Children.Add(whenText);
+                        entryPanel.Children.Add(nameText);
+                        entryPanel.Children.Add(dateText);
+                        entryPanel.Children.Add(whenText);
 
-                        // Add separator if there are more entries
+                        yahrzeitPanel.Children.Add(entryPanel);
+
+                        // Add separator line if there are more entries
                         if (upcoming != upcomingYahrzeits.Last())
                         {
                             var separator = new Microsoft.UI.Xaml.Shapes.Rectangle
                             {
-                                Height = 1,
+                                Height = 2,
                                 Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
-                                    Microsoft.UI.ColorHelper.FromArgb(100, 255, 215, 0)),
-                                Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 16)
+                                    Microsoft.UI.ColorHelper.FromArgb(100, 139, 69, 19)), // Saddle brown
+                                Margin = new Microsoft.UI.Xaml.Thickness(50, 8, 50, 8),
+                                HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch
                             };
                             yahrzeitPanel.Children.Add(separator);
                         }
