@@ -28,20 +28,22 @@
                             <Setter Target="MainStack.HorizontalAlignment" Value="Stretch" />
                             <Setter Target="MainStack.Spacing" Value="12" />
 
-                            <!-- Time Display: Keep horizontal side-by-side even in narrow mode -->
-                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <!-- Time Display: 3 column layout with date in center -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="Auto" />
+                            <Setter Target="TimeGrid.ColumnDefinitions[2].Width" Value="*" />
                             <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
                             <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
-                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="2" />
                             <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="0" />
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="16,14" />
-
-                            <!-- Date Card: Compact -->
-                            <Setter Target="DateCard.Padding" Value="16,14" />
-                            <Setter Target="txtEnglishDate.FontSize" Value="18" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="28" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="24" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="14" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="16" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="14" />
+                            <Setter Target="txtLocalTime.FontSize" Value="36" />
+                            <Setter Target="txtJerusalemTime.FontSize" Value="36" />
 
                             <!-- Cards Grid: SINGLE column, FULL WIDTH in very narrow portrait -->
                             <Setter Target="CardsGrid.ColumnDefinitions[0].MinWidth" Value="0" />
@@ -115,20 +117,22 @@
                             <Setter Target="MainStack.HorizontalAlignment" Value="Stretch" />
                             <Setter Target="MainStack.Spacing" Value="12" />
 
-                            <!-- Time Display: Keep horizontal side-by-side -->
-                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <!-- Time Display: 3 column layout with date in center -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="Auto" />
+                            <Setter Target="TimeGrid.ColumnDefinitions[2].Width" Value="*" />
                             <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
                             <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
-                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="2" />
                             <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="0" />
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="16,14" />
-
-                            <!-- Date Card: Compact -->
-                            <Setter Target="DateCard.Padding" Value="16,14" />
-                            <Setter Target="txtEnglishDate.FontSize" Value="18" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="28" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="24" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="16" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="18" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="16" />
+                            <Setter Target="txtLocalTime.FontSize" Value="40" />
+                            <Setter Target="txtJerusalemTime.FontSize" Value="40" />
 
                             <!-- Cards Grid: TWO columns in wider portrait -->
                             <Setter Target="CardsGrid.ColumnDefinitions[0].MinWidth" Value="0" />
@@ -199,22 +203,22 @@
                             <Setter Target="MainStack.MaxWidth" Value="1400" />
                             <Setter Target="MainStack.Spacing" Value="15" />
 
-                            <!-- Time Display: Horizontal -->
-                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <!-- Time Display: 3 column layout with date in center -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="Auto" />
+                            <Setter Target="TimeGrid.ColumnDefinitions[2].Width" Value="*" />
                             <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
                             <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
-                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="2" />
                             <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="0" />
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="20,18" />
                             <Setter Target="txtLocalTime.FontSize" Value="48" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="48" />
-
-                            <!-- Date Card -->
-                            <Setter Target="DateCard.Padding" Value="22,18" />
-                            <Setter Target="txtEnglishDate.FontSize" Value="24" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="36" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="32" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="18" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="22" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="20" />
 
                             <!-- Cards Grid: THREE columns in landscape -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
@@ -281,22 +285,22 @@
                             <Setter Target="MainStack.MaxWidth" Value="1800" />
                             <Setter Target="MainStack.Spacing" Value="20" />
 
-                            <!-- Time Display: Horizontal, larger fonts -->
-                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="*" />
+                            <!-- Time Display: 3 column layout with date in center, larger fonts -->
+                            <Setter Target="TimeGrid.ColumnDefinitions[1].Width" Value="Auto" />
+                            <Setter Target="TimeGrid.ColumnDefinitions[2].Width" Value="*" />
                             <Setter Target="LocalTimeStack.(Grid.Column)" Value="0" />
                             <Setter Target="LocalTimeStack.(Grid.Row)" Value="0" />
-                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Column)" Value="1" />
+                            <Setter Target="DateStack.(Grid.Row)" Value="0" />
+                            <Setter Target="JerusalemTimeStack.(Grid.Column)" Value="2" />
                             <Setter Target="JerusalemTimeStack.(Grid.Row)" Value="0" />
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="24,20" />
                             <Setter Target="txtLocalTime.FontSize" Value="56" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="56" />
-
-                            <!-- Date Card: Larger -->
-                            <Setter Target="DateCard.Padding" Value="28,22" />
-                            <Setter Target="txtEnglishDate.FontSize" Value="28" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="42" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="38" />
+                            <Setter Target="txtEnglishDate.FontSize" Value="20" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="26" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="22" />
 
                             <!-- Cards Grid: THREE columns for 1920×1080 displays -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
@@ -807,7 +811,7 @@
                     </Canvas>
                     </Viewbox>
 
-                    <!-- Live Time Display with Location -->
+                    <!-- Live Time Display with Location and Date -->
                     <Border 
                         x:Name="TimeDisplayBorder"
                         Background="#2D2D30" 
@@ -823,10 +827,11 @@
                                 Foreground="#888888"
                                 Text="Loading location..." />
 
-                            <!-- Times Grid - supports both horizontal and vertical layouts -->
+                            <!-- Times Grid with Date in center - supports responsive layouts -->
                             <Grid x:Name="TimeGrid">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
@@ -850,7 +855,38 @@
                                         Text="00:00:00 AM" />
                                 </StackPanel>
 
-                                <StackPanel x:Name="JerusalemTimeStack" Grid.Column="1" Grid.Row="0" Spacing="4">
+                                <!-- Date Display in Center -->
+                                <StackPanel x:Name="DateStack" Grid.Column="1" Grid.Row="0" Spacing="4" Margin="20,0" VerticalAlignment="Center">
+                                    <TextBlock
+                                        x:Name="txtEnglishDate"
+                                        FontSize="18"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#B0B0B0"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Center"
+                                        Text="Loading..." />
+                                    <TextBlock
+                                        x:Name="txtHebrewDate"
+                                        FontSize="22"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Center"
+                                        Foreground="#FFFFFF"
+                                        Text="" />
+                                    <TextBlock
+                                        x:Name="txtHebrewDateInHebrew"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        HorizontalAlignment="Center"
+                                        FlowDirection="RightToLeft"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Center"
+                                        Foreground="#9966FF"
+                                        Text="" />
+                                </StackPanel>
+
+                                <StackPanel x:Name="JerusalemTimeStack" Grid.Column="2" Grid.Row="0" Spacing="4">
                                     <TextBlock
                                         Text="Jerusalem • ירושלים"
                                         FontSize="16"
@@ -869,37 +905,47 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Date Card -->
+                    <!-- Yahrzeit Memorial Plaque Card - Appears at top when yahrzeits are upcoming -->
                     <Border 
-                        x:Name="DateCard"
-                        Background="#2D2D30" 
-                        CornerRadius="12" 
-                        Padding="25,20">
-                        <StackPanel Spacing="12">
+                        x:Name="YahrzeitCard"
+                        Visibility="Collapsed"
+                        CornerRadius="12"
+                        Padding="24,20"
+                        Margin="0,0,0,10"
+                        MinHeight="100">
+                        <!-- Bronze/Gold gradient background like a memorial plaque -->
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#8B5A2B" Offset="0" />
+                                <GradientStop Color="#CD853F" Offset="0.3" />
+                                <GradientStop Color="#DAA520" Offset="0.5" />
+                                <GradientStop Color="#CD853F" Offset="0.7" />
+                                <GradientStop Color="#8B5A2B" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <!-- Ornate border -->
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#B8860B" Offset="0" />
+                                <GradientStop Color="#FFD700" Offset="0.5" />
+                                <GradientStop Color="#B8860B" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Border.BorderThickness>3</Border.BorderThickness>
+
+                        <StackPanel Spacing="8" VerticalAlignment="Center">
+                            <!-- Title with memorial candles -->
                             <TextBlock
-                                x:Name="txtEnglishDate"
-                                FontSize="24"
+                                x:Name="txtYahrzeitTitle"
+                                Text="🕯️ In Loving Memory • לזכר נשמת 🕯️"
+                                FontSize="20"
                                 HorizontalAlignment="Center"
-                                Foreground="#B0B0B0"
                                 TextWrapping="Wrap"
-                                Text="Loading..." />
-                            <TextBlock
-                                x:Name="txtHebrewDate"
-                                FontSize="36"
                                 FontWeight="Bold"
-                                HorizontalAlignment="Center"
-                                TextWrapping="Wrap"
-                                Foreground="#FFFFFF"
-                                Text="" />
-                            <TextBlock
-                                x:Name="txtHebrewDateInHebrew"
-                                FontSize="32"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Center"
-                                FlowDirection="RightToLeft"
-                                TextWrapping="Wrap"
-                                Foreground="#9966FF"
-                                Text="" />
+                                Foreground="#1A1A1A" />
+
+                            <!-- Container for dynamically added yahrzeits -->
+                            <StackPanel x:Name="YahrzeitPanel" Spacing="12" Margin="0,8,0,0" />
                         </StackPanel>
                     </Border>
 
@@ -1208,50 +1254,6 @@
                                         </StackPanel>
                                                 </Grid>
                                             </StackPanel>
-                                        </StackPanel>
-                                    </Border>
-
-                                    <!-- Yahrzeit Memorial Plaque Card - Appears as a prominent bronze plaque -->
-                                    <Border 
-                                        x:Name="YahrzeitCard"
-                                        Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
-                                        Visibility="Collapsed"
-                                        CornerRadius="12"
-                                        Padding="24,20"
-                                        Margin="0,0,0,10"
-                                        MinHeight="120">
-                                        <!-- Bronze/Gold gradient background like a memorial plaque -->
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                <GradientStop Color="#8B5A2B" Offset="0" />
-                                                <GradientStop Color="#CD853F" Offset="0.3" />
-                                                <GradientStop Color="#DAA520" Offset="0.5" />
-                                                <GradientStop Color="#CD853F" Offset="0.7" />
-                                                <GradientStop Color="#8B5A2B" Offset="1" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <!-- Ornate border -->
-                                        <Border.BorderBrush>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                <GradientStop Color="#B8860B" Offset="0" />
-                                                <GradientStop Color="#FFD700" Offset="0.5" />
-                                                <GradientStop Color="#B8860B" Offset="1" />
-                                            </LinearGradientBrush>
-                                        </Border.BorderBrush>
-                                        <Border.BorderThickness>3</Border.BorderThickness>
-
-                                        <StackPanel Spacing="8" VerticalAlignment="Center">
-                                            <!-- Title with memorial candles -->
-                                            <TextBlock
-                                                Text="🕯️ In Loving Memory • לזכר נשמת 🕯️"
-                                                FontSize="20"
-                                                HorizontalAlignment="Center"
-                                                TextWrapping="Wrap"
-                                                FontWeight="Bold"
-                                                Foreground="#1A1A1A" />
-
-                                            <!-- Container for dynamically added yahrzeits -->
-                                            <StackPanel x:Name="YahrzeitPanel" Spacing="12" Margin="0,8,0,0" />
                                         </StackPanel>
                                     </Border>
 

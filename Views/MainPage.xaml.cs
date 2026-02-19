@@ -747,6 +747,7 @@ namespace Jewochron.Views
                 // Find the yahrzeit card container in the XAML
                 var yahrzeitCard = this.FindName("YahrzeitCard") as Microsoft.UI.Xaml.UIElement;
                 var yahrzeitPanel = this.FindName("YahrzeitPanel") as Microsoft.UI.Xaml.Controls.StackPanel;
+                var yahrzeitTitle = this.FindName("txtYahrzeitTitle") as Microsoft.UI.Xaml.Controls.TextBlock;
 
                 if (yahrzeitCard == null || yahrzeitPanel == null)
                 {
@@ -762,6 +763,17 @@ namespace Jewochron.Views
                 }
                 else
                 {
+                    // Check if any yahrzeit is TODAY
+                    bool hasYahrzeitToday = upcomingYahrzeits.Any(y => y.DaysFromNow == 0);
+
+                    // Update title based on whether it's today
+                    if (yahrzeitTitle != null)
+                    {
+                        yahrzeitTitle.Text = hasYahrzeitToday 
+                            ? "🕯️ TODAY IS A YAHRZEIT • היום יארצייט 🕯️"
+                            : "🕯️ In Loving Memory • לזכר נשמת 🕯️";
+                    }
+
                     // Show the memorial plaque card and populate it
                     yahrzeitCard.Visibility = Visibility.Visible;
                     yahrzeitPanel.Children.Clear();
@@ -781,7 +793,7 @@ namespace Jewochron.Views
                         // Get appropriate honorific
                         string honorific = yahrzeitService.GetHonorific(upcoming.Yahrzeit.Gender);
 
-                        // Create entry container (horizontal layout for plaque style)
+                        // Create entry container
                         var entryPanel = new Microsoft.UI.Xaml.Controls.StackPanel
                         {
                             Orientation = Microsoft.UI.Xaml.Controls.Orientation.Vertical,
@@ -789,10 +801,17 @@ namespace Jewochron.Views
                             Spacing = 4
                         };
 
+                        // If yahrzeit is TODAY, add animated flame
+                        if (upcoming.DaysFromNow == 0)
+                        {
+                            var flamePanel = CreateAnimatedFlamePanel();
+                            entryPanel.Children.Add(flamePanel);
+                        }
+
                         // Name in English and Hebrew with honorific - dark text for bronze plaque
                         var nameText = new Microsoft.UI.Xaml.Controls.TextBlock
                         {
-                            FontSize = 22,
+                            FontSize = upcoming.DaysFromNow == 0 ? 24 : 22,
                             FontWeight = Microsoft.UI.Text.FontWeights.Bold,
                             Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
                                 Microsoft.UI.ColorHelper.FromArgb(255, 26, 26, 26)), // Dark brown/black
@@ -805,7 +824,7 @@ namespace Jewochron.Views
                         // Hebrew date
                         var dateText = new Microsoft.UI.Xaml.Controls.TextBlock
                         {
-                            FontSize = 18,
+                            FontSize = upcoming.DaysFromNow == 0 ? 20 : 18,
                             Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
                                 Microsoft.UI.ColorHelper.FromArgb(255, 64, 32, 16)), // Dark bronze
                             TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
@@ -818,7 +837,7 @@ namespace Jewochron.Views
                         // When text (Today, or X days away)
                         var whenText = new Microsoft.UI.Xaml.Controls.TextBlock
                         {
-                            FontSize = 16,
+                            FontSize = upcoming.DaysFromNow == 0 ? 18 : 16,
                             FontWeight = upcoming.DaysFromNow == 0 ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.Normal,
                             Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
                                 upcoming.DaysFromNow == 0 
@@ -828,7 +847,7 @@ namespace Jewochron.Views
                             HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center
                         };
                         whenText.Text = upcoming.DaysFromNow == 0 
-                            ? "🕯️ TODAY - Light a candle 🕯️" 
+                            ? "TODAY - Please light a yahrzeit candle" 
                             : $"In {upcoming.DaysFromNow} day{(upcoming.DaysFromNow == 1 ? "" : "s")} ({upcoming.Date:dddd, MMM d})";
 
                         entryPanel.Children.Add(nameText);
@@ -851,11 +870,120 @@ namespace Jewochron.Views
                             yahrzeitPanel.Children.Add(separator);
                         }
                     }
+
+                    // Start flame animation if there's a yahrzeit today
+                    if (hasYahrzeitToday)
+                    {
+                        StartFlameAnimation();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading yahrzeits: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Creates an animated flame panel for yahrzeit candle
+        /// </summary>
+        private static Microsoft.UI.Xaml.Controls.StackPanel CreateAnimatedFlamePanel()
+        {
+            var flamePanel = new Microsoft.UI.Xaml.Controls.StackPanel
+            {
+                Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal,
+                HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
+                Spacing = 8,
+                Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 8)
+            };
+
+            // Create three flame emojis that will be animated
+            for (int i = 0; i < 3; i++)
+            {
+                var flame = new Microsoft.UI.Xaml.Controls.TextBlock
+                {
+                    Text = "🕯️",
+                    FontSize = 32,
+                    Name = $"YahrzeitFlame_{i}",
+                    RenderTransform = new Microsoft.UI.Xaml.Media.CompositeTransform()
+                };
+                flamePanel.Children.Add(flame);
+            }
+
+            return flamePanel;
+        }
+
+        private DispatcherQueueTimer? _flameAnimationTimer;
+        private double _flameAnimationPhase = 0;
+
+        /// <summary>
+        /// Starts the flickering flame animation for yahrzeit candles
+        /// </summary>
+        private void StartFlameAnimation()
+        {
+            // Stop any existing animation
+            _flameAnimationTimer?.Stop();
+
+            _flameAnimationTimer = DispatcherQueue.CreateTimer();
+            _flameAnimationTimer.Interval = TimeSpan.FromMilliseconds(100);
+            _flameAnimationTimer.Tick += (s, e) =>
+            {
+                try
+                {
+                    _flameAnimationPhase += 0.3;
+
+                    // Find all flame elements and animate them
+                    var yahrzeitPanel = this.FindName("YahrzeitPanel") as Microsoft.UI.Xaml.Controls.StackPanel;
+                    if (yahrzeitPanel == null) return;
+
+                    AnimateFlamesInPanel(yahrzeitPanel);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Flame animation error: {ex.Message}");
+                }
+            };
+            _flameAnimationTimer.Start();
+        }
+
+        private void AnimateFlamesInPanel(Microsoft.UI.Xaml.Controls.StackPanel panel)
+        {
+            foreach (var child in panel.Children)
+            {
+                if (child is Microsoft.UI.Xaml.Controls.StackPanel childPanel)
+                {
+                    // Check for flame panels (horizontal with candle emojis)
+                    if (childPanel.Orientation == Microsoft.UI.Xaml.Controls.Orientation.Horizontal)
+                    {
+                        int flameIndex = 0;
+                        foreach (var flameChild in childPanel.Children)
+                        {
+                            if (flameChild is Microsoft.UI.Xaml.Controls.TextBlock flameText && 
+                                flameText.Text == "🕯️" &&
+                                flameText.RenderTransform is Microsoft.UI.Xaml.Media.CompositeTransform transform)
+                            {
+                                // Create gentle flickering effect with different phases for each flame
+                                double phase = _flameAnimationPhase + (flameIndex * 1.2);
+                                double scaleX = 1.0 + Math.Sin(phase) * 0.05;
+                                double scaleY = 1.0 + Math.Sin(phase * 1.3) * 0.08;
+                                double rotation = Math.Sin(phase * 0.7) * 3;
+
+                                transform.ScaleX = scaleX;
+                                transform.ScaleY = scaleY;
+                                transform.Rotation = rotation;
+                                transform.CenterX = 16;
+                                transform.CenterY = 32;
+
+                                flameIndex++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Recurse into vertical panels
+                        AnimateFlamesInPanel(childPanel);
+                    }
+                }
             }
         }
     }
