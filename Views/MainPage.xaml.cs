@@ -735,10 +735,17 @@ namespace Jewochron.Views
             }
         }
 
+        public async Task RefreshYahrzeitsAsync()
+        {
+            System.Diagnostics.Debug.WriteLine("[YAHRZEIT] RefreshYahrzeitsAsync called");
+            await LoadYahrzeitsAsync();
+        }
+
         private async Task LoadYahrzeitsAsync()
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("[YAHRZEIT] LoadYahrzeitsAsync called");
                 // Check for yahrzeits in the next 8 days (including today)
                 var upcomingYahrzeits = await yahrzeitService.GetUpcomingYahrzeitsAsync(8);
 

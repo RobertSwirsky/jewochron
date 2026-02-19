@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI.Dispatching;
 using Jewochron.Views;
 using Jewochron.Services;
 
@@ -13,6 +14,7 @@ namespace Jewochron
     {
         private Window? window;
         private YahrzeitWebServer? webServer;
+        private DispatcherQueue? dispatcherQueue;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -32,6 +34,9 @@ namespace Jewochron
         {
             window ??= new Window();
 
+            // Capture the dispatcher queue for UI thread access
+            dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+
             if (window.Content is not Frame rootFrame)
             {
                 rootFrame = new Frame();
@@ -50,6 +55,7 @@ namespace Jewochron
             string dbPath = Path.Combine(dbFolder, "yahrzeits.db");
 
             webServer = new YahrzeitWebServer(dbPath);
+            webServer.YahrzeitDataChanged += OnYahrzeitDataChanged;
 
             try
             {
@@ -61,6 +67,33 @@ namespace Jewochron
             {
                 System.Diagnostics.Debug.WriteLine($"Failed to start web server: {ex.Message}");
             }
+        }
+
+        private void OnYahrzeitDataChanged(object? sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("[YAHRZEIT] Event received in App.xaml.cs");
+            // Dispatch to UI thread and refresh the yahrzeit display
+            var enqueued = dispatcherQueue?.TryEnqueue(async () =>
+            {
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine("[YAHRZEIT] Dispatched to UI thread");
+                    if (window?.Content is Frame frame && frame.Content is MainPage mainPage)
+                    {
+                        await mainPage.RefreshYahrzeitsAsync();
+                        System.Diagnostics.Debug.WriteLine("[YAHRZEIT] UI refreshed after data change");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("[YAHRZEIT] Could not find MainPage");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] Error refreshing UI: {ex.Message}");
+                }
+            });
+            System.Diagnostics.Debug.WriteLine($"[YAHRZEIT] TryEnqueue result: {enqueued}");
         }
 
         /// <summary>

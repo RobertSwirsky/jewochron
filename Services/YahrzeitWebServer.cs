@@ -19,9 +19,24 @@ namespace Jewochron.Services
         private readonly int _port = 5555;
         private readonly string _databasePath;
 
+        /// <summary>
+        /// Event raised when yahrzeit data is added, updated, or deleted
+        /// </summary>
+        public event EventHandler? YahrzeitDataChanged;
+
         public YahrzeitWebServer(string databasePath)
         {
             _databasePath = databasePath;
+        }
+
+        /// <summary>
+        /// Raises the YahrzeitDataChanged event
+        /// </summary>
+        protected virtual void OnYahrzeitDataChanged()
+        {
+            Debug.WriteLine("[YAHRZEIT] OnYahrzeitDataChanged triggered - raising event");
+            YahrzeitDataChanged?.Invoke(this, EventArgs.Empty);
+            Debug.WriteLine($"[YAHRZEIT] Event raised, handlers attached: {YahrzeitDataChanged != null}");
         }
 
         public async Task StartAsync()
@@ -150,6 +165,7 @@ namespace Jewochron.Services
                 yahrzeit.UpdatedAt = DateTime.UtcNow;
                 db.Yahrzeits.Add(yahrzeit);
                 await db.SaveChangesAsync();
+                OnYahrzeitDataChanged();
                 return Results.Created($"/api/yahrzeits/{yahrzeit.Id}", yahrzeit);
             });
 
@@ -168,6 +184,7 @@ namespace Jewochron.Services
                 yahrzeit.UpdatedAt = DateTime.UtcNow;
 
                 await db.SaveChangesAsync();
+                OnYahrzeitDataChanged();
                 return Results.Ok(yahrzeit);
             });
 
@@ -179,6 +196,7 @@ namespace Jewochron.Services
 
                 db.Yahrzeits.Remove(yahrzeit);
                 await db.SaveChangesAsync();
+                OnYahrzeitDataChanged();
                 return Results.NoContent();
             });
         }
