@@ -528,11 +528,11 @@ namespace Jewochron.Views
                 Canvas.SetLeft(sunCanvas, sunLeft);
                 Canvas.SetTop(sunCanvas, sunTop);
 
-                // Update moon position - keep it higher in sky and within bounds
+                // Update moon position - keep it HIGH in sky and within bounds
                 double moonLeft = Math.Clamp(moonPosition, 150, 1050);
                 double moonArc = Math.Sin(((timeOfDay + 12) % 24) / 12.0 * Math.PI);
-                double moonTop = 50 - (moonArc * 40); // Higher position overall
-                moonTop = Math.Clamp(moonTop, 5, 50); // Clamp to stay in sky area
+                double moonTop = 35 - (moonArc * 25); // Much higher position overall
+                moonTop = Math.Clamp(moonTop, 5, 35); // Clamp to stay high in sky area
 
                 // Set moon canvas position
                 Canvas.SetLeft(moonCanvas, moonLeft);
@@ -642,63 +642,57 @@ namespace Jewochron.Views
         {
             try
             {
-                var moonEmoji = this.FindName("SkylineMoonEmoji") as Microsoft.UI.Xaml.Controls.TextBlock;
+                var moonShadow = this.FindName("SkylineMoonShadow") as Microsoft.UI.Xaml.Shapes.Ellipse;
                 var moonGlow = this.FindName("SkylineMoonGlow") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                var moonLit = this.FindName("SkylineMoonLit") as Microsoft.UI.Xaml.Shapes.Ellipse;
 
-                if (moonEmoji == null) return;
+                if (moonShadow == null || moonLit == null) return;
 
                 // Calculate moon age to determine if waxing or waning
                 // Reference: Jan 6, 2000 at 18:14 was a known new moon
                 double moonAge = (DateTime.Now - new DateTime(2000, 1, 6, 18, 14, 0)).TotalDays % 29.53;
                 bool isWaxing = moonAge < 14.765; // First half of lunar cycle
 
-                // Select appropriate moon emoji based on illumination and phase
-                string emoji = GetMoonPhaseEmoji(illuminationPercent, isWaxing);
-                moonEmoji.Text = emoji;
+                // The shadow is positioned to reveal the illuminated portion
+                // illuminationPercent: 0 = new moon (all shadow), 100 = full moon (no shadow)
+                // 
+                // For waxing moon: right side lights up first, shadow slides LEFT off the moon
+                // For waning moon: left side stays lit, shadow slides RIGHT onto the moon
+                //
+                // Shadow position: -40 (fully off left) to 0 (centered) to +40 (fully off right)
+
+                // Calculate shadow offset based on illumination
+                // At 0% illumination, shadow covers all (offset = 0)
+                // At 100% illumination, shadow is completely off (offset = ±40)
+                double shadowOffset = (illuminationPercent / 100.0) * 44;
+
+                if (isWaxing)
+                {
+                    // Waxing: shadow slides left to reveal right side first
+                    // Start: shadow at 0 (covering moon)
+                    // End: shadow at -44 (off to the left)
+                    Canvas.SetLeft(moonShadow, -shadowOffset);
+                }
+                else
+                {
+                    // Waning: shadow slides right to cover right side first  
+                    // Start: shadow at 0 (covering moon from left)
+                    // End: shadow at +44 (off to the right)
+                    Canvas.SetLeft(moonShadow, shadowOffset - 44);
+                }
 
                 // Adjust glow intensity based on illumination
                 if (moonGlow != null)
                 {
-                    moonGlow.Opacity = 0.1 + (illuminationPercent / 100.0 * 0.2);
+                    moonGlow.Opacity = 0.08 + (illuminationPercent / 100.0 * 0.20);
                 }
+
+                // Slightly adjust lit portion brightness based on illumination
+                moonLit.Opacity = 0.85 + (illuminationPercent / 100.0 * 0.15);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Moon phase update error: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Gets the appropriate moon phase emoji based on illumination percentage and waxing/waning state
-        /// </summary>
-        private static string GetMoonPhaseEmoji(double illuminationPercent, bool isWaxing)
-        {
-            // Moon phase emojis:
-            // 🌑 New Moon (0-3%)
-            // 🌒 Waxing Crescent / 🌘 Waning Crescent (3-25%)
-            // 🌓 First Quarter / 🌗 Last Quarter (25-50%)
-            // 🌔 Waxing Gibbous / 🌖 Waning Gibbous (50-75%)
-            // 🌕 Full Moon (75-100%)
-
-            if (illuminationPercent < 3)
-            {
-                return "🌑"; // New Moon
-            }
-            else if (illuminationPercent < 25)
-            {
-                return isWaxing ? "🌒" : "🌘"; // Crescent
-            }
-            else if (illuminationPercent < 50)
-            {
-                return isWaxing ? "🌓" : "🌗"; // Quarter
-            }
-            else if (illuminationPercent < 75)
-            {
-                return isWaxing ? "🌔" : "🌖"; // Gibbous
-            }
-            else
-            {
-                return "🌕"; // Full Moon
             }
         }
 

@@ -370,16 +370,20 @@
                             <Ellipse x:Name="SunHighlight" Canvas.Left="5" Canvas.Top="3" Width="30" Height="30" Fill="#FFEB3B" Opacity="0.6" />
                         </Canvas>
 
-                        <!-- Moon (hidden during day) - Uses emoji for accurate phase display -->
-                        <Canvas x:Name="MoonCanvas" Canvas.Left="200" Canvas.Top="8" Visibility="Collapsed">
+                        <!-- Moon (hidden during day) - Drawn moon with accurate phase -->
+                        <Canvas x:Name="MoonCanvas" Canvas.Left="200" Canvas.Top="5" Visibility="Collapsed">
                             <!-- Moon glow background -->
-                            <Ellipse x:Name="SkylineMoonGlow" Width="50" Height="50" Canvas.Left="-5" Canvas.Top="-5" Fill="#FFFACD" Opacity="0.15" />
-                            <!-- Moon phase emoji - updated dynamically to match actual phase -->
-                            <TextBlock x:Name="SkylineMoonEmoji" 
-                                       Text="🌙" 
-                                       FontSize="40" 
-                                       Canvas.Left="0" 
-                                       Canvas.Top="-2" />
+                            <Ellipse x:Name="SkylineMoonGlow" Width="54" Height="54" Canvas.Left="-7" Canvas.Top="-7" Fill="#FFFACD" Opacity="0.15" />
+                            <!-- Moon base (lit portion) - creamy white circle -->
+                            <Ellipse x:Name="SkylineMoonLit" Width="40" Height="40" Fill="#FFFDE7" />
+                            <!-- Moon surface texture (subtle craters) - visible on lit portion -->
+                            <Ellipse Canvas.Left="8" Canvas.Top="10" Width="6" Height="6" Fill="#E8E4D0" Opacity="0.4" />
+                            <Ellipse Canvas.Left="20" Canvas.Top="18" Width="5" Height="5" Fill="#E8E4D0" Opacity="0.35" />
+                            <Ellipse Canvas.Left="14" Canvas.Top="26" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.3" />
+                            <Ellipse Canvas.Left="26" Canvas.Top="12" Width="3" Height="3" Fill="#E8E4D0" Opacity="0.3" />
+                            <Ellipse Canvas.Left="30" Canvas.Top="24" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.35" />
+                            <!-- Shadow ellipse (dark side) - positioned dynamically to create phase effect -->
+                            <Ellipse x:Name="SkylineMoonShadow" Width="40" Height="40" Canvas.Left="0" Canvas.Top="0" Fill="#1A202C" />
                         </Canvas>
                         
                         <!-- Stars (visible at night) - 6-pointed Stars of David -->
