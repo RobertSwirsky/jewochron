@@ -228,7 +228,7 @@ namespace Jewochron.Views
             }
         }
 
-        private string GetCurrentPrayerIndicator(DateTime now)
+        private static string GetCurrentPrayerIndicator(DateTime now)
         {
             // Quick check to see which prayer period we're in
             // This is used to detect transitions without recalculating everything
@@ -503,7 +503,7 @@ namespace Jewochron.Views
             }
         }
         
-        private string ConvertToHalachicTime(DateTime time, DateTime sunrise, DateTime sunset)
+        private static string ConvertToHalachicTime(DateTime time, DateTime sunrise, DateTime sunset)
         {
             // Halachic day starts at sunrise (hour 1) and has 12 hours until sunset
             // Halachic night starts at sunset (hour 1) and has 12 hours until sunrise

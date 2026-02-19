@@ -96,7 +96,7 @@ namespace Jewochron.Helpers
             try
             {
                 // Stop any existing animation
-                if (_camelMoveTimer != null && _camelMoveTimer.IsRunning)
+                if (_camelMoveTimer?.IsRunning == true)
                 {
                     _camelMoveTimer.Stop();
                 }
@@ -154,7 +154,7 @@ namespace Jewochron.Helpers
             try
             {
                 // Stop any existing animation
-                if (_jewishManMoveTimer != null && _jewishManMoveTimer.IsRunning)
+                if (_jewishManMoveTimer?.IsRunning == true)
                 {
                     _jewishManMoveTimer.Stop();
                 }
