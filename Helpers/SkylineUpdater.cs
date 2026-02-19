@@ -34,7 +34,6 @@ namespace Jewochron.Helpers
                 // Check if skyline elements exist
                 var sunCanvas = _page.FindName("SunCanvas") as UIElement;
                 var moonCanvas = _page.FindName("MoonCanvas") as UIElement;
-                var moonGlowCanvas = _page.FindName("MoonGlowCanvas") as UIElement;
                 var starsCanvas = _page.FindName("StarsCanvas") as UIElement;
                 var skyLayer1 = _page.FindName("SkyLayer1");
                 var skyLayer2 = _page.FindName("SkyLayer2");
@@ -72,18 +71,11 @@ namespace Jewochron.Helpers
                 Canvas.SetLeft(moonCanvas, moonLeft);
                 Canvas.SetTop(moonCanvas, moonTop);
 
-                // Position glow canvas relative to moon (offset by -5 for larger glow)
-                if (moonGlowCanvas != null)
-                {
-                    Canvas.SetLeft(moonGlowCanvas, moonLeft - 5);
-                    Canvas.SetTop(moonGlowCanvas, moonTop - 5);
-                }
-
-                // Update moon phase appearance
+                // Update moon phase emoji
                 UpdateMoonPhase(_currentMoonIllumination);
 
                 // Set sky colors and visibility based on time of day
-                ApplyTimeOfDaySettings(timeOfDay, sunCanvas, moonCanvas, moonGlowCanvas, starsCanvas);
+                ApplyTimeOfDaySettings(timeOfDay, sunCanvas, moonCanvas, starsCanvas);
             }
             catch (Exception ex)
             {
@@ -91,14 +83,13 @@ namespace Jewochron.Helpers
             }
         }
 
-        private void ApplyTimeOfDaySettings(double timeOfDay, UIElement sunCanvas, UIElement moonCanvas, UIElement? moonGlowCanvas, UIElement? starsCanvas)
+        private void ApplyTimeOfDaySettings(double timeOfDay, UIElement sunCanvas, UIElement moonCanvas, UIElement? starsCanvas)
         {
             if (timeOfDay >= 5 && timeOfDay < 6) // Dawn (5am-6am)
             {
                 SetSkyColors("#4A5568", "#5A6B7D", "#6B7C8F", 0.5, 0.4);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Visible;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Visible;
                 if (starsCanvas != null)
                 {
                     starsCanvas.Visibility = Visibility.Visible;
@@ -110,7 +101,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#FF6B6B", "#FFA07A", "#FFD700", 0.6, 0.3);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Collapsed;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Collapsed;
                 if (starsCanvas != null)
                     starsCanvas.Visibility = Visibility.Collapsed;
             }
@@ -119,7 +109,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#87CEEB", "#B0E0E6", "#E0F6FF", 0.5, 0.3);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Collapsed;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Collapsed;
                 if (starsCanvas != null)
                     starsCanvas.Visibility = Visibility.Collapsed;
             }
@@ -128,7 +117,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#4A90E2", "#5DA3E8", "#87CEEB", 0.4, 0.2);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Collapsed;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Collapsed;
                 if (starsCanvas != null)
                     starsCanvas.Visibility = Visibility.Collapsed;
             }
@@ -137,7 +125,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#6BA4D8", "#87CEEB", "#B0E0E6", 0.5, 0.3);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Collapsed;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Collapsed;
                 if (starsCanvas != null)
                     starsCanvas.Visibility = Visibility.Collapsed;
             }
@@ -146,7 +133,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#FF8C42", "#FFB366", "#FFD699", 0.6, 0.4);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Collapsed;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Collapsed;
                 if (starsCanvas != null)
                     starsCanvas.Visibility = Visibility.Collapsed;
             }
@@ -155,7 +141,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#FF6B6B", "#FF8C69", "#FFB347", 0.7, 0.5);
                 sunCanvas.Visibility = Visibility.Visible;
                 moonCanvas.Visibility = Visibility.Visible;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Visible;
                 if (starsCanvas != null)
                 {
                     starsCanvas.Visibility = Visibility.Visible;
@@ -167,7 +152,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#4A5568", "#5A6B7D", "#6B7C8F", 0.6, 0.4);
                 sunCanvas.Visibility = Visibility.Collapsed;
                 moonCanvas.Visibility = Visibility.Visible;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Visible;
                 if (starsCanvas != null)
                 {
                     starsCanvas.Visibility = Visibility.Visible;
@@ -179,7 +163,6 @@ namespace Jewochron.Helpers
                 SetSkyColors("#1A202C", "#2D3748", "#4A5568", 0.7, 0.5);
                 sunCanvas.Visibility = Visibility.Collapsed;
                 moonCanvas.Visibility = Visibility.Visible;
-                if (moonGlowCanvas != null) moonGlowCanvas.Visibility = Visibility.Visible;
                 if (starsCanvas != null)
                 {
                     starsCanvas.Visibility = Visibility.Visible;
@@ -192,13 +175,12 @@ namespace Jewochron.Helpers
         {
             try
             {
-                var moonShadow = _page.FindName("SkylineMoonShadow") as Ellipse;
-                var moonLit = _page.FindName("SkylineMoonLit") as Ellipse;
+                var moonEmoji = _page.FindName("SkylineMoonEmoji") as TextBlock;
                 var moonGlow = _page.FindName("SkylineMoonGlow") as Ellipse;
 
-                if (moonShadow == null || moonLit == null)
+                if (moonEmoji == null)
                 {
-                    Debug.WriteLine("Moon phase elements not found (SkylineMoonShadow/SkylineMoonLit)");
+                    Debug.WriteLine("Moon emoji element not found (SkylineMoonEmoji)");
                     return;
                 }
 
@@ -207,36 +189,56 @@ namespace Jewochron.Helpers
                 double moonAge = (DateTime.Now - new DateTime(2000, 1, 6, 18, 14, 0)).TotalDays % 29.53;
                 bool isWaxing = moonAge < 14.765; // First half of lunar cycle
 
-                // Calculate shadow offset based on illumination
-                // 0% illumination = shadow fully covers moon (offset 0)
-                // 100% illumination = shadow completely off moon (offset 40+)
-                double shadowOffset = (illuminationPercent / 100.0) * 50; // Move shadow off by up to 50 pixels
-
-                if (isWaxing)
-                {
-                    // Waxing: shadow moves from right to left (revealing right side first)
-                    // Shadow starts covering the moon and slides left off of it
-                    Canvas.SetLeft(moonShadow, shadowOffset - 10);
-                }
-                else
-                {
-                    // Waning: shadow moves from left to right (covering from right side)
-                    // Shadow comes back from the right
-                    Canvas.SetLeft(moonShadow, 10 - shadowOffset);
-                }
+                // Select appropriate moon emoji based on illumination and phase
+                string emoji = GetMoonPhaseEmoji(illuminationPercent, isWaxing);
+                moonEmoji.Text = emoji;
 
                 // Adjust glow intensity based on illumination
                 if (moonGlow != null)
                 {
-                    moonGlow.Opacity = 0.1 + (illuminationPercent / 100.0 * 0.25);
+                    moonGlow.Opacity = 0.1 + (illuminationPercent / 100.0 * 0.2);
                 }
-
-                // Adjust lit portion brightness
-                moonLit.Opacity = 0.5 + (illuminationPercent / 100.0 * 0.5);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Moon phase update error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Gets the appropriate moon phase emoji based on illumination percentage and waxing/waning state
+        /// </summary>
+        private static string GetMoonPhaseEmoji(double illuminationPercent, bool isWaxing)
+        {
+            // Moon phase emojis in order from new to full
+            // 🌑 New Moon (0-3%)
+            // 🌒 Waxing Crescent (3-25%)
+            // 🌓 First Quarter (25-50%)
+            // 🌔 Waxing Gibbous (50-75%)
+            // 🌕 Full Moon (75-100% when waxing, or 100-75% when waning)
+            // 🌖 Waning Gibbous (75-50%)
+            // 🌗 Last Quarter (50-25%)
+            // 🌘 Waning Crescent (25-3%)
+
+            if (illuminationPercent < 3)
+            {
+                return "🌑"; // New Moon
+            }
+            else if (illuminationPercent < 25)
+            {
+                return isWaxing ? "🌒" : "🌘"; // Crescent
+            }
+            else if (illuminationPercent < 50)
+            {
+                return isWaxing ? "🌓" : "🌗"; // Quarter
+            }
+            else if (illuminationPercent < 75)
+            {
+                return isWaxing ? "🌔" : "🌖"; // Gibbous
+            }
+            else
+            {
+                return "🌕"; // Full Moon
             }
         }
 
