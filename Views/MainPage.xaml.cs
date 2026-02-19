@@ -642,49 +642,66 @@ namespace Jewochron.Views
         {
             try
             {
-                var moonShadow = this.FindName("SkylineMoonShadow") as Microsoft.UI.Xaml.Shapes.Ellipse;
-                var moonLit = this.FindName("SkylineMoonLit") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                var moonEmoji = this.FindName("SkylineMoonEmoji") as Microsoft.UI.Xaml.Controls.TextBlock;
                 var moonGlow = this.FindName("SkylineMoonGlow") as Microsoft.UI.Xaml.Shapes.Ellipse;
 
-                if (moonShadow == null || moonLit == null) return;
+                if (moonEmoji == null) return;
 
-                // Calculate shadow position based on illumination
-                // 0% = new moon (shadow covers all), 100% = full moon (no shadow)
-                // Shadow moves from right to left as moon waxes, then left to right as it wanes
-
+                // Calculate moon age to determine if waxing or waning
+                // Reference: Jan 6, 2000 at 18:14 was a known new moon
                 double moonAge = (DateTime.Now - new DateTime(2000, 1, 6, 18, 14, 0)).TotalDays % 29.53;
                 bool isWaxing = moonAge < 14.765; // First half of lunar cycle
 
-                // Calculate shadow offset (0 at full moon, 40 at new moon)
-                double shadowOffset = 40 * (1 - illuminationPercent / 100.0);
+                // Select appropriate moon emoji based on illumination and phase
+                string emoji = GetMoonPhaseEmoji(illuminationPercent, isWaxing);
+                moonEmoji.Text = emoji;
 
-                if (isWaxing)
-                {
-                    // Waxing: shadow on left side, moving left
-                    Canvas.SetLeft(moonShadow, -shadowOffset);
-                }
-                else
-                {
-                    // Waning: shadow on right side, moving right
-                    Canvas.SetLeft(moonShadow, shadowOffset);
-                }
-
-                // Adjust moon brightness based on illumination
-                double glowOpacity = 0.1 + (illuminationPercent / 100.0 * 0.25);
+                // Adjust glow intensity based on illumination
                 if (moonGlow != null)
                 {
-                    moonGlow.Opacity = glowOpacity;
+                    moonGlow.Opacity = 0.1 + (illuminationPercent / 100.0 * 0.2);
                 }
-
-                // Adjust lit portion opacity based on illumination
-                moonLit.Opacity = 0.3 + (illuminationPercent / 100.0 * 0.7);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Moon phase update error: {ex.Message}");
             }
         }
-        
+
+        /// <summary>
+        /// Gets the appropriate moon phase emoji based on illumination percentage and waxing/waning state
+        /// </summary>
+        private static string GetMoonPhaseEmoji(double illuminationPercent, bool isWaxing)
+        {
+            // Moon phase emojis:
+            // 🌑 New Moon (0-3%)
+            // 🌒 Waxing Crescent / 🌘 Waning Crescent (3-25%)
+            // 🌓 First Quarter / 🌗 Last Quarter (25-50%)
+            // 🌔 Waxing Gibbous / 🌖 Waning Gibbous (50-75%)
+            // 🌕 Full Moon (75-100%)
+
+            if (illuminationPercent < 3)
+            {
+                return "🌑"; // New Moon
+            }
+            else if (illuminationPercent < 25)
+            {
+                return isWaxing ? "🌒" : "🌘"; // Crescent
+            }
+            else if (illuminationPercent < 50)
+            {
+                return isWaxing ? "🌓" : "🌗"; // Quarter
+            }
+            else if (illuminationPercent < 75)
+            {
+                return isWaxing ? "🌔" : "🌖"; // Gibbous
+            }
+            else
+            {
+                return "🌕"; // Full Moon
+            }
+        }
+
         private void SetSkyColors(string color1, string color2, string color3, double opacity2, double opacity3)
         {
             try
