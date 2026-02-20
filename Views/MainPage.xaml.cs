@@ -582,7 +582,20 @@ namespace Jewochron.Views
                 // Get location
                 var (city, state, latitude, longitude) = await locationService.GetLocationAsync();
                 txtLocationEnglish.Text = $"📍 {city}, {state}";
-                txtLocationHebrew.Text = $"📍 {TranslateToHebrew(city, state)}";
+
+                // Only show Hebrew location if we have a translation
+                string hebrewLocation = TranslateToHebrew(city, state);
+                if (hebrewLocation != $"{city}, {state}")
+                {
+                    // We have a Hebrew translation
+                    txtLocationHebrew.Text = $"📍 {hebrewLocation}";
+                    txtLocationHebrew.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                }
+                else
+                {
+                    // No translation available, hide Hebrew location
+                    txtLocationHebrew.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                }
 
                 // Hebrew date
                 var (hebrewYear, hebrewMonth, hebrewDay, isLeapYear) = hebrewCalendarService.GetHebrewDate(now);
@@ -1041,6 +1054,14 @@ namespace Jewochron.Views
                 {"St. Louis", "סנט לואיס"},
                 {"Sacramento", "סקרמנטו"},
                 {"San Francisco", "סן פרנסיסקו"},
+                {"Sunnyvale", "סאניוויל"},
+                {"Palo Alto", "פאלו אלטו"},
+                {"Mountain View", "מאונטיין וויו"},
+                {"Santa Clara", "סנטה קלרה"},
+                {"Cupertino", "קופרטינו"},
+                {"Fremont", "פרימונט"},
+                {"Oakland", "אוקלנד"},
+                {"Berkeley", "ברקלי"},
                 {"Buffalo", "באפלו"},
                 {"Rochester", "רוצ'סטר"},
                 {"Lakewood", "לייקווד"},
