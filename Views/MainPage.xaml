@@ -40,8 +40,8 @@
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="16,14" />
                             <Setter Target="txtEnglishDate.FontSize" Value="14" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="16" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="14" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="20" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="18" />
                             <Setter Target="txtLocalTime.FontSize" Value="36" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="36" />
 
@@ -157,8 +157,8 @@
                             <Setter Target="TimeGrid.RowDefinitions[1].Height" Value="0" />
                             <Setter Target="TimeDisplayBorder.Padding" Value="16,14" />
                             <Setter Target="txtEnglishDate.FontSize" Value="16" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="18" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="16" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="22" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="20" />
                             <Setter Target="txtLocalTime.FontSize" Value="40" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="40" />
 
@@ -251,8 +251,8 @@
                             <Setter Target="txtLocalTime.FontSize" Value="48" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="48" />
                             <Setter Target="txtEnglishDate.FontSize" Value="18" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="22" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="20" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="26" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="24" />
 
                             <!-- Cards Grid: THREE columns in landscape -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
@@ -361,8 +361,8 @@
                             <Setter Target="txtLocalTime.FontSize" Value="56" />
                             <Setter Target="txtJerusalemTime.FontSize" Value="56" />
                             <Setter Target="txtEnglishDate.FontSize" Value="20" />
-                            <Setter Target="txtHebrewDate.FontSize" Value="26" />
-                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="22" />
+                            <Setter Target="txtHebrewDate.FontSize" Value="30" />
+                            <Setter Target="txtHebrewDateInHebrew.FontSize" Value="26" />
 
                             <!-- Cards Grid: THREE columns for 1920×1080 displays -->
                             <Setter Target="CardsGrid.ColumnDefinitions[1].Width" Value="*" />
@@ -909,14 +909,6 @@
                         Padding="20,18"
                         HorizontalAlignment="Stretch">
                         <StackPanel Spacing="10">
-                            <!-- Location Header -->
-                            <TextBlock
-                                x:Name="txtLocation"
-                                FontSize="20"
-                                HorizontalAlignment="Center"
-                                Foreground="#888888"
-                                Text="Loading location..." />
-
                             <!-- Times Grid with Date in center - supports responsive layouts -->
                             <Grid x:Name="TimeGrid">
                                 <Grid.ColumnDefinitions>
@@ -930,11 +922,25 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel x:Name="LocalTimeStack" Grid.Column="0" Grid.Row="0" Spacing="4">
+                                    <!-- Location in English -->
                                     <TextBlock
-                                        Text="Local Time • זמן מקומי"
+                                        x:Name="txtLocationEnglish"
                                         FontSize="16"
                                         HorizontalAlignment="Center"
-                                        Foreground="#666666" />
+                                        Foreground="#888888"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Center"
+                                        Text="Loading location..." />
+                                    <!-- Location in Hebrew -->
+                                    <TextBlock
+                                        x:Name="txtLocationHebrew"
+                                        FontSize="16"
+                                        HorizontalAlignment="Center"
+                                        FlowDirection="RightToLeft"
+                                        Foreground="#888888"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Center"
+                                        Text="" />
                                     <TextBlock
                                         x:Name="txtLocalTime"
                                         FontFamily="Consolas"
@@ -957,7 +963,7 @@
                                         Text="Loading..." />
                                     <TextBlock
                                         x:Name="txtHebrewDate"
-                                        FontSize="22"
+                                        FontSize="26"
                                         FontWeight="Bold"
                                         HorizontalAlignment="Center"
                                         TextWrapping="Wrap"
@@ -966,7 +972,7 @@
                                         Text="" />
                                     <TextBlock
                                         x:Name="txtHebrewDateInHebrew"
-                                        FontSize="20"
+                                        FontSize="24"
                                         FontWeight="SemiBold"
                                         HorizontalAlignment="Center"
                                         FlowDirection="RightToLeft"

@@ -581,7 +581,8 @@ namespace Jewochron.Views
 
                 // Get location
                 var (city, state, latitude, longitude) = await locationService.GetLocationAsync();
-                txtLocation.Text = $"📍 {city}, {state}";
+                txtLocationEnglish.Text = $"📍 {city}, {state}";
+                txtLocationHebrew.Text = $"📍 {TranslateToHebrew(city, state)}";
 
                 // Hebrew date
                 var (hebrewYear, hebrewMonth, hebrewDay, isLeapYear) = hebrewCalendarService.GetHebrewDate(now);
@@ -730,7 +731,7 @@ namespace Jewochron.Views
             }
             catch (Exception ex)
             {
-                txtLocation.Text = $"Error: {ex.Message}";
+                txtLocationEnglish.Text = $"Error: {ex.Message}";
                 txtEnglishDate.Text = "Error loading data";
             }
         }
@@ -992,6 +993,105 @@ namespace Jewochron.Views
                     }
                 }
             }
+        }
+
+        private string TranslateToHebrew(string city, string state)
+        {
+            // Dictionary of common US cities and states in Hebrew
+            var cityTranslations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                // Major cities
+                {"New York", "ניו יורק"},
+                {"Los Angeles", "לוס אנג'לס"},
+                {"Chicago", "שיקגו"},
+                {"Houston", "יוסטון"},
+                {"Phoenix", "פיניקס"},
+                {"Philadelphia", "פילדלפיה"},
+                {"San Antonio", "סן אנטוניו"},
+                {"San Diego", "סן דייגו"},
+                {"Dallas", "דאלאס"},
+                {"San Jose", "סן חוזה"},
+                {"Austin", "אוסטין"},
+                {"Jacksonville", "ג'קסונוויל"},
+                {"Fort Worth", "פורט וורת'"},
+                {"Columbus", "קולומבוס"},
+                {"Charlotte", "שרלוט"},
+                {"Indianapolis", "אינדיאנפוליס"},
+                {"Seattle", "סיאטל"},
+                {"Denver", "דנוור"},
+                {"Boston", "בוסטון"},
+                {"Detroit", "דטרויט"},
+                {"Miami", "מיאמי"},
+                {"Atlanta", "אטלנטה"},
+                {"Washington", "וושינגטון"},
+                {"Baltimore", "בולטימור"},
+                {"Milwaukee", "מילווקי"},
+                {"Las Vegas", "לאס וגאס"},
+                {"Nashville", "נאשוויל"},
+                {"Portland", "פורטלנד"},
+                {"Memphis", "ממפיס"},
+                {"Louisville", "לואיוויל"},
+                {"Minneapolis", "מיניאפוליס"},
+                {"Cleveland", "קליבלנד"},
+                {"Orlando", "אורלנדו"},
+                {"Tampa", "טמפה"},
+                {"Pittsburgh", "פיטסבורג"},
+                {"Cincinnati", "סינסינטי"},
+                {"Kansas City", "קנזס סיטי"},
+                {"St. Louis", "סנט לואיס"},
+                {"Sacramento", "סקרמנטו"},
+                {"San Francisco", "סן פרנסיסקו"},
+                {"Buffalo", "באפלו"},
+                {"Rochester", "רוצ'סטר"},
+                {"Lakewood", "לייקווד"},
+                {"Passaic", "פסייק"},
+                {"Monsey", "מונסי"},
+                {"Teaneck", "טינק"},
+                {"Bergenfield", "ברגנפילד"},
+                {"Fair Lawn", "פייר לון"},
+                {"Unknown", "לא ידוע"}
+            };
+
+            var stateTranslations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                {"NY", "ניו יורק"},
+                {"CA", "קליפורניה"},
+                {"TX", "טקסס"},
+                {"FL", "פלורידה"},
+                {"PA", "פנסילבניה"},
+                {"IL", "אילינוי"},
+                {"OH", "אוהיו"},
+                {"GA", "ג'ורג'יה"},
+                {"NC", "צפון קרוליינה"},
+                {"MI", "מישיגן"},
+                {"NJ", "ניו ג'רזי"},
+                {"VA", "וירג'יניה"},
+                {"WA", "וושינגטון"},
+                {"AZ", "אריזונה"},
+                {"MA", "מסצ'וסטס"},
+                {"TN", "טנסי"},
+                {"IN", "אינדיאנה"},
+                {"MO", "מיזורי"},
+                {"MD", "מרילנד"},
+                {"WI", "ויסקונסין"},
+                {"CO", "קולורדו"},
+                {"MN", "מינסוטה"},
+                {"SC", "דרום קרוליינה"},
+                {"AL", "אלבמה"},
+                {"LA", "לואיזיאנה"},
+                {"KY", "קנטאקי"},
+                {"OR", "אורגון"},
+                {"OK", "אוקלהומה"},
+                {"CT", "קונטיקט"},
+                {"UT", "יוטה"},
+                {"NV", "נבדה"},
+                {"Unknown", "לא ידוע"}
+            };
+
+            string hebrewCity = cityTranslations.TryGetValue(city, out var cityHebrew) ? cityHebrew : city;
+            string hebrewState = stateTranslations.TryGetValue(state, out var stateHebrew) ? stateHebrew : state;
+
+            return $"{hebrewCity}, {hebrewState}";
         }
     }
 }
