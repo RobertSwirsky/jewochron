@@ -278,6 +278,57 @@ namespace Jewochron.Services
             font-size: 18px;
         }
 
+        .hebrew-name-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .hebrew-name-part {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .ben-bat-selector {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .radio-option:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .radio-option input[type='radio'] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .radio-option .hebrew-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .radio-option .english-text {
+            font-size: 12px;
+            color: #666;
+        }
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -386,17 +437,30 @@ namespace Jewochron.Services
             .form-row {
                 grid-template-columns: 1fr;
             }
-            
+
+            .hebrew-name-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hebrew-name-part {
+                min-width: 100%;
+            }
+
+            .ben-bat-selector {
+                justify-content: center;
+            }
+
             .yahrzeit-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .yahrzeit-actions {
                 margin-top: 10px;
                 width: 100%;
             }
-            
+
             .btn-small {
                 flex: 1;
             }
@@ -456,17 +520,29 @@ namespace Jewochron.Services
                 </div>
 
                 <div class='form-group'>
-                    <label for='nameHebrew'>Name (Hebrew)</label>
-                    <input type='text' id='nameHebrew' class='hebrew-input' required 
-                           placeholder='הזן שם בעברית'>
-                </div>
+                    <label>Hebrew Name</label>
+                    <div class='hebrew-name-container'>
+                        <input type='text' id='hebrewFirstName' class='hebrew-input hebrew-name-part' required 
+                               placeholder='שם פרטי' title='First Name'>
 
-                <div class='form-group'>
-                    <label for='gender'>Gender</label>
-                    <select id='gender' required>
-                        <option value='M'>Male (זכר)</option>
-                        <option value='F'>Female (נקבה)</option>
-                    </select>
+                        <div class='ben-bat-selector'>
+                            <label class='radio-option'>
+                                <input type='radio' name='benBat' value='M' checked>
+                                <span class='hebrew-text'>בן</span>
+                                <span class='english-text'>(Ben)</span>
+                            </label>
+                            <label class='radio-option'>
+                                <input type='radio' name='benBat' value='F'>
+                                <span class='hebrew-text'>בת</span>
+                                <span class='english-text'>(Bat)</span>
+                            </label>
+                        </div>
+
+                        <input type='text' id='hebrewFatherName' class='hebrew-input hebrew-name-part' required 
+                               placeholder='שם האב' title='Father Name'>
+                    </div>
+                    <input type='hidden' id='nameHebrew'>
+                    <input type='hidden' id='gender'>
                 </div>
 
                 <button type='submit' class='btn'>Save Yahrzeit</button>
@@ -535,18 +611,37 @@ namespace Jewochron.Services
             try {
                 const response = await fetch('/api/yahrzeits/' + id);
                 const yahrzeit = await response.json();
-                
+
                 document.getElementById('editId').value = id;
                 document.getElementById('hebrewMonth').value = yahrzeit.hebrewMonth;
                 document.getElementById('hebrewDay').value = yahrzeit.hebrewDay;
                 document.getElementById('hebrewYear').value = yahrzeit.hebrewYear;
                 document.getElementById('nameEnglish').value = yahrzeit.nameEnglish;
-                document.getElementById('nameHebrew').value = yahrzeit.nameHebrew;
-                document.getElementById('gender').value = yahrzeit.gender || 'M';
+
+                // Parse Hebrew name back into parts
+                const hebrewName = yahrzeit.nameHebrew;
+                const benIndex = hebrewName.indexOf(' בן ');
+                const batIndex = hebrewName.indexOf(' בת ');
+
+                if (benIndex !== -1) {
+                    document.getElementById('hebrewFirstName').value = hebrewName.substring(0, benIndex);
+                    document.getElementById('hebrewFatherName').value = hebrewName.substring(benIndex + 4);
+                    document.querySelector('input[name="benBat"][value="M"]').checked = true;
+                } else if (batIndex !== -1) {
+                    document.getElementById('hebrewFirstName').value = hebrewName.substring(0, batIndex);
+                    document.getElementById('hebrewFatherName').value = hebrewName.substring(batIndex + 4);
+                    document.querySelector('input[name="benBat"][value="F"]').checked = true;
+                } else {
+                    // Fallback if name doesn't match expected format
+                    document.getElementById('hebrewFirstName').value = hebrewName;
+                    document.getElementById('hebrewFatherName').value = '';
+                    const gender = yahrzeit.gender || 'M';
+                    document.querySelector('input[name="benBat"][value="' + gender + '"]').checked = true;
+                }
 
                 document.getElementById('formTitle').textContent = 'Edit Yahrzeit';
                 document.getElementById('cancelEdit').style.display = 'inline-block';
-                
+
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
                 showMessage('Failed to load yahrzeit: ' + error.message, 'error');
@@ -581,27 +676,34 @@ namespace Jewochron.Services
 
         document.getElementById('yahrzeitForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
+            // Construct full Hebrew name from parts
+            const hebrewFirstName = document.getElementById('hebrewFirstName').value.trim();
+            const hebrewFatherName = document.getElementById('hebrewFatherName').value.trim();
+            const benBat = document.querySelector('input[name="benBat"]:checked').value;
+            const benBatText = benBat === 'M' ? 'בן' : 'בת';
+            const fullHebrewName = hebrewFirstName + ' ' + benBatText + ' ' + hebrewFatherName;
+
             const editId = document.getElementById('editId').value;
             const yahrzeit = {
                 hebrewMonth: parseInt(document.getElementById('hebrewMonth').value),
                 hebrewDay: parseInt(document.getElementById('hebrewDay').value),
                 hebrewYear: parseInt(document.getElementById('hebrewYear').value),
                 nameEnglish: document.getElementById('nameEnglish').value,
-                nameHebrew: document.getElementById('nameHebrew').value,
-                gender: document.getElementById('gender').value
+                nameHebrew: fullHebrewName,
+                gender: benBat
             };
 
             try {
                 const url = editId ? '/api/yahrzeits/' + editId : '/api/yahrzeits';
                 const method = editId ? 'PUT' : 'POST';
-                
+
                 const response = await fetch(url, {
                     method: method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(yahrzeit)
                 });
-                
+
                 if (response.ok) {
                     showMessage(editId ? 'Yahrzeit updated successfully' : 'Yahrzeit added successfully', 'success');
                     document.getElementById('yahrzeitForm').reset();

@@ -25,6 +25,15 @@
         <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
         <Configurations>Debug;Release;ARM64</Configurations>
     </PropertyGroup>
+    <ItemGroup>
+      <Content Remove="Assets\Create-Quick-Icon.ps1" />
+      <Content Remove="Assets\Generate-App-Icons.bat" />
+      <Content Remove="Assets\Generate-Icons.ps1" />
+      <Content Remove="Assets\Icon-Design-Instructions.md" />
+      <Content Remove="Assets\Jewochron-Icon-Jerusalem.svg" />
+      <Content Remove="Assets\Jewochron-Icon.svg" />
+      <Content Remove="Assets\README.md" />
+    </ItemGroup>
 
     <ItemGroup>
         <Content Include="Assets\SplashScreen.scale-200.png" />

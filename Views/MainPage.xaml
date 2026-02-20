@@ -97,6 +97,34 @@
                             <Setter Target="PrayerCard.Padding" Value="16,14" />
                             <Setter Target="PrayerCard.MinHeight" Value="130" />
                             <Setter Target="PrayerCard.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Prayer Card: Stack content vertically on narrow screens -->
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[0].Width" Value="*" />
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[1].Width" Value="0" />
+                            <Setter Target="PrayerManCanvas.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerManCanvas.(Grid.Row)" Value="0" />
+                            <Setter Target="PrayerManCanvas.Width" Value="60" />
+                            <Setter Target="PrayerManCanvas.Height" Value="80" />
+                            <Setter Target="PrayerManCanvas.Margin" Value="0,0,0,8" />
+                            <Setter Target="PrayerManCanvas.HorizontalAlignment" Value="Center" />
+                            <Setter Target="PrayerTimesStack.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerTimesStack.(Grid.Row)" Value="1" />
+                            <Setter Target="PrayerTimesStack.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Adjust prayer times text sizes for narrow screens -->
+                            <Setter Target="PrayerTimesGrid.ColumnDefinitions[0].Width" Value="28" />
+                            <Setter Target="txtShacharitIndicator.FontSize" Value="18" />
+                            <Setter Target="txtMinchaIndicator.FontSize" Value="18" />
+                            <Setter Target="txtMaarivIndicator.FontSize" Value="18" />
+                            <Setter Target="txtShacharitLabel.FontSize" Value="14" />
+                            <Setter Target="txtMinchaLabel.FontSize" Value="14" />
+                            <Setter Target="txtMaarivLabel.FontSize" Value="14" />
+                            <Setter Target="txtShacharitTime.FontSize" Value="16" />
+                            <Setter Target="txtMinchaTime.FontSize" Value="16" />
+                            <Setter Target="txtMaarivTime.FontSize" Value="16" />
+                            <Setter Target="txtShacharitTime.Margin" Value="8,3,0,3" />
+                            <Setter Target="txtMinchaTime.Margin" Value="8,3,0,3" />
+                            <Setter Target="txtMaarivTime.Margin" Value="8,3,0,3" />
                         </VisualState.Setters>
                     </VisualState>
 
@@ -188,6 +216,12 @@
                             <Setter Target="PrayerCard.Padding" Value="16,14" />
                             <Setter Target="PrayerCard.MinHeight" Value="140" />
                             <Setter Target="PrayerCard.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Prayer Card: Hide illustration in 2-column portrait to save space -->
+                            <Setter Target="PrayerManCanvas.Visibility" Value="Collapsed" />
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[0].Width" Value="0" />
+                            <Setter Target="PrayerTimesStack.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerTimesStack.(Grid.ColumnSpan)" Value="2" />
                         </VisualState.Setters>
                     </VisualState>
 
@@ -270,6 +304,34 @@
                             <Setter Target="PrayerCard.Padding" Value="20,16" />
                             <Setter Target="PrayerCard.MinHeight" Value="160" />
                             <Setter Target="PrayerCard.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Prayer Card: Stack vertically in landscape to fit in narrow column -->
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[0].Width" Value="*" />
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[1].Width" Value="0" />
+                            <Setter Target="PrayerManCanvas.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerManCanvas.(Grid.Row)" Value="0" />
+                            <Setter Target="PrayerManCanvas.Width" Value="50" />
+                            <Setter Target="PrayerManCanvas.Height" Value="70" />
+                            <Setter Target="PrayerManCanvas.Margin" Value="0,0,0,6" />
+                            <Setter Target="PrayerManCanvas.HorizontalAlignment" Value="Center" />
+                            <Setter Target="PrayerTimesStack.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerTimesStack.(Grid.Row)" Value="1" />
+                            <Setter Target="PrayerTimesStack.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Adjust prayer times text sizes for landscape narrow -->
+                            <Setter Target="PrayerTimesGrid.ColumnDefinitions[0].Width" Value="24" />
+                            <Setter Target="txtShacharitIndicator.FontSize" Value="16" />
+                            <Setter Target="txtMinchaIndicator.FontSize" Value="16" />
+                            <Setter Target="txtMaarivIndicator.FontSize" Value="16" />
+                            <Setter Target="txtShacharitLabel.FontSize" Value="13" />
+                            <Setter Target="txtMinchaLabel.FontSize" Value="13" />
+                            <Setter Target="txtMaarivLabel.FontSize" Value="13" />
+                            <Setter Target="txtShacharitTime.FontSize" Value="15" />
+                            <Setter Target="txtMinchaTime.FontSize" Value="15" />
+                            <Setter Target="txtMaarivTime.FontSize" Value="15" />
+                            <Setter Target="txtShacharitTime.Margin" Value="6,3,0,3" />
+                            <Setter Target="txtMinchaTime.Margin" Value="6,3,0,3" />
+                            <Setter Target="txtMaarivTime.Margin" Value="6,3,0,3" />
                         </VisualState.Setters>
                     </VisualState>
 
@@ -351,6 +413,34 @@
                             <Setter Target="PrayerCard.Padding" Value="20,18" />
                             <Setter Target="PrayerCard.MinHeight" Value="160" />
                             <Setter Target="PrayerCard.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Prayer Card: Stack vertically in landscape wide with slightly larger sizes -->
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[0].Width" Value="*" />
+                            <Setter Target="PrayerCardContentGrid.ColumnDefinitions[1].Width" Value="0" />
+                            <Setter Target="PrayerManCanvas.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerManCanvas.(Grid.Row)" Value="0" />
+                            <Setter Target="PrayerManCanvas.Width" Value="60" />
+                            <Setter Target="PrayerManCanvas.Height" Value="85" />
+                            <Setter Target="PrayerManCanvas.Margin" Value="0,0,0,8" />
+                            <Setter Target="PrayerManCanvas.HorizontalAlignment" Value="Center" />
+                            <Setter Target="PrayerTimesStack.(Grid.Column)" Value="0" />
+                            <Setter Target="PrayerTimesStack.(Grid.Row)" Value="1" />
+                            <Setter Target="PrayerTimesStack.HorizontalAlignment" Value="Stretch" />
+
+                            <!-- Adjust prayer times text sizes -->
+                            <Setter Target="PrayerTimesGrid.ColumnDefinitions[0].Width" Value="28" />
+                            <Setter Target="txtShacharitIndicator.FontSize" Value="18" />
+                            <Setter Target="txtMinchaIndicator.FontSize" Value="18" />
+                            <Setter Target="txtMaarivIndicator.FontSize" Value="18" />
+                            <Setter Target="txtShacharitLabel.FontSize" Value="14" />
+                            <Setter Target="txtMinchaLabel.FontSize" Value="14" />
+                            <Setter Target="txtMaarivLabel.FontSize" Value="14" />
+                            <Setter Target="txtShacharitTime.FontSize" Value="16" />
+                            <Setter Target="txtMinchaTime.FontSize" Value="16" />
+                            <Setter Target="txtMaarivTime.FontSize" Value="16" />
+                            <Setter Target="txtShacharitTime.Margin" Value="8,3,0,3" />
+                            <Setter Target="txtMinchaTime.Margin" Value="8,3,0,3" />
+                            <Setter Target="txtMaarivTime.Margin" Value="8,3,0,3" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -1330,14 +1420,18 @@
                             Padding="20,18"
                             Margin="0,0,0,10"
                             MinHeight="160">
-                            <Grid>
+                            <Grid x:Name="PrayerCardContentGrid">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
 
                                 <!-- Praying Man Illustration - Enhanced Realistic Version -->
-                                <Canvas Grid.Column="0" Width="90" Height="130" Margin="0,0,16,0" VerticalAlignment="Center">
+                                <Canvas x:Name="PrayerManCanvas" Grid.Column="0" Grid.Row="0" Width="90" Height="130" Margin="0,0,16,0" VerticalAlignment="Center">
                                     <!-- Shadow beneath figure -->
                                     <Ellipse Canvas.Left="25" Canvas.Top="120" Width="40" Height="8" Fill="#000000" Opacity="0.15" />
 
@@ -1465,14 +1559,14 @@
                                     </Canvas>
                                 </Canvas>
 
-                                <StackPanel Grid.Column="1" Spacing="12" VerticalAlignment="Center">
+                                <StackPanel x:Name="PrayerTimesStack" Grid.Column="1" Grid.Row="0" Spacing="12" VerticalAlignment="Center">
                                     <TextBlock
                                         Text="✡️ Prayer Times • תפילות"
                                         FontSize="16"
                                         HorizontalAlignment="Center"
                                         TextWrapping="Wrap"
                                         Foreground="#888888" />
-                                    <Grid Margin="0,6,0,0" MaxWidth="500">
+                                    <Grid x:Name="PrayerTimesGrid" Margin="0,6,0,0" MaxWidth="500">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="36" />
                                             <ColumnDefinition Width="*" />
@@ -1485,15 +1579,15 @@
                                         </Grid.RowDefinitions>
 
                                         <TextBlock x:Name="txtShacharitIndicator" Grid.Row="0" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
-                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                        <TextBlock x:Name="txtShacharitLabel" Grid.Row="0" Grid.Column="1" Text="Shacharit • שחרית:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
                                         <TextBlock x:Name="txtShacharitTime" Grid.Row="0" Grid.Column="2" Foreground="#87CEEB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
 
                                         <TextBlock x:Name="txtMinchaIndicator" Grid.Row="1" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
-                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                        <TextBlock x:Name="txtMinchaLabel" Grid.Row="1" Grid.Column="1" Text="Mincha • מנחה:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
                                         <TextBlock x:Name="txtMinchaTime" Grid.Row="1" Grid.Column="2" Foreground="#FFA07A" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
 
                                         <TextBlock x:Name="txtMaarivIndicator" Grid.Row="2" Grid.Column="0" FontSize="24" HorizontalAlignment="Center" Margin="0,3" Text="" />
-                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
+                                        <TextBlock x:Name="txtMaarivLabel" Grid.Row="2" Grid.Column="1" Text="Maariv • מעריב:" Foreground="#B0B0B0" Margin="6,3,0,3" FontSize="16" />
                                         <TextBlock x:Name="txtMaarivTime" Grid.Row="2" Grid.Column="2" Foreground="#9370DB" FontWeight="Bold" Margin="12,3,0,3" FontSize="18" Text="" />
                                     </Grid>
                                 </StackPanel>

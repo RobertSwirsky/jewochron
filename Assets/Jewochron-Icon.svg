@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Jewochron App Icon - Star of David with Clock -->
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E4D7B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D2847;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#DAA520;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <rect width="1024" height="1024" rx="200" fill="url(#bgGradient)"/>
+  
+  <!-- Outer glow circle -->
+  <circle cx="512" cy="512" r="420" fill="none" stroke="#FFD700" stroke-width="8" opacity="0.3"/>
+  
+  <!-- Star of David -->
+  <g transform="translate(512, 512)">
+    <!-- Upper triangle -->
+    <path d="M 0,-280 L 242,140 L -242,140 Z" 
+          fill="url(#goldGradient)" 
+          stroke="#B8860B" 
+          stroke-width="12"/>
+    
+    <!-- Lower triangle -->
+    <path d="M 0,280 L -242,-140 L 242,-140 Z" 
+          fill="url(#goldGradient)" 
+          stroke="#B8860B" 
+          stroke-width="12"/>
+  </g>
+  
+  <!-- Clock face in center -->
+  <circle cx="512" cy="512" r="160" fill="#FFFFFF" stroke="#1E4D7B" stroke-width="8"/>
+  
+  <!-- Clock numbers (Hebrew style) -->
+  <text x="512" y="390" font-size="40" font-weight="bold" fill="#1E4D7B" text-anchor="middle" font-family="Arial">12</text>
+  <text x="620" y="520" font-size="40" font-weight="bold" fill="#1E4D7B" text-anchor="middle" font-family="Arial">3</text>
+  <text x="512" y="650" font-size="40" font-weight="bold" fill="#1E4D7B" text-anchor="middle" font-family="Arial">6</text>
+  <text x="404" y="520" font-size="40" font-weight="bold" fill="#1E4D7B" text-anchor="middle" font-family="Arial">9</text>
+  
+  <!-- Clock center dot -->
+  <circle cx="512" cy="512" r="12" fill="#1E4D7B"/>
+  
+  <!-- Hour hand (pointing to 10) -->
+  <line x1="512" y1="512" x2="460" y2="440" stroke="#1E4D7B" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- Minute hand (pointing to 2) -->
+  <line x1="512" y1="512" x2="580" y2="450" stroke="#DAA520" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Hebrew letter Zayin (ז) for Zman (time) at bottom -->
+  <text x="512" y="880" font-size="100" font-weight="bold" fill="#FFD700" text-anchor="middle" font-family="Arial">ז</text>
+</svg>

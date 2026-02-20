@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Jewochron App Icon - Simplified Jerusalem Skyline -->
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background - Night sky gradient -->
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A202C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2D3E50;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="domeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DAA520;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="180" fill="url(#skyGradient)"/>
+  
+  <!-- Stars -->
+  <circle cx="200" cy="150" r="3" fill="#FFFACD"/>
+  <circle cx="350" cy="100" r="4" fill="#FFFACD"/>
+  <circle cx="700" cy="120" r="3" fill="#FFFACD"/>
+  <circle cx="850" cy="180" r="4" fill="#FFFACD"/>
+  <circle cx="600" cy="90" r="2" fill="#FFFACD"/>
+  
+  <!-- Moon crescent -->
+  <circle cx="180" cy="180" r="50" fill="#FFFDE7"/>
+  <circle cx="190" cy="180" r="45" fill="url(#skyGradient)"/>
+  
+  <!-- Simplified Jerusalem buildings -->
+  <!-- Left wall -->
+  <rect x="150" y="550" width="120" height="200" fill="#8B7355"/>
+  <rect x="155" y="550" width="110" height="6" fill="#A5957F"/>
+  
+  <!-- Western Wall -->
+  <rect x="280" y="580" width="140" height="170" fill="#9B8B7E"/>
+  <rect x="285" y="580" width="130" height="6" fill="#AB9B8E"/>
+  
+  <!-- Dome of the Rock - THE CENTERPIECE -->
+  <!-- Base building -->
+  <rect x="430" y="520" width="180" height="230" fill="#D4C5B0"/>
+  <rect x="435" y="520" width="170" height="8" fill="#E4D5C0"/>
+  
+  <!-- The magnificent golden dome -->
+  <ellipse cx="520" cy="480" rx="110" ry="80" fill="url(#domeGradient)"/>
+  <ellipse cx="520" cy="475" rx="100" ry="70" fill="#FFD700" opacity="0.8"/>
+  <ellipse cx="520" cy="470" rx="80" ry="50" fill="#FFEB3B" opacity="0.5"/>
+  
+  <!-- Crescent on top -->
+  <circle cx="520" cy="415" r="15" fill="#FFD700"/>
+  <circle cx="525" cy="415" r="13" fill="url(#skyGradient)"/>
+  
+  <!-- Right buildings -->
+  <rect x="620" y="570" width="110" height="180" fill="#A89968"/>
+  <rect x="625" y="570" width="100" height="6" fill="#B8A978"/>
+  
+  <rect x="740" y="590" width="130" height="160" fill="#8B7355"/>
+  <rect x="745" y="590" width="120" height="6" fill="#A5957F"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="750" width="1024" height="274" fill="#5D4E37"/>
+  
+  <!-- App name in Hebrew at bottom -->
+  <text x="512" y="920" font-size="80" font-weight="bold" fill="#FFD700" text-anchor="middle" font-family="Arial">לוח עברי</text>
+</svg>
