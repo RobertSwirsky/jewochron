@@ -17,6 +17,7 @@ namespace Jewochron.Views
         private readonly JewishHolidaysService jewishHolidaysService;
         private readonly MoladService moladService;
         private readonly YahrzeitService yahrzeitService;
+        private readonly ShabbatTimesService shabbatTimesService;
         private readonly SkylineAnimationHelper animationHelper;
         private DispatcherQueueTimer? clockTimer;
         private DispatcherQueueTimer? dataRefreshTimer;
@@ -38,6 +39,7 @@ namespace Jewochron.Views
             locationService = new LocationService();
             jewishHolidaysService = new JewishHolidaysService(hebrewCalendarService);
             moladService = new MoladService(hebrewCalendarService);
+            shabbatTimesService = new ShabbatTimesService(halachicTimesService, hebrewCalendarService);
 
             // Initialize Yahrzeit service
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -675,6 +677,17 @@ namespace Jewochron.Views
                 {
                     lastPrayerIndicator = "between";
                 }
+
+                // Next Shabbat times
+                var (candleLighting, havdalah, shabbatDate, parshaName) = shabbatTimesService.GetNextShabbatTimes(now, latitude, longitude);
+
+                // Format the date for display
+                string shabbatDateStr = shabbatDate.ToString("dddd, MMMM d");
+                txtShabbatDate.Text = shabbatDateStr;
+
+                // Format the times
+                txtCandleLighting.Text = candleLighting.ToString("h:mm tt");
+                txtHavdalah.Text = havdalah.ToString("h:mm tt");
 
                 // Detailed Moon phase with exact illumination
                 var (moonEmoji, moonPhaseName, moonIllumination, moonAge) = moonPhaseService.GetDetailedMoonPhase(now);

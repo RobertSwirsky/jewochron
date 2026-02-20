@@ -1615,6 +1615,133 @@
                             </Grid>
                         </Border>
 
+                        <!-- Next Shabbos Card -->
+                        <Border 
+                            x:Name="ShabbatCard"
+                            Grid.Row="2" Grid.Column="0"
+                            CornerRadius="12" 
+                            Padding="20,18"
+                            Margin="0,0,10,10"
+                            MinHeight="160">
+                            <!-- Shabbat gradient background -->
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#1e3a5f" Offset="0" />
+                                    <GradientStop Color="#2d5a8a" Offset="0.5" />
+                                    <GradientStop Color="#1e3a5f" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+
+                            <StackPanel Spacing="10" VerticalAlignment="Center">
+                                <!-- Shabbat Candles Illustration -->
+                                <Canvas Width="120" Height="80" HorizontalAlignment="Center">
+                                    <!-- Left Candle -->
+                                    <Rectangle Canvas.Left="30" Canvas.Top="35" Width="12" Height="40" Fill="#F5F5DC" RadiusX="2" RadiusY="2" />
+                                    <!-- Candle highlight -->
+                                    <Rectangle Canvas.Left="31" Canvas.Top="35" Width="3" Height="40" Fill="#FFFACD" Opacity="0.6" />
+                                    <!-- Wax drip -->
+                                    <Ellipse Canvas.Left="28" Canvas.Top="50" Width="16" Height="6" Fill="#F5F5DC" Opacity="0.8" />
+
+                                    <!-- Left Flame -->
+                                    <Ellipse Canvas.Left="33" Canvas.Top="25" Width="10" Height="15" Fill="#FFD700">
+                                        <Ellipse.RenderTransform>
+                                            <RotateTransform Angle="0" CenterX="5" CenterY="7.5" />
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <Ellipse Canvas.Left="34" Canvas.Top="27" Width="8" Height="12" Fill="#FFA500" Opacity="0.8" />
+                                    <Ellipse Canvas.Left="35" Canvas.Top="29" Width="6" Height="9" Fill="#FFFFFF" Opacity="0.6" />
+                                    <!-- Flame glow -->
+                                    <Ellipse Canvas.Left="31" Canvas.Top="23" Width="14" Height="17" Fill="#FFD700" Opacity="0.3" />
+
+                                    <!-- Right Candle -->
+                                    <Rectangle Canvas.Left="78" Canvas.Top="35" Width="12" Height="40" Fill="#F5F5DC" RadiusX="2" RadiusY="2" />
+                                    <!-- Candle highlight -->
+                                    <Rectangle Canvas.Left="79" Canvas.Top="35" Width="3" Height="40" Fill="#FFFACD" Opacity="0.6" />
+                                    <!-- Wax drip -->
+                                    <Ellipse Canvas.Left="76" Canvas.Top="50" Width="16" Height="6" Fill="#F5F5DC" Opacity="0.8" />
+
+                                    <!-- Right Flame -->
+                                    <Ellipse Canvas.Left="81" Canvas.Top="25" Width="10" Height="15" Fill="#FFD700">
+                                        <Ellipse.RenderTransform>
+                                            <RotateTransform Angle="0" CenterX="5" CenterY="7.5" />
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <Ellipse Canvas.Left="82" Canvas.Top="27" Width="8" Height="12" Fill="#FFA500" Opacity="0.8" />
+                                    <Ellipse Canvas.Left="83" Canvas.Top="29" Width="6" Height="9" Fill="#FFFFFF" Opacity="0.6" />
+                                    <!-- Flame glow -->
+                                    <Ellipse Canvas.Left="79" Canvas.Top="23" Width="14" Height="17" Fill="#FFD700" Opacity="0.3" />
+
+                                    <!-- Candle holder/tray -->
+                                    <Rectangle Canvas.Left="20" Canvas.Top="75" Width="80" Height="4" Fill="#C0C0C0" RadiusX="2" RadiusY="2" />
+                                    <Rectangle Canvas.Left="22" Canvas.Top="76" Width="76" Height="2" Fill="#E8E8E8" Opacity="0.5" />
+                                </Canvas>
+
+                                <TextBlock
+                                    Text="Next Shabbos • שבת הבא"
+                                    FontSize="16"
+                                    HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Foreground="#E0E0E0" />
+
+                                <TextBlock
+                                    x:Name="txtShabbatDate"
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Foreground="#FFD700"
+                                    Text="" />
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                                               Text="🕯️ Candle Lighting • הדלקת נרות:" 
+                                               Foreground="#B0B0B0" 
+                                               Margin="0,4" 
+                                               FontSize="14" 
+                                               TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtCandleLighting" 
+                                               Grid.Row="0" Grid.Column="1" 
+                                               Foreground="#FFD700" 
+                                               FontWeight="Bold" 
+                                               Margin="12,4,0,4" 
+                                               FontSize="18" 
+                                               Text="" />
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" 
+                                               Text="✨ Havdalah • הבדלה:" 
+                                               Foreground="#B0B0B0" 
+                                               Margin="0,4" 
+                                               FontSize="14" 
+                                               TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtHavdalah" 
+                                               Grid.Row="1" Grid.Column="1" 
+                                               Foreground="#87CEEB" 
+                                               FontWeight="Bold" 
+                                               Margin="12,4,0,4" 
+                                               FontSize="18" 
+                                               Text="" />
+                                </Grid>
+
+                                <TextBlock
+                                    x:Name="txtShabbatGreeting"
+                                    Text="שבת שלום • Shabbat Shalom"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#FFFFFF"
+                                    Margin="0,8,0,0" />
+                            </StackPanel>
+                        </Border>
+
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
