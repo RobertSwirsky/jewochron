@@ -1,6 +1,6 @@
 # Jewochron - Jewish Calendar Digital Sign
 
-A beautiful WinUI 3 desktop application that displays Jewish calendar information, Halachic times, Torah readings, Yahrzeits and more.
+A beautiful, fully responsive WinUI 3 desktop application that displays Jewish calendar information, Halachic times, Torah readings, Yahrzeits and more. Optimized for any screen size from narrow portrait phones to wide 1920×1080 displays.
 
 <img width="1642" height="1952" alt="image" src="https://github.com/user-attachments/assets/98f30c49-c436-442b-8940-e80398c17649" />
 
@@ -8,13 +8,27 @@ A beautiful WinUI 3 desktop application that displays Jewish calendar informatio
 
 ## Features
 
+### 📱 Fully Responsive Design
+- **4 Visual States**: Automatically adapts to any screen size
+  - **Portrait Narrow** (1-column): Perfect for phones and narrow tablets
+  - **Portrait Wide** (2-column): Optimized for wider portrait displays
+  - **Landscape Narrow** (3-column): Compact landscape mode
+  - **Landscape Wide** (3-column): Full-screen desktop experience (1920×1080+)
+- **Dynamic Sizing**: Font sizes, spacing, and layouts adjust automatically
+- **Smart Card Arrangement**: Cards rearrange and resize based on available space
+- **Optimized Illustrations**: Graphics scale and adapt to each layout mode
+
+### 📅 Calendar & Times
 - **📅 Dates**: Display current date in English and Hebrew (both transliterated and in Hebrew characters)
 - **🌆 Jerusalem Skyline**: Animated Jerusalem skyline with dynamic time-of-day visuals (dawn, sunrise, day, sunset, dusk, night)
   - Responsive scaling via Viewbox - fits any screen width while maintaining aspect ratio
   - Phase-accurate moon that reflects actual lunar illumination percentage
   - Sun and moon positioned high in the sky with natural arc movement
+  - Includes iconic landmarks: Dome of the Rock, Western Wall, Second Temple
 - **⏰ Live Clocks**: Real-time display of local time and Jerusalem time side-by-side
 - **📍 Location**: Automatic location detection (City, State) with user permission
+
+### 📖 Torah & Study
 - **📖 Torah Portion**: Current week's Parsha in English and Hebrew with decorative Torah scroll illustration
 - **📚 Daf Yomi**: Today's Talmud page in English and Hebrew with Hebrew numerals
 - **🕐 Halachic Times**: Location-based calculations for:
@@ -22,15 +36,32 @@ A beautiful WinUI 3 desktop application that displays Jewish calendar informatio
   - Sunrise (נץ החמה)
   - Sunset (שקיעה)
   - Tzait HaKochavim (Nightfall)
+
+### 🌙 Lunar & Holidays
 - **🌙 Molad & Moon Phase**: Next Molad (new moon) with exact time and Chalakim, plus current lunar phase details
 - **🎉 Next Holiday**: Countdown to the next Jewish holiday with days remaining
-- **✡️ Prayer Times**: Visual prayer times with animated praying man illustration
+
+### ✡️ Prayer Times
+- **Visual Prayer Times**: Beautiful prayer times card with responsive layout
   - Shacharit, Mincha, and Maariv times with current prayer indicator
   - Detailed illustration showing man holding Siddur (prayer book)
   - Dynamic display of Tallit (prayer shawl) during Shacharit
   - Dynamic display of Tefillin (phylacteries) during weekday Shacharit
+  - **Responsive Behavior**:
+    - Hidden illustration in 2-column portrait for better text visibility
+    - Vertical stacking in 3-column landscape layouts
+    - Full side-by-side display in default layout
+
+### 🎨 Design
 - **🎨 Dark Mode**: Beautiful dark theme with responsive card layout
-- **📖 Yahrzeit Manager**: Built-in web interface for managing yahrzeit dates (memorial anniversaries)
+- **✡️ Custom Icons**: Professional Star of David themed app icons
+  - Gold Star of David on deep blue background
+  - All sizes from 24×24 to 1240×600 (splash screen)
+  - SVG templates included for customization
+  - Icon generation tools for easy updates
+
+### 📖 Yahrzeit Manager
+- **Built-in Web Interface**: Manage memorial anniversaries via browser
   - Accessible at `http://localhost:5555` when app is running
   - Add, edit, and delete yahrzeit entries
   - Store Hebrew dates with bilingual names
@@ -209,6 +240,52 @@ The app uses **VisualStateManager** with custom **aspect ratio detection** to en
 
 4. **Hide taskbar** (optional):
    - Right-click taskbar → Taskbar settings → "Automatically hide taskbar"
+
+## Icon Customization
+
+The application includes professional Star of David themed icons and complete customization tools.
+
+### Current Icon Design
+- **Style**: Gold Star of David (✡️) on deep blue background (#1A4D7A)
+- **Sizes**: All required Windows app icon sizes (24×24 to 1240×600)
+- **Theme**: Matches the Jerusalem skyline and Jewish heritage aesthetic
+
+### Customization Options
+
+#### Quick Method (5 minutes)
+1. Run `Assets\Generate-App-Icons.bat`
+2. Choose option 2 for placeholder icons
+3. Rebuild the project
+
+#### Professional Method (Best Quality)
+1. **Install Inkscape** (free): https://inkscape.org/release/
+2. **Edit SVG templates** in `Assets\` folder:
+   - `Jewochron-Icon-Jerusalem.svg` - Jerusalem skyline design (RECOMMENDED)
+   - `Jewochron-Icon.svg` - Star of David with clock design
+3. **Generate all sizes**: Run `Assets\Generate-Icons.ps1`
+4. **Rebuild project** to see your custom icons
+
+#### Online Method (Easiest)
+1. Create or find a 1024×1024 PNG icon
+2. Go to https://www.appicon.co/
+3. Upload and download Windows icon pack
+4. Copy files to `Assets\` folder
+5. Rebuild project
+
+### Included Tools & Templates
+- **📁 Assets\README.md** - Complete icon customization guide
+- **🎨 SVG Templates** - Fully editable vector designs
+- **⚙️ PowerShell Scripts** - Automated icon generation
+- **📖 Icon-Design-Instructions.md** - Design concepts and best practices
+
+### Icon Specifications
+All required sizes are automatically generated:
+- `Square44x44Logo.scale-200.png` (88×88) - Small tile
+- `Square44x44Logo.targetsize-24_altform-unplated.png` (24×24) - Taskbar
+- `Square150x150Logo.scale-200.png` (300×300) - Medium tile
+- `Wide310x150Logo.scale-200.png` (620×300) - Wide tile
+- `StoreLogo.png` (50×50) - Store listing
+- `SplashScreen.scale-200.png` (1240×600) - Launch screen
 
 ## Permissions Required
 
