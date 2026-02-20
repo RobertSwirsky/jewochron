@@ -106,5 +106,81 @@ namespace Jewochron.Services
         {
             return date.DayOfWeek == DayOfWeek.Saturday;
         }
+
+        public (int day, int month, int year)? ConvertToHebrewDate(DateTime gregorianDate)
+        {
+            try
+            {
+                int year = hebrewCalendar.GetYear(gregorianDate);
+                int month = hebrewCalendar.GetMonth(gregorianDate);
+                int day = hebrewCalendar.GetDayOfMonth(gregorianDate);
+                return (day, month, year);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public DateTime? ConvertToEnglishDate(int hebrewDay, int hebrewMonth, int hebrewYear)
+        {
+            try
+            {
+                return hebrewCalendar.ToDateTime(hebrewYear, hebrewMonth, hebrewDay, 0, 0, 0, 0);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public (string english, string hebrew) FormatHebrewDate(int day, int month, int year)
+        {
+            var isLeapYear = hebrewCalendar.IsLeapYear(year);
+            var monthNameEnglish = GetHebrewMonthName(month, isLeapYear);
+            var monthNameHebrew = GetHebrewMonthNameInHebrew(month, isLeapYear);
+            var dayHebrew = ConvertToHebrewNumber(day);
+            var yearHebrew = ConvertToHebrewNumber(year);
+
+            var english = $"{day} {monthNameEnglish} {year}";
+            var hebrew = $"{dayHebrew} {monthNameHebrew} {yearHebrew}";
+
+            return (english, hebrew);
+        }
+
+        public DateTime? GetNextHebrewAnniversary(int hebrewDay, int hebrewMonth, int hebrewYear)
+        {
+            try
+            {
+                var today = DateTime.Today;
+                var currentHebrewYear = hebrewCalendar.GetYear(today);
+
+                // Try current Hebrew year
+                try
+                {
+                    var thisYear = hebrewCalendar.ToDateTime(currentHebrewYear, hebrewMonth, hebrewDay, 0, 0, 0, 0);
+                    if (thisYear >= today)
+                        return thisYear;
+                }
+                catch
+                {
+                    // Date doesn't exist this year (e.g., Adar in non-leap year), try next year
+                }
+
+                // Try next Hebrew year
+                try
+                {
+                    return hebrewCalendar.ToDateTime(currentHebrewYear + 1, hebrewMonth, hebrewDay, 0, 0, 0, 0);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

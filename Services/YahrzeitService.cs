@@ -93,6 +93,83 @@ namespace Jewochron.Services
                 ? "עליה השלום" // Aleiha HaShalom
                 : "זכרונו לברכה"; // Zichrono Livrakha
         }
+
+        /// <summary>
+        /// Get all yahrzeits from the database
+        /// </summary>
+        public async Task<List<Yahrzeit>> GetAllYahrzeitsAsync()
+        {
+            try
+            {
+                var options = new DbContextOptionsBuilder<YahrzeitDbContext>()
+                    .UseSqlite($"Data Source={_databasePath}")
+                    .Options;
+
+                using var dbContext = new YahrzeitDbContext(options);
+                return await dbContext.Yahrzeits.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting all yahrzeits: {ex.Message}");
+                return new List<Yahrzeit>();
+            }
+        }
+
+        /// <summary>
+        /// Add a new yahrzeit to the database
+        /// </summary>
+        public async Task<bool> AddYahrzeitAsync(Yahrzeit yahrzeit)
+        {
+            try
+            {
+                var options = new DbContextOptionsBuilder<YahrzeitDbContext>()
+                    .UseSqlite($"Data Source={_databasePath}")
+                    .Options;
+
+                using var dbContext = new YahrzeitDbContext(options);
+                await dbContext.Database.EnsureCreatedAsync();
+
+                yahrzeit.CreatedAt = DateTime.UtcNow;
+                yahrzeit.UpdatedAt = DateTime.UtcNow;
+
+                dbContext.Yahrzeits.Add(yahrzeit);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error adding yahrzeit: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Delete a yahrzeit from the database
+        /// </summary>
+        public async Task<bool> DeleteYahrzeitAsync(int id)
+        {
+            try
+            {
+                var options = new DbContextOptionsBuilder<YahrzeitDbContext>()
+                    .UseSqlite($"Data Source={_databasePath}")
+                    .Options;
+
+                using var dbContext = new YahrzeitDbContext(options);
+                var yahrzeit = await dbContext.Yahrzeits.FindAsync(id);
+                if (yahrzeit != null)
+                {
+                    dbContext.Yahrzeits.Remove(yahrzeit);
+                    await dbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error deleting yahrzeit: {ex.Message}");
+                return false;
+            }
+        }
     }
 
     /// <summary>

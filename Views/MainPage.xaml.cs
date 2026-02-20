@@ -1134,6 +1134,11 @@ namespace Jewochron.Views
             // Return original if either is missing - this will trigger the "no translation" logic
             return $"{city}, {state}";
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
+        }
     }
 }
 

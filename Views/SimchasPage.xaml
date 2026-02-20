@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Jewochron.Views.SimchasPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Jewochron.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="#1E1E1E">
+    
+    <ScrollViewer>
+        <StackPanel Spacing="24" Padding="24">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Content="← Back" Click="BackButton_Click" FontSize="16" />
+                <TextBlock Text="Simchas" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" />
+            </StackPanel>
+            
+            <TextBlock Text="Add and manage Hebrew birthdays, Bar Mitzvahs, weddings, and more joyous occasions." FontSize="16" Margin="0,0,0,16" />
+
+            <!-- Simcha Entry Form -->
+            <Border Background="#2D2D30" CornerRadius="12" Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Add New Simcha" FontSize="20" FontWeight="SemiBold" />
+                    
+                    <TextBox x:Name="txtName" Header="Name" PlaceholderText="Enter name" />
+                    
+                    <ComboBox x:Name="cmbType" Header="Type" PlaceholderText="Select type">
+                        <ComboBoxItem Content="Hebrew Birthday" Tag="HebrewBirthday" />
+                        <ComboBoxItem Content="Bar Mitzvah" Tag="BarMitzvah" />
+                        <ComboBoxItem Content="Bat Mitzvah" Tag="BatMitzvah" />
+                        <ComboBoxItem Content="Wedding" Tag="Wedding" />
+                        <ComboBoxItem Content="Engagement" Tag="Engagement" />
+                        <ComboBoxItem Content="Brit Milah" Tag="BritMilah" />
+                        <ComboBoxItem Content="Pidyon HaBen" Tag="Pidyon" />
+                        <ComboBoxItem Content="Upsherin" Tag="UpSherin" />
+                        <ComboBoxItem Content="Anniversary" Tag="Anniversary" />
+                        <ComboBoxItem Content="Other" Tag="Other" />
+                    </ComboBox>
+                    
+                    <!-- Hebrew Date Picker -->
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Hebrew Date" FontWeight="SemiBold" />
+                        <Border Background="#3C3C3C" CornerRadius="8" Padding="12">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Headers -->
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Day" HorizontalAlignment="Center" FontSize="14" Foreground="#888" Margin="0,0,0,8" />
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Month" HorizontalAlignment="Center" FontSize="14" Foreground="#888" Margin="0,0,0,8" />
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Year" HorizontalAlignment="Center" FontSize="14" Foreground="#888" Margin="0,0,0,8" />
+
+                                <!-- Controls -->
+                                <ComboBox x:Name="DayComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,4,0" SelectionChanged="DayComboBox_SelectionChanged" />
+                                <ComboBox x:Name="MonthComboBox" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2,0,2,0" SelectionChanged="MonthComboBox_SelectionChanged" />
+                                <ComboBox x:Name="YearComboBox" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" Margin="4,0,0,0" SelectionChanged="YearComboBox_SelectionChanged" />
+                            </Grid>
+                        </Border>
+                        <TextBlock x:Name="SelectedDateDisplay" FontSize="14" Foreground="#4EC9B0" TextAlignment="Center" />
+                    </StackPanel>
+                    
+                    <CheckBox x:Name="chkRecurring" Content="Recurring (annual anniversary)" IsChecked="True" />
+                    
+                    <TextBox x:Name="txtNotes" Header="Notes (Optional)" PlaceholderText="Additional information" AcceptsReturn="True" TextWrapping="Wrap" Height="80" />
+                    
+                    <Button Content="Add Simcha" Click="AddSimcha_Click" Style="{StaticResource PrimaryAction}" />
+                </StackPanel>
+            </Border>
+
+            <!-- Simchas List -->
+            <Border Background="#2D2D30" CornerRadius="12" Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Joyous Occasions" FontSize="20" FontWeight="SemiBold" />
+                    <ListView x:Name="SimchasList" ItemsSource="{x:Bind Simchas}" SelectionMode="Single" ItemClick="SimchasList_ItemClick" IsItemClickEnabled="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:SimchaDisplayItem">
+                                <Border Background="#3C3C3C" CornerRadius="8" Padding="16" Margin="0,4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <StackPanel Grid.Column="0" Spacing="4">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{x:Bind Name}" FontSize="18" FontWeight="SemiBold" />
+                                                <TextBlock Text="{x:Bind TypeEmoji}" FontSize="18" />
+                                            </StackPanel>
+                                            <TextBlock Text="{x:Bind Type}" FontSize="14" Foreground="#AAAAAA" />
+                                            <TextBlock Text="{x:Bind HebrewDate}" FontSize="14" Foreground="#9966FF" />
+                                            <TextBlock Text="{x:Bind NextOccurrence}" FontSize="14" Foreground="#4EC9B0" />
+                                            <TextBlock Text="{x:Bind Notes}" FontSize="12" Foreground="#CCCCCC" TextWrapping="Wrap" Visibility="{x:Bind NotesVisibility}" />
+                                        </StackPanel>
+                                        
+                                        <Button Grid.Column="1" Content="🗑️" Click="DeleteSimcha_Click" Tag="{x:Bind Id}" VerticalAlignment="Top" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
