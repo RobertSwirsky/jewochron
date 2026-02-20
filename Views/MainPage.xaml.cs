@@ -590,11 +590,24 @@ namespace Jewochron.Views
                     // We have a Hebrew translation
                     txtLocationHebrew.Text = $"📍 {hebrewLocation}";
                     txtLocationHebrew.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+
+                    // Show spacer on Jerusalem side to keep times aligned
+                    var spacer = this.FindName("txtJerusalemSpacer") as Microsoft.UI.Xaml.Controls.TextBlock;
+                    if (spacer != null)
+                    {
+                        spacer.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    // No translation available, hide Hebrew location
+                    // No translation available, hide Hebrew location and spacer
                     txtLocationHebrew.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+
+                    var spacer = this.FindName("txtJerusalemSpacer") as Microsoft.UI.Xaml.Controls.TextBlock;
+                    if (spacer != null)
+                    {
+                        spacer.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    }
                 }
 
                 // Hebrew date
@@ -1109,10 +1122,17 @@ namespace Jewochron.Views
                 {"Unknown", "לא ידוע"}
             };
 
-            string hebrewCity = cityTranslations.TryGetValue(city, out var cityHebrew) ? cityHebrew : city;
-            string hebrewState = stateTranslations.TryGetValue(state, out var stateHebrew) ? stateHebrew : state;
+            bool hasCityTranslation = cityTranslations.TryGetValue(city, out var cityHebrew);
+            bool hasStateTranslation = stateTranslations.TryGetValue(state, out var stateHebrew);
 
-            return $"{hebrewCity}, {hebrewState}";
+            // Only return Hebrew if BOTH city and state have translations
+            if (hasCityTranslation && hasStateTranslation)
+            {
+                return $"{cityHebrew}, {stateHebrew}";
+            }
+
+            // Return original if either is missing - this will trigger the "no translation" logic
+            return $"{city}, {state}";
         }
     }
 }
