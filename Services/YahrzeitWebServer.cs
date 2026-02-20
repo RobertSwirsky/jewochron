@@ -283,6 +283,7 @@ namespace Jewochron.Services
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
+            flex-direction: row-reverse; /* Right-to-left layout for Hebrew */
         }
 
         .hebrew-name-part {
@@ -520,10 +521,10 @@ namespace Jewochron.Services
                 </div>
 
                 <div class='form-group'>
-                    <label>Hebrew Name</label>
+                    <label>Hebrew Name (Format: [First Name] בן/בת [Father's Name])</label>
                     <div class='hebrew-name-container'>
                         <input type='text' id='hebrewFirstName' class='hebrew-input hebrew-name-part' required 
-                               placeholder='שם פרטי' title='First Name'>
+                               placeholder='שם פרטי' title='First Name (appears on right)'>
 
                         <div class='ben-bat-selector'>
                             <label class='radio-option'>
@@ -539,7 +540,7 @@ namespace Jewochron.Services
                         </div>
 
                         <input type='text' id='hebrewFatherName' class='hebrew-input hebrew-name-part' required 
-                               placeholder='שם האב' title='Father Name'>
+                               placeholder='שם האב' title="Father's Name (appears on left)">
                     </div>
                     <input type='hidden' id='nameHebrew'>
                     <input type='hidden' id='gender'>
