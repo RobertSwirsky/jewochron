@@ -49,6 +49,9 @@ namespace Jewochron.Services
                 builder.Services.AddDbContext<YahrzeitDbContext>(options =>
                     options.UseSqlite($"Data Source={_databasePath}"));
 
+                builder.Services.AddDbContext<SimchaDbContext>(options =>
+                    options.UseSqlite($"Data Source={_databasePath.Replace("yahrzeits.db", "simchas.db")}"));
+
                 builder.Services.AddCors(options =>
                 {
                     options.AddDefaultPolicy(policy =>
@@ -69,6 +72,10 @@ namespace Jewochron.Services
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<YahrzeitDbContext>();
                     await dbContext.Database.EnsureCreatedAsync();
+
+                    // Ensure Simcha database is also created
+                    var simchaDbContext = scope.ServiceProvider.GetRequiredService<SimchaDbContext>();
+                    await simchaDbContext.Database.EnsureCreatedAsync();
 
                     // Check if Gender column exists and add it if missing
                     try
@@ -113,11 +120,25 @@ namespace Jewochron.Services
                 // API Endpoints
                 MapApiEndpoints(_app);
 
-                // Serve the HTML page
+                // Serve the main settings menu
                 _app.MapGet("/", async context =>
                 {
                     context.Response.ContentType = "text/html; charset=utf-8";
+                    await context.Response.WriteAsync(GetSettingsMenuHtml());
+                });
+
+                // Serve the Yahrzeit management page
+                _app.MapGet("/yahrzeits", async context =>
+                {
+                    context.Response.ContentType = "text/html; charset=utf-8";
                     await context.Response.WriteAsync(GetYahrzeitFormHtml());
+                });
+
+                // Serve the Simchas management page
+                _app.MapGet("/simchas", async context =>
+                {
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                    await context.Response.WriteAsync(GetSimchasFormHtml());
                 });
 
                 await _app.StartAsync();
@@ -199,6 +220,214 @@ namespace Jewochron.Services
                 OnYahrzeitDataChanged();
                 return Results.NoContent();
             });
+
+            // Simchas API Endpoints
+
+            // GET all simchas
+            app.MapGet("/api/simchas", async (SimchaDbContext db) =>
+            {
+                var simchas = await db.Simchas
+                    .OrderBy(s => s.HebrewMonth)
+                    .ThenBy(s => s.HebrewDay)
+                    .ToListAsync();
+                return Results.Ok(simchas);
+            });
+
+            // GET simcha by ID
+            app.MapGet("/api/simchas/{id}", async (int id, SimchaDbContext db) =>
+            {
+                var simcha = await db.Simchas.FindAsync(id);
+                return simcha != null ? Results.Ok(simcha) : Results.NotFound();
+            });
+
+            // POST new simcha
+            app.MapPost("/api/simchas", async (Models.Simcha simcha, SimchaDbContext db) =>
+            {
+                simcha.CreatedDate = DateTime.UtcNow;
+                db.Simchas.Add(simcha);
+                await db.SaveChangesAsync();
+                return Results.Created($"/api/simchas/{simcha.Id}", simcha);
+            });
+
+            // PUT update simcha
+            app.MapPut("/api/simchas/{id}", async (int id, Models.Simcha updatedSimcha, SimchaDbContext db) =>
+            {
+                var simcha = await db.Simchas.FindAsync(id);
+                if (simcha == null) return Results.NotFound();
+
+                simcha.Name = updatedSimcha.Name;
+                simcha.Type = updatedSimcha.Type;
+                simcha.HebrewDay = updatedSimcha.HebrewDay;
+                simcha.HebrewMonth = updatedSimcha.HebrewMonth;
+                simcha.HebrewYear = updatedSimcha.HebrewYear;
+                simcha.HebrewDate = updatedSimcha.HebrewDate;
+                simcha.EnglishDate = updatedSimcha.EnglishDate;
+                simcha.IsRecurring = updatedSimcha.IsRecurring;
+                simcha.Notes = updatedSimcha.Notes;
+
+                await db.SaveChangesAsync();
+                return Results.Ok(simcha);
+            });
+
+            // DELETE simcha
+            app.MapDelete("/api/simchas/{id}", async (int id, SimchaDbContext db) =>
+            {
+                var simcha = await db.Simchas.FindAsync(id);
+                if (simcha == null) return Results.NotFound();
+
+                db.Simchas.Remove(simcha);
+                await db.SaveChangesAsync();
+                return Results.NoContent();
+            });
+
+            // Convert Gregorian date to Hebrew date
+            app.MapPost("/api/convert-to-hebrew", (DateConversionRequest request) =>
+            {
+                try
+                {
+                    var gregorianDate = DateTime.Parse(request.GregorianDate);
+                    var hebrewCalendar = new System.Globalization.HebrewCalendar();
+
+                    int hebrewYear = hebrewCalendar.GetYear(gregorianDate);
+                    int hebrewMonth = hebrewCalendar.GetMonth(gregorianDate);
+                    int hebrewDay = hebrewCalendar.GetDayOfMonth(gregorianDate);
+
+                    return Results.Ok(new { hebrewDay, hebrewMonth, hebrewYear });
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+        }
+
+        private record DateConversionRequest(string GregorianDate);
+
+        private string GetSettingsMenuHtml()
+        {
+            return """
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Jewochron Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .setting-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .setting-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .setting-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .setting-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .setting-description {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .yahrzeit-card {
+            background: linear-gradient(135deg, #8B7355 0%, #CD853F 50%, #8B7355 100%);
+        }
+
+        .yahrzeit-card .setting-title,
+        .yahrzeit-card .setting-description {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .simcha-card {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FFC371 100%);
+        }
+
+        .simcha-card .setting-title,
+        .simcha-card .setting-description {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <h1>⚙️ Jewochron Settings</h1>
+        <div class='settings-grid'>
+            <a href='/yahrzeits' class='setting-card yahrzeit-card'>
+                <div class='setting-icon'>🕯️</div>
+                <div class='setting-title'>Yahrzeits</div>
+                <div class='setting-description'>
+                    Manage memorial dates and anniversaries for loved ones
+                </div>
+            </a>
+            <a href='/simchas' class='setting-card simcha-card'>
+                <div class='setting-icon'>🎉</div>
+                <div class='setting-title'>Simchas</div>
+                <div class='setting-description'>
+                    Track Hebrew birthdays, bar mitzvahs, weddings, and joyous occasions
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+""";
         }
 
         private string GetYahrzeitFormHtml()
@@ -231,12 +460,37 @@ namespace Jewochron.Services
             margin: 0 auto;
         }
 
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
         h1 {
             color: white;
             text-align: center;
-            margin-bottom: 30px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            flex: 1;
         }
 
         .card {
@@ -470,8 +724,12 @@ namespace Jewochron.Services
 </head>
 <body>
     <div class='container'>
-        <h1>📖 Yahrzeit Manager</h1>
-        
+        <div class='header'>
+            <a href='/' class='back-btn'>← Back to Settings</a>
+            <h1>📖 Yahrzeit Manager</h1>
+            <div style='width: 180px;'></div>
+        </div>
+
         <div class='card'>
             <h2 id='formTitle'>Add New Yahrzeit</h2>
             <div id='message' class='message'></div>
@@ -721,6 +979,784 @@ namespace Jewochron.Services
         });
 
         loadYahrzeits();
+    </script>
+</body>
+</html>
+""";
+        }
+
+        private string GetSimchasFormHtml()
+        {
+            return """
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Simchas Manager - Jewochron</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FFC371 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background: white;
+            color: #FF6B9D;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FF6B9D;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .date-type-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff5f8;
+            border-radius: 8px;
+            justify-content: center;
+        }
+
+        .date-type-btn {
+            padding: 12px 24px;
+            border: 2px solid #FF6B9D;
+            background: white;
+            color: #FF6B9D;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            min-width: 180px;
+        }
+
+        .date-type-btn:hover {
+            background: #fff0f5;
+            transform: translateY(-2px);
+        }
+
+        .date-type-btn.active {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FFC371 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .date-input-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .date-input-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hebrew-datepicker {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+            border-radius: 12px;
+            border: 2px solid #ffd4e5;
+        }
+
+        .datepicker-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .datepicker-field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #FF6B9D;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .datepicker-select,
+        .datepicker-input {
+            padding: 12px;
+            border: 2px solid #ffd4e5;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .datepicker-select:focus,
+        .datepicker-input:focus {
+            outline: none;
+            border-color: #FF6B9D;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        .gregorian-datepicker {
+            padding: 20px;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+            border-radius: 12px;
+            border: 2px solid #ffd4e5;
+        }
+
+        .datepicker-field-full {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .datepicker-field-full label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #FF6B9D;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .datepicker-input-full {
+            padding: 14px;
+            border: 2px solid #ffd4e5;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .datepicker-input-full:focus {
+            outline: none;
+            border-color: #FF6B9D;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        .date-preview {
+            margin-top: 15px;
+            padding: 12px;
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            border-radius: 4px;
+            font-size: 15px;
+            color: #0d47a1;
+            font-weight: 500;
+            display: none;
+        }
+
+        .date-preview.show {
+            display: block;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FFC371 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+            margin: 0 5px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .simcha-list {
+            margin-top: 30px;
+        }
+
+        .simcha-item {
+            background: #fff5f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #FF6B9D;
+        }
+
+        .simcha-info {
+            flex: 1;
+        }
+
+        .simcha-name {
+            font-weight: 600;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .simcha-type {
+            color: #FF6B9D;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .simcha-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .simcha-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #0d47a1;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hebrew-datepicker {
+                grid-template-columns: 1fr;
+            }
+
+            .date-type-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .date-type-btn {
+                width: 100%;
+            }
+
+            .simcha-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .simcha-actions {
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            .simcha-actions button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <a href='/' class='back-btn'>← Back to Settings</a>
+            <h1>🎉 Simchas Manager</h1>
+            <div style='width: 140px;'></div>
+        </div>
+
+        <div id='message' class='message'></div>
+
+        <div class='card'>
+            <h2 id='formTitle'>Add New Simcha</h2>
+            <form id='simchaForm'>
+                <input type='hidden' id='editId' />
+                <input type='hidden' id='hebrewDay' />
+                <input type='hidden' id='hebrewMonth' />
+                <input type='hidden' id='hebrewYear' />
+                <input type='hidden' id='hebrewDateString' />
+                <input type='hidden' id='englishDate' />
+
+                <div class='form-group'>
+                    <label for='name'>Name</label>
+                    <input type='text' id='name' required placeholder='Enter name' />
+                </div>
+
+                <div class='form-group'>
+                    <label for='type'>Type</label>
+                    <select id='type' required>
+                        <option value=''>Select type...</option>
+                        <option value='Hebrew Birthday'>🎂 Hebrew Birthday</option>
+                        <option value='Bar Mitzvah'>📜 Bar Mitzvah</option>
+                        <option value='Bat Mitzvah'>📜 Bat Mitzvah</option>
+                        <option value='Wedding'>💒 Wedding</option>
+                        <option value='Engagement'>💍 Engagement</option>
+                        <option value='Brit Milah'>👶 Brit Milah</option>
+                        <option value='Pidyon HaBen'>🕊️ Pidyon HaBen</option>
+                        <option value='Upsherin'>✂️ Upsherin</option>
+                        <option value='Anniversary'>💝 Anniversary</option>
+                        <option value='Other'>🎉 Other</option>
+                    </select>
+                </div>
+
+                <div class='form-group'>
+                    <label>Date Entry Method</label>
+                    <div class='date-type-selector'>
+                        <button type='button' class='date-type-btn active' id='hebrewBtn'>
+                            📅 Hebrew Calendar
+                        </button>
+                        <button type='button' class='date-type-btn' id='gregorianBtn'>
+                            📆 Gregorian Calendar
+                        </button>
+                    </div>
+                </div>
+
+                <div id='hebrewDateSection' class='date-input-section active'>
+                    <div class='info-box'>
+                        📅 Enter the date in the Hebrew calendar (e.g., 15 Nisan 5784)
+                    </div>
+                    <div class='hebrew-datepicker'>
+                        <div class='datepicker-field'>
+                            <label for='hebrewDayInput'>Day</label>
+                            <select id='hebrewDayInput' class='datepicker-select'></select>
+                        </div>
+                        <div class='datepicker-field'>
+                            <label for='hebrewMonthInput'>Month</label>
+                            <select id='hebrewMonthInput' class='datepicker-select'>
+                                <option value=''>Select month...</option>
+                                <option value='1'>Tishrei (תִּשְׁרֵי)</option>
+                                <option value='2'>Cheshvan (חֶשְׁוָן)</option>
+                                <option value='3'>Kislev (כִּסְלֵו)</option>
+                                <option value='4'>Tevet (טֵבֵת)</option>
+                                <option value='5'>Shevat (שְׁבָט)</option>
+                                <option value='6'>Adar (אֲדָר)</option>
+                                <option value='7'>Nisan (נִיסָן)</option>
+                                <option value='8'>Iyar (אִיָּר)</option>
+                                <option value='9'>Sivan (סִיוָן)</option>
+                                <option value='10'>Tammuz (תַּמּוּז)</option>
+                                <option value='11'>Av (אָב)</option>
+                                <option value='12'>Elul (אֱלוּל)</option>
+                            </select>
+                        </div>
+                        <div class='datepicker-field'>
+                            <label for='hebrewYearInput'>Year</label>
+                            <input type='number' id='hebrewYearInput' class='datepicker-input' placeholder='e.g., 5784' min='5000' max='6000' />
+                        </div>
+                    </div>
+                    <div id='hebrewDatePreview' class='date-preview'></div>
+                </div>
+
+                <div id='gregorianDateSection' class='date-input-section'>
+                    <div class='info-box'>
+                        📆 Enter the date in the Gregorian calendar (e.g., January 15, 2024). It will be automatically converted to the Hebrew calendar for storage.
+                    </div>
+                    <div class='gregorian-datepicker'>
+                        <div class='datepicker-field-full'>
+                            <label for='gregorianDateInput'>Date</label>
+                            <input type='date' id='gregorianDateInput' class='datepicker-input-full' />
+                        </div>
+                    </div>
+                    <div id='gregorianDatePreview' class='date-preview'></div>
+                </div>
+
+                <div class='form-group'>
+                    <label for='notes'>Notes (Optional)</label>
+                    <textarea id='notes' rows='3' placeholder='Add any additional information'></textarea>
+                </div>
+
+                <button type='submit' class='btn'>Save Simcha</button>
+                <button type='button' id='cancelEdit' class='btn btn-secondary' style='display:none;'>Cancel</button>
+            </form>
+        </div>
+
+        <div class='card'>
+            <h2>Saved Simchas</h2>
+            <div id='simchaList' class='simcha-list'></div>
+        </div>
+    </div>
+
+    <script>
+        let currentDateType = 'hebrew';
+
+        // Populate day dropdown
+        const daySelect = document.getElementById('hebrewDayInput');
+        for (let i = 1; i <= 30; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            daySelect.appendChild(option);
+        }
+
+        const monthNames = {
+            1: 'Tishrei', 2: 'Cheshvan', 3: 'Kislev', 4: 'Tevet',
+            5: 'Shevat', 6: 'Adar', 7: 'Nisan', 8: 'Iyar',
+            9: 'Sivan', 10: 'Tammuz', 11: 'Av', 12: 'Elul'
+        };
+
+        // Setup date type buttons with event listeners
+        document.getElementById('hebrewBtn').addEventListener('click', function() {
+            switchDateType('hebrew');
+        });
+
+        document.getElementById('gregorianBtn').addEventListener('click', function() {
+            switchDateType('gregorian');
+        });
+
+        function switchDateType(type) {
+            currentDateType = type;
+
+            // Update button states
+            document.getElementById('hebrewBtn').classList.toggle('active', type === 'hebrew');
+            document.getElementById('gregorianBtn').classList.toggle('active', type === 'gregorian');
+
+            // Show/hide date sections with animation
+            document.getElementById('hebrewDateSection').classList.toggle('active', type === 'hebrew');
+            document.getElementById('gregorianDateSection').classList.toggle('active', type === 'gregorian');
+        }
+
+        // Hebrew date preview
+        function updateHebrewDatePreview() {
+            const day = document.getElementById('hebrewDayInput').value;
+            const month = document.getElementById('hebrewMonthInput').value;
+            const year = document.getElementById('hebrewYearInput').value;
+            const preview = document.getElementById('hebrewDatePreview');
+
+            if (day && month && year) {
+                preview.textContent = '📅 Selected: ' + day + ' ' + monthNames[parseInt(month)] + ' ' + year;
+                preview.classList.add('show');
+            } else {
+                preview.classList.remove('show');
+            }
+        }
+
+        document.getElementById('hebrewDayInput').addEventListener('change', updateHebrewDatePreview);
+        document.getElementById('hebrewMonthInput').addEventListener('change', updateHebrewDatePreview);
+        document.getElementById('hebrewYearInput').addEventListener('input', updateHebrewDatePreview);
+
+        // Gregorian date preview
+        function updateGregorianDatePreview() {
+            const dateInput = document.getElementById('gregorianDateInput').value;
+            const preview = document.getElementById('gregorianDatePreview');
+
+            if (dateInput) {
+                const date = new Date(dateInput);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const gregorianDisplay = date.toLocaleDateString('en-US', options);
+
+                // Convert to Hebrew date for preview
+                fetch('/api/convert-to-hebrew', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ gregorianDate: dateInput })
+                })
+                .then(response => response.json())
+                .then(hebrewDate => {
+                    const hebrewDisplay = hebrewDate.hebrewDay + ' ' + monthNames[hebrewDate.hebrewMonth] + ' ' + hebrewDate.hebrewYear;
+                    preview.innerHTML = '📆 Selected: ' + gregorianDisplay + '<br/>🔄 Converts to: ' + hebrewDisplay + ' (Hebrew)';
+                    preview.classList.add('show');
+                })
+                .catch(() => {
+                    preview.textContent = '📆 Selected: ' + gregorianDisplay;
+                    preview.classList.add('show');
+                });
+            } else {
+                preview.classList.remove('show');
+            }
+        }
+
+        document.getElementById('gregorianDateInput').addEventListener('change', updateGregorianDatePreview);
+
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = 'message ' + type;
+            message.style.display = 'block';
+            setTimeout(() => message.style.display = 'none', 5000);
+        }
+
+        async function loadSimchas() {
+            try {
+                const response = await fetch('/api/simchas');
+                const simchas = await response.json();
+
+                const listDiv = document.getElementById('simchaList');
+                if (simchas.length === 0) {
+                    listDiv.innerHTML = '<p style="color: #666;">No simchas recorded yet. Add your first joyous occasion above!</p>';
+                    return;
+                }
+
+                listDiv.innerHTML = simchas.map(s => {
+                    const dateDisplay = s.hebrewDate || 'No date';
+                    return '<div class="simcha-item">' +
+                        '<div class="simcha-info">' +
+                        '<div class="simcha-name">' + s.name + '</div>' +
+                        '<div class="simcha-type">' + s.type + '</div>' +
+                        '<div class="simcha-date">📅 ' + dateDisplay + '</div>' +
+                        (s.notes ? '<div class="simcha-date" style="margin-top: 5px; font-style: italic;">' + s.notes + '</div>' : '') +
+                        '</div>' +
+                        '<div class="simcha-actions">' +
+                        '<button class="btn btn-small btn-secondary" onclick="editSimcha(' + s.id + ')">Edit</button>' +
+                        '<button class="btn btn-small btn-danger" onclick="deleteSimcha(' + s.id + ')">Delete</button>' +
+                        '</div>' +
+                        '</div>';
+                }).join('');
+            } catch (error) {
+                showMessage('Failed to load simchas: ' + error.message, 'error');
+            }
+        }
+
+        async function editSimcha(id) {
+            try {
+                const response = await fetch('/api/simchas/' + id);
+                const simcha = await response.json();
+
+                document.getElementById('editId').value = id;
+                document.getElementById('name').value = simcha.name;
+                document.getElementById('type').value = simcha.type;
+                document.getElementById('notes').value = simcha.notes || '';
+
+                // Always use Hebrew date since that's what we store
+                if (simcha.hebrewDay && simcha.hebrewMonth && simcha.hebrewYear) {
+                    switchDateType('hebrew');
+                    document.getElementById('hebrewDayInput').value = simcha.hebrewDay;
+                    document.getElementById('hebrewMonthInput').value = simcha.hebrewMonth;
+                    document.getElementById('hebrewYearInput').value = simcha.hebrewYear;
+                    updateHebrewDatePreview();
+                }
+
+                document.getElementById('formTitle').textContent = 'Edit Simcha';
+                document.getElementById('cancelEdit').style.display = 'inline-block';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                showMessage('Failed to load simcha: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteSimcha(id) {
+            if (!confirm('Are you sure you want to delete this simcha?')) return;
+
+            try {
+                const response = await fetch('/api/simchas/' + id, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showMessage('Simcha deleted successfully', 'success');
+                    loadSimchas();
+                } else {
+                    showMessage('Failed to delete simcha', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('cancelEdit').addEventListener('click', () => {
+            document.getElementById('simchaForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('formTitle').textContent = 'Add New Simcha';
+            document.getElementById('cancelEdit').style.display = 'none';
+        });
+
+        document.getElementById('simchaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const editId = document.getElementById('editId').value;
+
+            // Build simcha object based on current date type
+            const simcha = {
+                name: document.getElementById('name').value.trim(),
+                type: document.getElementById('type').value,
+                notes: document.getElementById('notes').value.trim(),
+                isRecurring: true
+            };
+
+            if (currentDateType === 'hebrew') {
+                const day = parseInt(document.getElementById('hebrewDayInput').value);
+                const month = parseInt(document.getElementById('hebrewMonthInput').value);
+                const year = parseInt(document.getElementById('hebrewYearInput').value);
+
+                if (!day || !month || !year) {
+                    showMessage('Please enter all Hebrew date fields', 'error');
+                    return;
+                }
+
+                simcha.hebrewDay = day;
+                simcha.hebrewMonth = month;
+                simcha.hebrewYear = year;
+                simcha.hebrewDate = day + ' ' + monthNames[month] + ' ' + year;
+                simcha.englishDate = null;
+            } else {
+                // Gregorian mode - convert to Hebrew first
+                const gregorianDate = document.getElementById('gregorianDateInput').value;
+                if (!gregorianDate) {
+                    showMessage('Please enter a Gregorian date', 'error');
+                    return;
+                }
+
+                // Convert Gregorian to Hebrew via API
+                try {
+                    const convertResponse = await fetch('/api/convert-to-hebrew', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ gregorianDate: gregorianDate })
+                    });
+
+                    if (!convertResponse.ok) {
+                        showMessage('Failed to convert date to Hebrew calendar', 'error');
+                        return;
+                    }
+
+                    const hebrewDate = await convertResponse.json();
+
+                    simcha.hebrewDay = hebrewDate.hebrewDay;
+                    simcha.hebrewMonth = hebrewDate.hebrewMonth;
+                    simcha.hebrewYear = hebrewDate.hebrewYear;
+                    simcha.hebrewDate = hebrewDate.hebrewDay + ' ' + monthNames[hebrewDate.hebrewMonth] + ' ' + hebrewDate.hebrewYear;
+                    simcha.englishDate = null;
+                } catch (error) {
+                    showMessage('Error converting date: ' + error.message, 'error');
+                    return;
+                }
+            }
+
+            try {
+                const url = editId ? '/api/simchas/' + editId : '/api/simchas';
+                const method = editId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(simcha)
+                });
+
+                if (response.ok) {
+                    showMessage(editId ? 'Simcha updated successfully!' : 'Simcha added successfully!', 'success');
+                    document.getElementById('simchaForm').reset();
+                    document.getElementById('editId').value = '';
+                    document.getElementById('formTitle').textContent = 'Add New Simcha';
+                    document.getElementById('cancelEdit').style.display = 'none';
+                    switchDateType('hebrew');
+                    loadSimchas();
+                } else {
+                    showMessage('Failed to save simcha', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        });
+
+        loadSimchas();
     </script>
 </body>
 </html>

@@ -17,6 +17,7 @@ namespace Jewochron.Views
         private readonly JewishHolidaysService jewishHolidaysService;
         private readonly MoladService moladService;
         private readonly YahrzeitService yahrzeitService;
+        private readonly SimchaService simchaService;
         private readonly ShabbatTimesService shabbatTimesService;
         private readonly SkylineAnimationHelper animationHelper;
         private DispatcherQueueTimer? clockTimer;
@@ -45,6 +46,10 @@ namespace Jewochron.Views
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string dbPath = Path.Combine(appDataPath, "Jewochron", "yahrzeits.db");
             yahrzeitService = new YahrzeitService(dbPath, hebrewCalendarService);
+
+            // Initialize Simcha service
+            string simchaDbPath = Path.Combine(appDataPath, "Jewochron", "simchas.db");
+            simchaService = new SimchaService(simchaDbPath, hebrewCalendarService);
 
             // Initialize animation helper
             animationHelper = new SkylineAnimationHelper(this);
@@ -752,8 +757,9 @@ namespace Jewochron.Views
                 // Display the Molad time with chalakim (formatted by service)
                 txtMoladJerusalemTime.Text = moladFormattedTime;
 
-                // Check for upcoming yahrzeits
+                // Check for upcoming yahrzeits and simchas
                 await LoadYahrzeitsAsync();
+                await LoadSimchasAsync();
             }
             catch (Exception ex)
             {
@@ -766,6 +772,7 @@ namespace Jewochron.Views
         {
             System.Diagnostics.Debug.WriteLine("[YAHRZEIT] RefreshYahrzeitsAsync called");
             await LoadYahrzeitsAsync();
+            await LoadSimchasAsync();
         }
 
         private async Task LoadYahrzeitsAsync()
@@ -916,6 +923,203 @@ namespace Jewochron.Views
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading yahrzeits: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Loads upcoming simchas (within next 8 days or later in current month)
+        /// </summary>
+        private async Task LoadSimchasAsync()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[SIMCHAS] LoadSimchasAsync called");
+
+                // Get all simchas
+                var allSimchas = await simchaService.GetAllSimchasAsync();
+                var today = DateTime.Today;
+                var currentHebrewDate = hebrewCalendarService.GetHebrewDate(today);
+
+                // Filter for upcoming simchas: within next 8 days OR later in current Hebrew month
+                var upcomingSimchas = new List<(Models.Simcha Simcha, DateTime NextDate, int DaysFromNow, int HebrewDay, int HebrewMonth, int HebrewYear)>();
+
+                foreach (var simcha in allSimchas)
+                {
+                    // Calculate next occurrence
+                    var nextOccurrence = simcha.GetNextOccurrence(hebrewCalendarService);
+
+                    if (nextOccurrence.HasValue)
+                    {
+                        int daysFromNow = (nextOccurrence.Value.Date - today).Days;
+                        var nextHebrewDate = hebrewCalendarService.GetHebrewDate(nextOccurrence.Value);
+
+                        // Include if within 8 days OR later in current Hebrew month
+                        bool isWithin8Days = daysFromNow >= 0 && daysFromNow <= 7;
+                        bool isLaterThisMonth = nextHebrewDate.month == currentHebrewDate.month && 
+                                                nextHebrewDate.year == currentHebrewDate.year &&
+                                                daysFromNow > 0;
+
+                        if (isWithin8Days || isLaterThisMonth)
+                        {
+                            upcomingSimchas.Add((simcha, nextOccurrence.Value, daysFromNow, 
+                                nextHebrewDate.day, nextHebrewDate.month, nextHebrewDate.year));
+                        }
+                    }
+                }
+
+                // Sort by days from now
+                upcomingSimchas = upcomingSimchas.OrderBy(s => s.DaysFromNow).ToList();
+
+                System.Diagnostics.Debug.WriteLine($"[SIMCHAS] Found {upcomingSimchas.Count} upcoming simcha(s)");
+
+                // Find the simchas card container in the XAML
+                var simchasCard = this.FindName("SimchasCard") as Microsoft.UI.Xaml.UIElement;
+                var simchasPanel = this.FindName("SimchasPanel") as Microsoft.UI.Xaml.Controls.StackPanel;
+
+                if (simchasCard == null || simchasPanel == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("[SIMCHAS] ERROR: Simchas card elements not found in XAML");
+                    return;
+                }
+
+                if (upcomingSimchas.Count == 0)
+                {
+                    // Hide the simchas card if there are no upcoming simchas
+                    simchasCard.Visibility = Visibility.Collapsed;
+                    System.Diagnostics.Debug.WriteLine("[SIMCHAS] No upcoming simchas - card hidden");
+                }
+                else
+                {
+                    // Show the simchas card and populate it
+                    simchasCard.Visibility = Visibility.Visible;
+                    simchasPanel.Children.Clear();
+                    System.Diagnostics.Debug.WriteLine($"[SIMCHAS] Displaying {upcomingSimchas.Count} simcha(s)");
+
+                    foreach (var upcoming in upcomingSimchas)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[SIMCHAS] - {upcoming.Simcha.Name} ({upcoming.DaysFromNow} day(s) away)");
+
+                        // Get Hebrew date with Hebrew numerals
+                        string hebrewDay = hebrewCalendarService.ConvertToHebrewNumber(upcoming.HebrewDay);
+                        string hebrewMonthName = hebrewCalendarService.GetHebrewMonthNameInHebrew(upcoming.HebrewMonth, 
+                            hebrewCalendarService.GetHebrewDate(upcoming.NextDate).isLeapYear);
+                        string hebrewYear = hebrewCalendarService.ConvertToHebrewNumber(upcoming.HebrewYear);
+                        string hebrewDate = $"{hebrewDay} {hebrewMonthName} {hebrewYear}";
+
+                        // Get icon for simcha type
+                        string icon = GetSimchaIcon(upcoming.Simcha.Type);
+
+                        // Create entry container
+                        var entryPanel = new Microsoft.UI.Xaml.Controls.StackPanel
+                        {
+                            Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal,
+                            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
+                            Spacing = 12,
+                            Margin = new Microsoft.UI.Xaml.Thickness(0, 0, 0, 8)
+                        };
+
+                        // Icon
+                        var iconText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            Text = icon,
+                            FontSize = 32,
+                            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center
+                        };
+
+                        // Details panel
+                        var detailsPanel = new Microsoft.UI.Xaml.Controls.StackPanel
+                        {
+                            Orientation = Microsoft.UI.Xaml.Controls.Orientation.Vertical,
+                            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
+                            Spacing = 2
+                        };
+
+                        // Name and type
+                        var nameText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = upcoming.DaysFromNow == 0 ? 22 : 20,
+                            FontWeight = upcoming.DaysFromNow == 0 ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.SemiBold,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                Microsoft.UI.ColorHelper.FromArgb(255, 26, 26, 26)),
+                            TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap
+                        };
+                        nameText.Text = $"{upcoming.Simcha.Name} • {upcoming.Simcha.Type}";
+
+                        // Hebrew date
+                        var dateText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = 16,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                Microsoft.UI.ColorHelper.FromArgb(255, 64, 32, 64)),
+                            FlowDirection = Microsoft.UI.Xaml.FlowDirection.RightToLeft
+                        };
+                        dateText.Text = hebrewDate;
+
+                        // When text (Today, Tomorrow, or X days away)
+                        var whenText = new Microsoft.UI.Xaml.Controls.TextBlock
+                        {
+                            FontSize = upcoming.DaysFromNow == 0 ? 16 : 14,
+                            FontWeight = upcoming.DaysFromNow == 0 ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.Normal,
+                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                upcoming.DaysFromNow == 0 
+                                    ? Microsoft.UI.ColorHelper.FromArgb(255, 255, 20, 147) // Hot pink for TODAY
+                                    : Microsoft.UI.ColorHelper.FromArgb(200, 139, 0, 139)) // Dark magenta
+                        };
+
+                        if (upcoming.DaysFromNow == 0)
+                            whenText.Text = "🎊 TODAY! 🎊";
+                        else if (upcoming.DaysFromNow == 1)
+                            whenText.Text = "Tomorrow";
+                        else
+                            whenText.Text = $"In {upcoming.DaysFromNow} days ({upcoming.NextDate:dddd, MMM d})";
+
+                        detailsPanel.Children.Add(nameText);
+                        detailsPanel.Children.Add(dateText);
+                        detailsPanel.Children.Add(whenText);
+
+                        entryPanel.Children.Add(iconText);
+                        entryPanel.Children.Add(detailsPanel);
+
+                        simchasPanel.Children.Add(entryPanel);
+
+                        // Add separator line if there are more entries
+                        if (upcoming != upcomingSimchas.Last())
+                        {
+                            var separator = new Microsoft.UI.Xaml.Shapes.Rectangle
+                            {
+                                Height = 1,
+                                Fill = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                    Microsoft.UI.ColorHelper.FromArgb(80, 0, 0, 0)),
+                                Margin = new Microsoft.UI.Xaml.Thickness(0, 8, 0, 8)
+                            };
+                            simchasPanel.Children.Add(separator);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading simchas: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Gets the appropriate icon for a simcha type
+        /// </summary>
+        private string GetSimchaIcon(string type)
+        {
+            return type switch
+            {
+                "Hebrew Birthday" => "🎂",
+                "Bar Mitzvah" => "📜",
+                "Bat Mitzvah" => "📜",
+                "Wedding" => "💒",
+                "Engagement" => "💍",
+                "Brit Milah" => "👶",
+                "Pidyon HaBen" => "🕊️",
+                "Upsherin" => "✂️",
+                "Anniversary" => "💝",
+                _ => "🎉"
+            };
         }
 
         /// <summary>
@@ -1133,11 +1337,6 @@ namespace Jewochron.Views
 
             // Return original if either is missing - this will trigger the "no translation" logic
             return $"{city}, {state}";
-        }
-
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SettingsPage));
         }
     }
 }
