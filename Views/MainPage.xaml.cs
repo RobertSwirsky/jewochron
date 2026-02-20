@@ -590,24 +590,11 @@ namespace Jewochron.Views
                     // We have a Hebrew translation
                     txtLocationHebrew.Text = $"📍 {hebrewLocation}";
                     txtLocationHebrew.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-
-                    // Show spacer on Jerusalem side to keep times aligned
-                    var spacer = this.FindName("txtJerusalemSpacer") as Microsoft.UI.Xaml.Controls.TextBlock;
-                    if (spacer != null)
-                    {
-                        spacer.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    }
                 }
                 else
                 {
-                    // No translation available, hide Hebrew location and spacer
+                    // No translation available, hide Hebrew location
                     txtLocationHebrew.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-
-                    var spacer = this.FindName("txtJerusalemSpacer") as Microsoft.UI.Xaml.Controls.TextBlock;
-                    if (spacer != null)
-                    {
-                        spacer.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    }
                 }
 
                 // Hebrew date

@@ -909,7 +909,38 @@
                         Padding="20,18"
                         HorizontalAlignment="Stretch">
                         <StackPanel Spacing="10">
-                            <!-- Times Grid with Date in center - supports responsive layouts -->
+                            <!-- Aligned Time Display Row (Times at top for prominence) -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    x:Name="txtLocalTime"
+                                    Grid.Column="0"
+                                    FontFamily="Consolas"
+                                    FontSize="48"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#4EC9B0"
+                                    Text="00:00:00 AM" />
+
+                                <TextBlock
+                                    x:Name="txtJerusalemTime"
+                                    Grid.Column="2"
+                                    FontFamily="Consolas"
+                                    FontSize="48"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#FFD700"
+                                    Text="00:00:00" />
+                            </Grid>
+
+                            <!-- Labels and Location Grid (Now underneath times) -->
                             <Grid x:Name="TimeGrid">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -925,7 +956,7 @@
                                     <!-- Location in English -->
                                     <TextBlock
                                         x:Name="txtLocationEnglish"
-                                        FontSize="16"
+                                        FontSize="14"
                                         HorizontalAlignment="Center"
                                         Foreground="#888888"
                                         TextWrapping="Wrap"
@@ -934,7 +965,7 @@
                                     <!-- Location in Hebrew -->
                                     <TextBlock
                                         x:Name="txtLocationHebrew"
-                                        FontSize="16"
+                                        FontSize="14"
                                         HorizontalAlignment="Center"
                                         FlowDirection="RightToLeft"
                                         Foreground="#888888"
@@ -977,49 +1008,10 @@
                                 <StackPanel x:Name="JerusalemTimeStack" Grid.Column="2" Grid.Row="0" Spacing="4">
                                     <TextBlock
                                         Text="Jerusalem • ירושלים"
-                                        FontSize="16"
+                                        FontSize="14"
                                         HorizontalAlignment="Center"
-                                        Foreground="#666666" />
-                                    <!-- Spacer to match Hebrew location height when visible -->
-                                    <TextBlock
-                                        x:Name="txtJerusalemSpacer"
-                                        FontSize="16"
-                                        HorizontalAlignment="Center"
-                                        Foreground="Transparent"
-                                        Text="‎" 
-                                        Visibility="Collapsed" />
+                                        Foreground="#888888" />
                                 </StackPanel>
-                            </Grid>
-
-                            <!-- Aligned Time Display Row -->
-                            <Grid Margin="0,8,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock
-                                    x:Name="txtLocalTime"
-                                    Grid.Column="0"
-                                    FontFamily="Consolas"
-                                    FontSize="48"
-                                    FontWeight="Bold"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="#4EC9B0"
-                                    Text="00:00:00 AM" />
-
-                                <TextBlock
-                                    x:Name="txtJerusalemTime"
-                                    Grid.Column="2"
-                                    FontFamily="Consolas"
-                                    FontSize="48"
-                                    FontWeight="Bold"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="#FFD700"
-                                    Text="00:00:00" />
                             </Grid>
                         </StackPanel>
                     </Border>
