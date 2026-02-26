@@ -51,24 +51,31 @@ The cosine curve closely approximates the actual circular segment area formula, 
 if (isWaxing)
 {
     terminatorOffset = (phase * 2 - 1) * radius;  // LINEAR
+    shadowOnRight = false;
 }
 else
 {
-    terminatorOffset = -(phase * 2 - 1) * radius; // LINEAR
+    terminatorOffset = -(phase * 2 - 1) * radius; // LINEAR (WRONG SIGN)
+    shadowOnRight = true;
 }
 ```
 
 **After:**
 ```csharp
+// Same formula for both waxing and waning!
+terminatorOffset = radius * Math.Cos(Math.PI * (1 - phase)); // COSINE
+
 if (isWaxing)
 {
-    terminatorOffset = radius * Math.Cos(Math.PI * (1 - phase)); // COSINE
+    shadowOnRight = false; // Shadow on left
 }
 else
 {
-    terminatorOffset = -radius * Math.Cos(Math.PI * (1 - phase)); // COSINE
+    shadowOnRight = true;  // Shadow on right
 }
 ```
+
+**Key Insight**: The terminator position is the SAME for both waxing and waning at any given illumination percentage. The only difference is which SIDE of the moon the shadow appears on!
 
 ### 2. Crater Visibility (`UpdateCraterVisibility`)
 
@@ -83,15 +90,12 @@ if (!isWaxing)
 
 **After:**
 ```csharp
-if (isWaxing)
-{
-    terminatorX = moonCenterX + moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
-}
-else
-{
-    terminatorX = moonCenterX - moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
-}
+// Same calculation for both waxing and waning
+double terminatorOffset = moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
+double terminatorX = moonCenterX + terminatorOffset;
 ```
+
+**Important**: The terminator X position is the same regardless of waxing/waning. The difference is only in how we determine which side is lit (left vs right of the terminator).
 
 ## Visual Results
 

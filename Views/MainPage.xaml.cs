@@ -527,16 +527,9 @@ namespace Jewochron.Views
                 const double moonRadius = 20.0;
 
                 // Calculate terminator position using area-accurate cosine formula
-                // This matches the geometry rendering and ensures craters are properly lit/shadowed
-                double terminatorX;
-                if (isWaxing)
-                {
-                    terminatorX = moonCenterX + moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
-                }
-                else
-                {
-                    terminatorX = moonCenterX - moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
-                }
+                // Same formula for both waxing and waning
+                double terminatorOffset = moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
+                double terminatorX = moonCenterX + terminatorOffset;
 
                 foreach (var (crater, craterX) in craters)
                 {
@@ -658,21 +651,23 @@ namespace Jewochron.Views
                 // At phase 1: offset = +radius (full moon, 100% lit)
                 //
                 // Formula: cos(π * (1 - phase)) maps phase to offset with correct area relationship
+                // Both waxing and waning use the SAME formula - the difference is only which
+                // side of the moon we draw the shadow on
 
                 double terminatorOffset;
                 bool shadowOnRight;
 
+                // Calculate terminator position (same for both waxing and waning)
+                terminatorOffset = radius * Math.Cos(Math.PI * (1 - phase));
+
                 if (isWaxing)
                 {
-                    // Waxing: shadow on left, retreating
-                    // Use cosine formula for accurate area-to-illumination mapping
-                    terminatorOffset = radius * Math.Cos(Math.PI * (1 - phase));
+                    // Waxing: shadow on left, retreating as moon gets fuller
                     shadowOnRight = false;
                 }
                 else
                 {
-                    // Waning: shadow on right, advancing
-                    terminatorOffset = -radius * Math.Cos(Math.PI * (1 - phase));
+                    // Waning: shadow on right, advancing as moon gets darker
                     shadowOnRight = true;
                 }
 
