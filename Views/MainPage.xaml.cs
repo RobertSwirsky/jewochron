@@ -400,7 +400,7 @@ namespace Jewochron.Views
                 // Update moon phase appearance when moon is visible
                 if (moonCanvas.Visibility == Visibility.Visible)
                 {
-                    UpdateSkylineMoonPhase(currentMoonIllumination);
+                    UpdateSkylineMoonPhase(currentMoonIllumination, timeOfDay);
                 }
             }
             catch (Exception ex)
@@ -411,62 +411,343 @@ namespace Jewochron.Views
             }
         }
 
-        private void UpdateSkylineMoonPhase(double illuminationPercent)
+        private void UpdateSkylineMoonPhase(double illuminationPercent, double timeOfDay)
         {
             try
             {
-                var moonShadow = this.FindName("SkylineMoonShadow") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                var moonPhaseShape = this.FindName("SkylineMoonPhaseShape") as Microsoft.UI.Xaml.Shapes.Path;
                 var moonGlow = this.FindName("SkylineMoonGlow") as Microsoft.UI.Xaml.Shapes.Ellipse;
-                var moonLit = this.FindName("SkylineMoonLit") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                var moonDisc = this.FindName("SkylineMoonDisc") as Microsoft.UI.Xaml.Shapes.Ellipse;
 
-                if (moonShadow == null || moonLit == null) return;
+                if (moonPhaseShape == null || moonDisc == null) return;
 
                 // Calculate moon age to determine if waxing or waning
-                // Reference: Jan 6, 2000 at 18:14 was a known new moon
-                double moonAge = (DateTime.Now - new DateTime(2000, 1, 6, 18, 14, 0)).TotalDays % 29.53;
+                // Reference: Jan 6, 2000 at 18:14 UTC was a known new moon
+                double moonAge = (DateTime.UtcNow - new DateTime(2000, 1, 6, 18, 14, 0, DateTimeKind.Utc)).TotalDays % 29.53;
                 bool isWaxing = moonAge < 14.765; // First half of lunar cycle
 
-                // The shadow is positioned to reveal the illuminated portion
-                // illuminationPercent: 0 = new moon (all shadow), 100 = full moon (no shadow)
-                // 
-                // For waxing moon: right side lights up first, shadow slides LEFT off the moon
-                // For waning moon: left side stays lit, shadow slides RIGHT onto the moon
-                //
-                // Shadow position: -40 (fully off left) to 0 (centered) to +40 (fully off right)
+                // Clamp and normalize illumination for smoother visuals
+                double clampedIllumination = Math.Clamp(illuminationPercent, 0.0, 100.0);
+                double illuminationFactor = clampedIllumination / 100.0; // 0 = new, 1 = full
 
-                // Calculate shadow offset based on illumination
-                // At 0% illumination, shadow covers all (offset = 0)
-                // At 100% illumination, shadow is completely off (offset = ±40)
-                double shadowOffset = (illuminationPercent / 100.0) * 44;
+                // Calculate time-of-day opacity factor (fainter during bright day, stronger at night)
+                double timeOpacityFactor = 1.0;
+                if (timeOfDay >= 7 && timeOfDay < 17)
+                {
+                    timeOpacityFactor = 0.3; // Bright day
+                }
+                else if (timeOfDay >= 17 && timeOfDay < 19)
+                {
+                    timeOpacityFactor = 0.3 + (timeOfDay - 17) / 2.0 * 0.7; // Evening fade-in
+                }
+                else if (timeOfDay >= 5 && timeOfDay < 7)
+                {
+                    timeOpacityFactor = 1.0 - (timeOfDay - 5) / 2.0 * 0.7; // Dawn fade-out
+                }
 
-                if (isWaxing)
-                {
-                    // Waxing: shadow slides left to reveal right side first
-                    // Start: shadow at 0 (covering moon)
-                    // End: shadow at -44 (off to the left)
-                    Canvas.SetLeft(moonShadow, -shadowOffset);
-                }
-                else
-                {
-                    // Waning: shadow slides right to cover right side first  
-                    // Start: shadow at 0 (covering moon from left)
-                    // End: shadow at +44 (off to the right)
-                    Canvas.SetLeft(moonShadow, shadowOffset - 44);
-                }
+                // Apply time-based opacity to moon disc
+                moonDisc.Opacity = (0.5 + illuminationFactor * 0.5) * timeOpacityFactor;
 
                 // Adjust glow intensity based on illumination
                 if (moonGlow != null)
                 {
-                    moonGlow.Opacity = 0.08 + (illuminationPercent / 100.0 * 0.20);
+                    moonGlow.Opacity = (0.05 + (illuminationFactor * 0.22)) * timeOpacityFactor;
                 }
 
-                // Slightly adjust lit portion brightness based on illumination
-                moonLit.Opacity = 0.85 + (illuminationPercent / 100.0 * 0.15);
+                // Create the phase shadow shape using proper geometry
+                const double radius = 20.0; // Moon radius
+                const double centerX = radius;
+                const double centerY = radius;
+
+                // Generate the path geometry for the shadow (dark portion)
+                var geometry = CreateMoonPhaseGeometry(centerX, centerY, radius, illuminationFactor, isWaxing);
+                moonPhaseShape.Data = geometry;
+
+                // Shadow opacity: full at new moon, mostly opaque even near full moon for visibility
+                double shadowOpacity = Math.Max(0.85, 1.0 - illuminationFactor * 0.2) * timeOpacityFactor;
+                moonPhaseShape.Opacity = shadowOpacity;
+
+                // Adjust shadow gradient center based on phase for 3D depth
+                var shadowGradient = this.FindName("ShadowGradient") as Microsoft.UI.Xaml.Media.RadialGradientBrush;
+                if (shadowGradient != null)
+                {
+                    // Move gradient origin to create depth effect
+                    double gradientX = isWaxing ? 0.3 : 0.7;
+                    shadowGradient.GradientOrigin = new Windows.Foundation.Point(gradientX, 0.4);
+                }
+
+                // Enhancement: Earthshine effect (visible on dark side during crescent phases)
+                var earthshine = this.FindName("SkylineEarthshine") as Microsoft.UI.Xaml.Shapes.Ellipse;
+                if (earthshine != null)
+                {
+                    // Earthshine is most visible during crescent phases (10-40% illumination)
+                    double earthshineOpacity = 0;
+                    if (illuminationFactor < 0.4)
+                    {
+                        // Peak at ~25% illumination (crescent)
+                        earthshineOpacity = Math.Sin(illuminationFactor * Math.PI / 0.4) * 0.15;
+                    }
+                    earthshine.Opacity = earthshineOpacity * timeOpacityFactor;
+                }
+
+                // Enhancement: Dynamic crater visibility based on terminator position
+                UpdateCraterVisibility(illuminationFactor, isWaxing, timeOpacityFactor);
+
+                // Enhancement: Smooth transitions using animation (optional - can be enabled)
+                AnimateMoonPhaseTransition(moonPhaseShape, shadowOpacity);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Moon phase update error: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Updates crater visibility based on moon phase
+        /// Craters in shadow should be less visible
+        /// </summary>
+        private void UpdateCraterVisibility(double illuminationFactor, bool isWaxing, double timeOpacityFactor)
+        {
+            try
+            {
+                // Get all craters
+                var craters = new[]
+                {
+                    (this.FindName("Crater1") as Microsoft.UI.Xaml.Shapes.Ellipse, 8.0),   // X position
+                    (this.FindName("Crater2") as Microsoft.UI.Xaml.Shapes.Ellipse, 20.0),
+                    (this.FindName("Crater3") as Microsoft.UI.Xaml.Shapes.Ellipse, 14.0),
+                    (this.FindName("Crater4") as Microsoft.UI.Xaml.Shapes.Ellipse, 26.0),
+                    (this.FindName("Crater5") as Microsoft.UI.Xaml.Shapes.Ellipse, 30.0),
+                    (this.FindName("Crater6") as Microsoft.UI.Xaml.Shapes.Ellipse, 18.0),
+                    (this.FindName("Crater7") as Microsoft.UI.Xaml.Shapes.Ellipse, 10.0),
+                    (this.FindName("Crater8") as Microsoft.UI.Xaml.Shapes.Ellipse, 24.0)
+                };
+
+                const double moonCenterX = 20.0;
+                const double moonRadius = 20.0;
+
+                // Calculate terminator position
+                double terminatorX = moonCenterX + (illuminationFactor * 2 - 1) * moonRadius;
+                if (!isWaxing)
+                {
+                    terminatorX = moonCenterX - (illuminationFactor * 2 - 1) * moonRadius;
+                }
+
+                foreach (var (crater, craterX) in craters)
+                {
+                    if (crater == null) continue;
+
+                    // Determine if crater is in lit or shadow region
+                    bool isInLight;
+                    if (isWaxing)
+                    {
+                        isInLight = craterX > terminatorX;
+                    }
+                    else
+                    {
+                        isInLight = craterX < terminatorX;
+                    }
+
+                    // Base opacity from XAML
+                    double baseOpacity = crater.Opacity;
+
+                    // Reduce opacity if in shadow, enhance if in light
+                    double visibilityFactor = isInLight ? 1.0 : 0.3;
+                    crater.Opacity = baseOpacity * visibilityFactor * timeOpacityFactor;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Crater visibility update error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Adds smooth transition animation to moon phase changes
+        /// </summary>
+        private void AnimateMoonPhaseTransition(Microsoft.UI.Xaml.Shapes.Path phaseShape, double targetOpacity)
+        {
+            try
+            {
+                // Create subtle fade transition for smooth visual updates
+                var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard();
+
+                var opacityAnimation = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
+                {
+                    To = targetOpacity,
+                    Duration = new Duration(TimeSpan.FromMilliseconds(500)),
+                    EasingFunction = new Microsoft.UI.Xaml.Media.Animation.QuadraticEase 
+                    { 
+                        EasingMode = Microsoft.UI.Xaml.Media.Animation.EasingMode.EaseInOut 
+                    }
+                };
+
+                Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(opacityAnimation, phaseShape);
+                Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+
+                storyboard.Children.Add(opacityAnimation);
+                storyboard.Begin();
+            }
+            catch (Exception ex)
+            {
+                // Animation is optional enhancement, fail silently
+                System.Diagnostics.Debug.WriteLine($"Moon animation error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Creates accurate moon phase geometry using the terminator curve
+        /// </summary>
+        private Microsoft.UI.Xaml.Media.Geometry CreateMoonPhaseGeometry(double centerX, double centerY, double radius, double phase, bool isWaxing)
+        {
+            // phase: 0 = new moon (all shadow), 1 = full moon (no shadow)
+
+            // For phase = 0 (new moon): full circle of shadow
+            // For phase = 0.5 (quarter): half circle (semicircle)
+            // For phase = 1 (full moon): no shadow (empty geometry)
+
+            if (phase >= 0.98)
+            {
+                // Full moon: return empty geometry (no shadow)
+                return new Microsoft.UI.Xaml.Media.PathGeometry();
+            }
+
+            var pathFigure = new Microsoft.UI.Xaml.Media.PathFigure();
+
+            if (phase <= 0.02)
+            {
+                // New moon: full circle of shadow
+                pathFigure.StartPoint = new Windows.Foundation.Point(centerX - radius, centerY);
+
+                var arc1 = new Microsoft.UI.Xaml.Media.ArcSegment
+                {
+                    Point = new Windows.Foundation.Point(centerX + radius, centerY),
+                    Size = new Windows.Foundation.Size(radius, radius),
+                    SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Clockwise,
+                    IsLargeArc = false
+                };
+
+                var arc2 = new Microsoft.UI.Xaml.Media.ArcSegment
+                {
+                    Point = new Windows.Foundation.Point(centerX - radius, centerY),
+                    Size = new Windows.Foundation.Size(radius, radius),
+                    SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Clockwise,
+                    IsLargeArc = false
+                };
+
+                pathFigure.Segments.Add(arc1);
+                pathFigure.Segments.Add(arc2);
+                pathFigure.IsClosed = true;
+            }
+            else
+            {
+                // Crescent, quarter, or gibbous: draw the dark portion
+                // The terminator is an ellipse, the limb is a circle
+
+                // Calculate the horizontal offset of the terminator from center
+                // At phase 0: offset = -radius (terminator at left edge, waxing)
+                // At phase 0.5: offset = 0 (terminator at center, quarter)
+                // At phase 1: offset = radius (terminator at right edge, full)
+
+                double terminatorOffset;
+                bool shadowOnRight;
+
+                if (isWaxing)
+                {
+                    // Waxing: shadow on left, retreating
+                    terminatorOffset = (phase * 2 - 1) * radius;
+                    shadowOnRight = false;
+                }
+                else
+                {
+                    // Waning: shadow on right, advancing
+                    terminatorOffset = -(phase * 2 - 1) * radius;
+                    shadowOnRight = true;
+                }
+
+                // Draw the shadow region
+                // It's bounded by the terminator ellipse and the limb arc
+
+                if (shadowOnRight)
+                {
+                    // Shadow on right side (waning)
+                    // Start at top of terminator
+                    double terminatorX = centerX + terminatorOffset;
+                    pathFigure.StartPoint = new Windows.Foundation.Point(terminatorX, centerY - radius);
+
+                    // Arc along the right limb from top to bottom
+                    var limbArc = new Microsoft.UI.Xaml.Media.ArcSegment
+                    {
+                        Point = new Windows.Foundation.Point(centerX + radius, centerY),
+                        Size = new Windows.Foundation.Size(radius, radius),
+                        SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Clockwise,
+                        IsLargeArc = false
+                    };
+                    pathFigure.Segments.Add(limbArc);
+
+                    var limbArc2 = new Microsoft.UI.Xaml.Media.ArcSegment
+                    {
+                        Point = new Windows.Foundation.Point(terminatorX, centerY + radius),
+                        Size = new Windows.Foundation.Size(radius, radius),
+                        SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Clockwise,
+                        IsLargeArc = false
+                    };
+                    pathFigure.Segments.Add(limbArc2);
+
+                    // Terminator curve back to start (elliptical arc)
+                    double ellipseWidth = Math.Abs(radius - Math.Abs(terminatorOffset));
+                    var terminatorArc = new Microsoft.UI.Xaml.Media.ArcSegment
+                    {
+                        Point = new Windows.Foundation.Point(terminatorX, centerY - radius),
+                        Size = new Windows.Foundation.Size(ellipseWidth, radius),
+                        SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Counterclockwise,
+                        IsLargeArc = false
+                    };
+                    pathFigure.Segments.Add(terminatorArc);
+                }
+                else
+                {
+                    // Shadow on left side (waxing)
+                    double terminatorX = centerX + terminatorOffset;
+                    pathFigure.StartPoint = new Windows.Foundation.Point(terminatorX, centerY - radius);
+
+                    // Arc along the left limb from top to bottom
+                    var limbArc = new Microsoft.UI.Xaml.Media.ArcSegment
+                    {
+                        Point = new Windows.Foundation.Point(centerX - radius, centerY),
+                        Size = new Windows.Foundation.Size(radius, radius),
+                        SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Counterclockwise,
+                        IsLargeArc = false
+                    };
+                    pathFigure.Segments.Add(limbArc);
+
+                    var limbArc2 = new Microsoft.UI.Xaml.Media.ArcSegment
+                    {
+                        Point = new Windows.Foundation.Point(terminatorX, centerY + radius),
+                        Size = new Windows.Foundation.Size(radius, radius),
+                        SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Counterclockwise,
+                        IsLargeArc = false
+                    };
+                    pathFigure.Segments.Add(limbArc2);
+
+                    // Terminator curve back to start
+                    double ellipseWidth = Math.Abs(radius - Math.Abs(terminatorOffset));
+                    var terminatorArc = new Microsoft.UI.Xaml.Media.ArcSegment
+                    {
+                        Point = new Windows.Foundation.Point(terminatorX, centerY - radius),
+                        Size = new Windows.Foundation.Size(ellipseWidth, radius),
+                        SweepDirection = Microsoft.UI.Xaml.Media.SweepDirection.Clockwise,
+                        IsLargeArc = false
+                    };
+                    pathFigure.Segments.Add(terminatorArc);
+                }
+
+                pathFigure.IsClosed = true;
+            }
+
+            var pathGeometry = new Microsoft.UI.Xaml.Media.PathGeometry();
+            pathGeometry.Figures.Add(pathFigure);
+            return pathGeometry;
         }
 
         private void SetSkyColors(string color1, string color2, string color3, double opacity2, double opacity3)
@@ -619,10 +900,22 @@ namespace Jewochron.Views
                 txtHebrewDateInHebrew.Text = $"{hebrewCalendarService.ConvertToHebrewNumber(hebrewDay)} {monthNameHebrew} {hebrewCalendarService.ConvertToHebrewNumber(hebrewYear)}";
 
                 // Next holiday
-                var (holidayEnglish, holidayHebrew, holidayDate, daysUntil) = jewishHolidaysService.GetNextHoliday(now);
+                var (holidayEnglish, holidayHebrew, holidayDate, daysUntil, isFast, is24HourFast) = jewishHolidaysService.GetNextHoliday(now);
                 txtNextHolidayEnglish.Text = holidayEnglish;
                 txtNextHolidayHebrew.Text = holidayHebrew;
                 txtDaysUntilHoliday.Text = daysUntil.ToString();
+
+                // Get Hebrew date for the holiday
+                var (holidayHebrewYear, holidayHebrewMonth, holidayHebrewDay, holidayIsLeapYear) = hebrewCalendarService.GetHebrewDate(holidayDate);
+                string holidayHebrewMonthName = hebrewCalendarService.GetHebrewMonthNameInHebrew(holidayHebrewMonth, holidayIsLeapYear);
+                string holidayHebrewDayStr = hebrewCalendarService.ConvertToHebrewNumber(holidayHebrewDay);
+                string hebrewHolidayDate = $"{holidayHebrewDayStr} {holidayHebrewMonthName}";
+
+                // Format Gregorian date
+                string englishHolidayDate = holidayDate.ToString("MMMM d");
+
+                // Display both Hebrew and English dates
+                txtHolidayDate.Text = $"{hebrewHolidayDate} • {englishHolidayDate}";
 
                 // Add day of week
                 var holidayDayOfWeek = this.FindName("txtHolidayDayOfWeek") as Microsoft.UI.Xaml.Controls.TextBlock;
@@ -630,7 +923,39 @@ namespace Jewochron.Views
                 {
                     holidayDayOfWeek.Text = holidayDate.ToString("dddd");
                 }
-                txtHolidayDate.Text = holidayDate.ToString("MMMM d, yyyy");
+
+                // Display fast times if this is a fast day
+                var txtFastTimes = this.FindName("txtFastTimes") as Microsoft.UI.Xaml.Controls.TextBlock;
+                if (txtFastTimes != null)
+                {
+                    if (isFast)
+                    {
+                        var holidayTimes = halachicTimesService.CalculateTimes(holidayDate, latitude, longitude);
+
+                        if (is24HourFast)
+                        {
+                            // 24-hour fast: sunset to nightfall (Yom Kippur, Tisha B'Av)
+                            DateTime fastStart = holidayTimes.sunset.AddDays(-1); // Previous evening
+                            DateTime fastEnd = holidayTimes.tzait; // Nightfall (tzait)
+
+                            txtFastTimes.Text = $"⏰ Fast: {fastStart:dddd h:mm tt} - {fastEnd:dddd h:mm tt}";
+                            txtFastTimes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                        }
+                        else
+                        {
+                            // Dawn-to-dusk fast: alot hashachar to nightfall
+                            DateTime fastStart = holidayTimes.alotHaShachar; // Dawn
+                            DateTime fastEnd = holidayTimes.tzait; // Nightfall
+
+                            txtFastTimes.Text = $"⏰ Fast: {fastStart:h:mm tt} - {fastEnd:h:mm tt}";
+                            txtFastTimes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                        }
+                    }
+                    else
+                    {
+                        txtFastTimes.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    }
+                }
 
                 // Torah portion - use async method for accurate results
                 var (parshaEnglish, parshaHebrew) = await torahPortionService.GetTorahPortionAsync(hebrewYear, hebrewMonth, hebrewDay, isLeapYear);
@@ -686,12 +1011,25 @@ namespace Jewochron.Views
                 // Next Shabbat times
                 var (candleLighting, havdalah, shabbatDate, parshaName) = shabbatTimesService.GetNextShabbatTimes(now, latitude, longitude);
 
-                // Format the date for display
-                string shabbatDateStr = shabbatDate.ToString("dddd, MMMM d");
-                txtShabbatDate.Text = shabbatDateStr;
+                // Get Hebrew date for Shabbat (Saturday)
+                var (shabbatHebrewYear, shabbatHebrewMonth, shabbatHebrewDay, shabbatIsLeapYear) = hebrewCalendarService.GetHebrewDate(shabbatDate);
+
+                // Format the date in English
+                string englishShabbatDate = shabbatDate.ToString("MMMM d");
+
+                // Format the date in Hebrew
+                string shabbatHebrewMonthName = hebrewCalendarService.GetHebrewMonthNameInHebrew(shabbatHebrewMonth, shabbatIsLeapYear);
+                string shabbatHebrewDayStr = hebrewCalendarService.ConvertToHebrewNumber(shabbatHebrewDay);
+                string hebrewShabbatDate = $"{shabbatHebrewDayStr} {shabbatHebrewMonthName}";
+
+                // Display both Hebrew and English dates (no "Shabbat" prefix to avoid repetition with card title)
+                txtShabbatDate.Text = $"{hebrewShabbatDate} • {englishShabbatDate}";
 
                 // Format the times
-                txtCandleLighting.Text = candleLighting.ToString("h:mm tt");
+                // Show that candle lighting is Friday evening (the start of Shabbat)
+                DateTime fridayDate = candleLighting.Date;
+                string candleLightingDay = fridayDate.DayOfWeek.ToString();
+                txtCandleLighting.Text = $"{candleLightingDay} {candleLighting:h:mm tt}";
                 txtHavdalah.Text = havdalah.ToString("h:mm tt");
 
                 // Detailed Moon phase with exact illumination

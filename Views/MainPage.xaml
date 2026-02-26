@@ -464,20 +464,53 @@
                             <Ellipse x:Name="SunHighlight" Canvas.Left="5" Canvas.Top="3" Width="30" Height="30" Fill="#FFEB3B" Opacity="0.6" />
                         </Canvas>
 
-                        <!-- Moon (hidden during day) - Drawn moon with accurate phase -->
-                        <Canvas x:Name="MoonCanvas" Canvas.Left="200" Canvas.Top="5" Visibility="Collapsed">
-                            <!-- Moon glow background -->
+                        <!-- Moon (hidden during day) - Realistic phase rendering using geometry -->
+                        <Canvas x:Name="MoonCanvas" Canvas.Left="200" Canvas.Top="5" Visibility="Collapsed" Width="40" Height="40">
+                            <!-- Moon glow background (soft halo) -->
                             <Ellipse x:Name="SkylineMoonGlow" Width="54" Height="54" Canvas.Left="-7" Canvas.Top="-7" Fill="#FFFACD" Opacity="0.15" />
-                            <!-- Moon base (lit portion) - creamy white circle -->
-                            <Ellipse x:Name="SkylineMoonLit" Width="40" Height="40" Fill="#FFFDE7" />
-                            <!-- Moon surface texture (subtle craters) - visible on lit portion -->
-                            <Ellipse Canvas.Left="8" Canvas.Top="10" Width="6" Height="6" Fill="#E8E4D0" Opacity="0.4" />
-                            <Ellipse Canvas.Left="20" Canvas.Top="18" Width="5" Height="5" Fill="#E8E4D0" Opacity="0.35" />
-                            <Ellipse Canvas.Left="14" Canvas.Top="26" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.3" />
-                            <Ellipse Canvas.Left="26" Canvas.Top="12" Width="3" Height="3" Fill="#E8E4D0" Opacity="0.3" />
-                            <Ellipse Canvas.Left="30" Canvas.Top="24" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.35" />
-                            <!-- Shadow ellipse (dark side) - positioned dynamically to create phase effect -->
-                            <Ellipse x:Name="SkylineMoonShadow" Width="40" Height="40" Canvas.Left="0" Canvas.Top="0" Fill="#1A202C" />
+
+                            <!-- Base moon disc (full moon appearance, always present) -->
+                            <Ellipse x:Name="SkylineMoonDisc" Width="40" Height="40" Canvas.Left="0" Canvas.Top="0">
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush GradientOrigin="0.4,0.3">
+                                        <GradientStop Color="#FFFEF5" Offset="0" />
+                                        <GradientStop Color="#FFFDE7" Offset="0.7" />
+                                        <GradientStop Color="#F5EDD0" Offset="1" />
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <!-- Moon craters/texture (dynamically shown/hidden based on phase) -->
+                            <Ellipse x:Name="Crater1" Canvas.Left="8" Canvas.Top="10" Width="6" Height="6" Fill="#E8E4D0" Opacity="0.35" />
+                            <Ellipse x:Name="Crater2" Canvas.Left="20" Canvas.Top="18" Width="5" Height="5" Fill="#E8E4D0" Opacity="0.3" />
+                            <Ellipse x:Name="Crater3" Canvas.Left="14" Canvas.Top="26" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.25" />
+                            <Ellipse x:Name="Crater4" Canvas.Left="26" Canvas.Top="12" Width="3" Height="3" Fill="#E8E4D0" Opacity="0.25" />
+                            <Ellipse x:Name="Crater5" Canvas.Left="30" Canvas.Top="24" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.3" />
+                            <Ellipse x:Name="Crater6" Canvas.Left="18" Canvas.Top="8" Width="3" Height="3" Fill="#E8E4D0" Opacity="0.2" />
+                            <Ellipse x:Name="Crater7" Canvas.Left="10" Canvas.Top="20" Width="4" Height="4" Fill="#E8E4D0" Opacity="0.25" />
+                            <Ellipse x:Name="Crater8" Canvas.Left="24" Canvas.Top="28" Width="3" Height="3" Fill="#E8E4D0" Opacity="0.2" />
+
+                            <!-- Phase shape (uses Path geometry with gradient for 3D depth) -->
+                            <Path x:Name="SkylineMoonPhaseShape" Canvas.Left="0" Canvas.Top="0">
+                                <Path.Fill>
+                                    <RadialGradientBrush x:Name="ShadowGradient" GradientOrigin="0.5,0.5">
+                                        <GradientStop Color="#0D1117" Offset="0.3" />
+                                        <GradientStop Color="#1A1F2E" Offset="0.7" />
+                                        <GradientStop Color="#0D1117" Offset="1" />
+                                    </RadialGradientBrush>
+                                </Path.Fill>
+                            </Path>
+
+                            <!-- Earthshine effect (subtle glow on dark side during crescent) -->
+                            <Ellipse x:Name="SkylineEarthshine" Width="40" Height="40" Canvas.Left="0" Canvas.Top="0" Opacity="0">
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Color="#2D3A52" Offset="0" />
+                                        <GradientStop Color="#1A2332" Offset="0.6" />
+                                        <GradientStop Color="#0D1117" Offset="1" />
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
                         </Canvas>
                         
                         <!-- Stars (visible at night) - 6-pointed Stars of David -->
@@ -1442,33 +1475,45 @@
                                     TextWrapping="Wrap"
                                     Foreground="#FFD700"
                                     Text="" />
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,4,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6" Margin="0,2,0,0">
                                     <TextBlock
                                         x:Name="txtDaysUntilHoliday"
-                                        FontSize="36"
-                                        FontWeight="Bold"
+                                        FontSize="24"
+                                        FontWeight="SemiBold"
                                         Foreground="#FF6B6B"
                                         Text="" />
                                     <TextBlock
                                         Text="days"
-                                        FontSize="18"
-                                        FontWeight="SemiBold"
+                                        FontSize="14"
+                                        FontWeight="Normal"
                                         Foreground="#B0B0B0"
                                         VerticalAlignment="Center"
-                                        Margin="0,6,0,0" />
+                                        Margin="0,4,0,0" />
                                 </StackPanel>
                                 <TextBlock
                                     x:Name="txtHolidayDayOfWeek"
-                                    FontSize="14"
+                                    FontSize="16"
                                     HorizontalAlignment="Center"
                                     Foreground="#B0B0B0"
-                                    Margin="0,4,0,0"
+                                    FontWeight="SemiBold"
+                                    Margin="0,6,0,0"
                                     Text="" />
                                 <TextBlock
                                     x:Name="txtHolidayDate"
-                                    FontSize="16"
+                                    FontSize="20"
                                     HorizontalAlignment="Center"
-                                    Foreground="#888888"
+                                    Foreground="#E0E0E0"
+                                    FontWeight="SemiBold"
+                                    Text="" />
+                                <!-- Fast times (only shown for fast days) -->
+                                <TextBlock
+                                    x:Name="txtFastTimes"
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    Foreground="#FFA07A"
+                                    Margin="0,8,0,0"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed"
                                     Text="" />
                             </StackPanel>
                         </Border>

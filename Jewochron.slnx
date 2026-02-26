@@ -7,7 +7,7 @@
     <Project Path="Jewochron.csproj">
         <BuildType Solution="ARM64|*" Project="Debug" />
         <Platform Solution="ARM64|*" Project="ARM64" />
-        <Platform Solution="Debug|*" Project="x64" />
+        <Platform Solution="Debug|*" Project="ARM64" />
         <Deploy />
     </Project>
 </Solution>

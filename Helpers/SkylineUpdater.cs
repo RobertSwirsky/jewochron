@@ -185,18 +185,22 @@ namespace Jewochron.Helpers
                 }
 
                 // Calculate moon age to determine if waxing or waning
-                // Reference: Jan 6, 2000 at 18:14 was a known new moon
-                double moonAge = (DateTime.Now - new DateTime(2000, 1, 6, 18, 14, 0)).TotalDays % 29.53;
+                // Reference: Jan 6, 2000 at 18:14 UTC was a known new moon
+                double moonAge = (DateTime.UtcNow - new DateTime(2000, 1, 6, 18, 14, 0, DateTimeKind.Utc)).TotalDays % 29.53;
                 bool isWaxing = moonAge < 14.765; // First half of lunar cycle
 
+                // Clamp illumination and derive a factor we can use for visuals
+                double clampedIllumination = Math.Clamp(illuminationPercent, 0.0, 100.0);
+                double illuminationFactor = clampedIllumination / 100.0;
+
                 // Select appropriate moon emoji based on illumination and phase
-                string emoji = GetMoonPhaseEmoji(illuminationPercent, isWaxing);
+                string emoji = GetMoonPhaseEmoji(clampedIllumination, isWaxing);
                 moonEmoji.Text = emoji;
 
                 // Adjust glow intensity based on illumination
                 if (moonGlow != null)
                 {
-                    moonGlow.Opacity = 0.1 + (illuminationPercent / 100.0 * 0.2);
+                    moonGlow.Opacity = 0.08 + (illuminationFactor * 0.22);
                 }
             }
             catch (Exception ex)
