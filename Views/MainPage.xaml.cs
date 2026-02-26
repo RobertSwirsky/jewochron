@@ -526,11 +526,16 @@ namespace Jewochron.Views
                 const double moonCenterX = 20.0;
                 const double moonRadius = 20.0;
 
-                // Calculate terminator position
-                double terminatorX = moonCenterX + (illuminationFactor * 2 - 1) * moonRadius;
-                if (!isWaxing)
+                // Calculate terminator position using area-accurate cosine formula
+                // This matches the geometry rendering and ensures craters are properly lit/shadowed
+                double terminatorX;
+                if (isWaxing)
                 {
-                    terminatorX = moonCenterX - (illuminationFactor * 2 - 1) * moonRadius;
+                    terminatorX = moonCenterX + moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
+                }
+                else
+                {
+                    terminatorX = moonCenterX - moonRadius * Math.Cos(Math.PI * (1 - illuminationFactor));
                 }
 
                 foreach (var (crater, craterX) in craters)
@@ -645,9 +650,14 @@ namespace Jewochron.Views
                 // The terminator is an ellipse, the limb is a circle
 
                 // Calculate the horizontal offset of the terminator from center
-                // At phase 0: offset = -radius (terminator at left edge, waxing)
-                // At phase 0.5: offset = 0 (terminator at center, quarter)
-                // At phase 1: offset = radius (terminator at right edge, full)
+                // Using cosine function for area-accurate illumination mapping
+                // This ensures the visible area matches the illumination percentage
+                //
+                // At phase 0: offset = -radius (new moon, 0% lit)
+                // At phase 0.5: offset = 0 (quarter, 50% lit)
+                // At phase 1: offset = +radius (full moon, 100% lit)
+                //
+                // Formula: cos(π * (1 - phase)) maps phase to offset with correct area relationship
 
                 double terminatorOffset;
                 bool shadowOnRight;
@@ -655,13 +665,14 @@ namespace Jewochron.Views
                 if (isWaxing)
                 {
                     // Waxing: shadow on left, retreating
-                    terminatorOffset = (phase * 2 - 1) * radius;
+                    // Use cosine formula for accurate area-to-illumination mapping
+                    terminatorOffset = radius * Math.Cos(Math.PI * (1 - phase));
                     shadowOnRight = false;
                 }
                 else
                 {
                     // Waning: shadow on right, advancing
-                    terminatorOffset = -(phase * 2 - 1) * radius;
+                    terminatorOffset = -radius * Math.Cos(Math.PI * (1 - phase));
                     shadowOnRight = true;
                 }
 

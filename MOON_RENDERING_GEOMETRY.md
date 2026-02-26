@@ -63,11 +63,23 @@ phase = illumination / 100.0
 
 **Terminator Position**:
 ```
-terminatorOffset = (phase * 2 - 1) * radius
+terminatorOffset = radius * cos(π * (1 - phase))
 
 Waxing:  terminatorOffset ranges from -radius to +radius (left to right)
 Waning:  terminatorOffset ranges from +radius to -radius (right to left)
 ```
+
+**Why Cosine Formula?**
+
+The simple linear formula `(phase * 2 - 1) * radius` doesn't account for circular geometry. The visible illuminated area isn't linear with the terminator's x-position.
+
+Using the cosine function ensures:
+- **Accurate area mapping**: The visible area precisely matches the illumination percentage
+- **Correct at all phases**: 
+  - phase = 0: cos(π) = -1, offset = -radius (0% illuminated)
+  - phase = 0.5: cos(π/2) = 0, offset = 0 (50% illuminated)
+  - phase = 1: cos(0) = 1, offset = radius (100% illuminated)
+- **Smooth transitions**: Natural progression through all lunar phases
 
 **Path Construction**:
 
