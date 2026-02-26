@@ -38,8 +38,28 @@ A beautiful, fully responsive WinUI 3 desktop application that displays Jewish c
   - Tzait HaKochavim (Nightfall)
 
 ### 🌙 Lunar & Holidays
-- **🌙 Molad & Moon Phase**: Next Molad (new moon) with exact time and Chalakim, plus current lunar phase details
-- **🎉 Next Holiday**: Countdown to the next Jewish holiday with days remaining
+- **🌙 Realistic Moon Phase Rendering**: 
+  - Astronomically accurate geometric moon with proper terminator curves
+  - 3D gradient shadows for depth perception
+  - Earthshine effect visible during crescent phases (blue-grey glow on dark side)
+  - Dynamic crater visibility based on illumination
+  - Smooth animated transitions between phases
+  - Time-of-day opacity (subtle during daytime, bright at night)
+  - Current lunar phase details with exact illumination percentage
+- **🌙 Molad**: Next Molad (new moon) with exact time and Chalakim
+- **🎉 Next Holiday**: Countdown to the next Jewish holiday with:
+  - Hebrew and Gregorian dates displayed (e.g., "ח׳ אדר • March 8")
+  - Days remaining counter
+  - **Fast Day Times**: Automatic display for fasts with distinction between:
+    - **24-Hour Fasts** (Yom Kippur, Tisha B'Av): Sunset to nightfall with day names
+    - **Dawn-to-Dusk Fasts** (Minor fasts): Alot hashachar to tzait times
+
+### 🕯️ Shabbat Times
+- **Candle Lighting & Havdalah**: Next Shabbat times with location-based calculations
+  - Hebrew and Gregorian dates (e.g., "ח׳ אדר • March 8")
+  - Candle lighting shown with day name (e.g., "Friday 5:42 PM") to clarify evening start
+  - Havdalah time for Shabbat conclusion
+  - Respects Jewish tradition of day starting at sunset
 
 ### ✡️ Prayer Times
 - **Visual Prayer Times**: Beautiful prayer times card with responsive layout
@@ -153,7 +173,14 @@ The application has been refactored into a modular architecture:
 ### Jerusalem Skyline
 - Detailed architectural illustration featuring iconic landmarks
 - **Responsive scaling**: Automatically scales to fit any screen width using Viewbox
-- **Phase-accurate moon**: Displays actual lunar phase with shadow overlay based on real illumination percentage
+- **Realistic moon phase rendering**:
+  - Geometrically accurate terminator curves (not simple circle overlaps)
+  - 3D gradient shadows with adjustable origin based on waxing/waning
+  - Earthshine effect during crescent phases (simulates reflected Earth light)
+  - 8 dynamically lit/dimmed craters based on phase
+  - Smooth 500ms animated transitions between updates
+  - Time-based opacity (30% during day, 100% at night, smooth dawn/dusk fades)
+  - Displays actual lunar phase with shadow overlay based on real illumination percentage
 - Animated sun and moon that move across the sky based on real Jerusalem time
 - Celestial bodies positioned high in sky with proper arc movement throughout day/night
 - Dynamic sky colors transitioning through dawn, sunrise, day, sunset, dusk, and night
@@ -298,6 +325,46 @@ All required sizes are automatically generated:
 - **WinUI 3** (Windows App SDK)
 - **MSIX Packaging** for deployment
 - **C# 14** with latest language features
+
+## Recent Major Improvements
+
+### 🌙 Realistic Moon Phase Rendering (Latest)
+- **Geometric accuracy**: Uses proper terminator ellipse curves instead of simple circle overlaps
+- **3D visual effects**: 
+  - Radial gradient shadows with dynamic origin positioning
+  - Earthshine glow during crescent phases (astronomically accurate)
+  - Sphere gradient on moon disc for 3D appearance
+- **Dynamic details**:
+  - 8 craters with phase-based visibility (dimmed in shadow, bright in light)
+  - Smooth 500ms animated transitions with QuadraticEase
+  - Time-of-day opacity adjustments (30% day, 100% night)
+- **Astronomical precision**:
+  - UTC-based calculations for global accuracy
+  - Proper waxing/waning terminator positioning
+  - Illumination percentage from real moon phase service
+- See `MOON_RENDERING_GEOMETRY.md` and `MOON_ENHANCEMENTS_IMPLEMENTED.md` for technical details
+
+### 🕯️ Fast Day Times (Latest)
+- **Automatic fast time display** on holiday card when next holiday is a fast
+- **Distinction between fast types**:
+  - **24-Hour Fasts** (Yom Kippur, Tisha B'Av): Shows sunset (evening before) to nightfall with day names
+  - **Dawn-to-Dusk Fasts** (Tzom Gedaliah, 10th of Tevet, Ta'anit Esther, 17th of Tammuz): Shows alot hashachar to tzait
+- **Halachically accurate**: Uses proper dawn (72 min before sunrise) and nightfall (42 min after sunset)
+- See `HOLIDAY_CARD_FAST_TIMES.md` for complete documentation
+
+### 📅 Dual-Language Dates (Latest)
+- **Hebrew and Gregorian dates** displayed together on holiday and Shabbat cards
+- **Format**: "ח׳ אדר • March 8" (Hebrew day + month • English month day)
+- **Clarity improvements**:
+  - Shabbat card shows candle lighting with day name: "Friday 5:42 PM"
+  - Respects Jewish tradition of day starting at sunset
+- See `SHABBAT_CARD_FIX.md` for details
+
+### 🧪 Comprehensive Testing
+- **Test suite** for moon phase calculations (`Tests/MoonPhaseVerification.cs`)
+- **Verification script** against NASA/USNO astronomical data (`TestMoonPhase.csx`)
+- **Documentation**: Complete guides for verifying accuracy (`HOW_TO_VERIFY_MOON_PHASE.md`)
+- See `MOON_PHASE_IMPROVEMENTS.md` and `EXPECTED_TEST_RESULTS.md`
 
 ## Building
 
